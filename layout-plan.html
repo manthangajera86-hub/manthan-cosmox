@@ -1,0 +1,1562 @@
+<title>Cosmox Chemicals — Website Layout Plan</title>
+<style>
+:root{
+  --paper:#F5F6F3; --paper-2:#EDEFEA; --paper-3:#E1E4DD;
+  --rule:#C7CCC3; --rule-soft:#DBDFD6;
+  --ink:#15191A; --ink-2:#4A514C; --ink-3:#7C837D;
+  --accent:#0E7C6B; --accent-soft:rgba(14,124,107,.09);
+  --flag:#B4441F;
+  --grid:rgba(21,25,26,.05);
+  --hatch:rgba(21,25,26,.14);
+  --shell:#EAECE6;
+  --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --max:1360px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#0E1418; --paper-2:#161E23; --paper-3:#1E282E;
+    --rule:#33454E; --rule-soft:#222E35;
+    --ink:#E4EBE8; --ink-2:#9CA9A5; --ink-3:#6F7E79;
+    --accent:#4FD1B4; --accent-soft:rgba(79,209,180,.12);
+    --flag:#E8825A;
+    --grid:rgba(140,200,220,.065);
+    --hatch:rgba(160,205,220,.17);
+    --shell:#0A1013;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1418; --paper-2:#161E23; --paper-3:#1E282E;
+  --rule:#33454E; --rule-soft:#222E35;
+  --ink:#E4EBE8; --ink-2:#9CA9A5; --ink-3:#6F7E79;
+  --accent:#4FD1B4; --accent-soft:rgba(79,209,180,.12);
+  --flag:#E8825A;
+  --grid:rgba(140,200,220,.065);
+  --hatch:rgba(160,205,220,.17);
+  --shell:#0A1013;
+}
+:root[data-theme="light"]{
+  --paper:#F5F6F3; --paper-2:#EDEFEA; --paper-3:#E1E4DD;
+  --rule:#C7CCC3; --rule-soft:#DBDFD6;
+  --ink:#15191A; --ink-2:#4A514C; --ink-3:#7C837D;
+  --accent:#0E7C6B; --accent-soft:rgba(14,124,107,.09);
+  --flag:#B4441F;
+  --grid:rgba(21,25,26,.05);
+  --hatch:rgba(21,25,26,.14);
+  --shell:#EAECE6;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;background:var(--shell);color:var(--ink-2);
+  font-family:var(--sans);font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{color:var(--ink);margin:0;line-height:1.08;font-weight:700;letter-spacing:-.03em;text-wrap:balance}
+p{margin:0}
+ol,ul{margin:0;padding:0;list-style:none}
+a{color:var(--accent);text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- utility type ---------- */
+.mono{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:500}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* ---------- title bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:40;background:var(--paper);
+  border-bottom:1px solid var(--rule);
+  display:flex;align-items:center;gap:18px;
+  padding:0 clamp(14px,3vw,26px);height:52px;
+}
+.topbar__mark{display:flex;align-items:center;gap:9px;color:var(--ink);font-weight:700;letter-spacing:-.04em;font-size:16px}
+.topbar__mark span{width:11px;height:11px;background:var(--accent);display:block}
+.topbar__meta{display:flex;gap:clamp(10px,2.4vw,26px);margin-left:auto;color:var(--ink-3);flex-wrap:wrap}
+.topbar__meta b{color:var(--ink-2);font-weight:500}
+.themer{
+  border:1px solid var(--rule);background:transparent;color:var(--ink-2);
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  padding:6px 10px;cursor:pointer;
+}
+.themer:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ---------- doc frame ---------- */
+.doc{display:grid;grid-template-columns:236px minmax(0,1fr);gap:0;max-width:var(--max);margin:0 auto;background:var(--paper);border-left:1px solid var(--rule);border-right:1px solid var(--rule);min-height:100vh}
+@media (max-width:900px){.doc{grid-template-columns:1fr;border:0}}
+
+/* ---------- sheet index ---------- */
+.index{border-right:1px solid var(--rule);padding:22px 0 40px}
+.index__head{padding:0 18px 12px;color:var(--ink-3)}
+.index__list{display:flex;flex-direction:column}
+.tab{
+  display:grid;grid-template-columns:34px 1fr;gap:8px;align-items:baseline;
+  width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--rule-soft);
+  padding:11px 18px;cursor:pointer;color:var(--ink-2);font-family:var(--sans);font-size:13.5px;
+}
+.tab em{font-family:var(--mono);font-size:10px;letter-spacing:.1em;font-style:normal;color:var(--ink-3)}
+.tab:hover{background:var(--paper-2);color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--accent-soft);color:var(--ink);font-weight:700}
+.tab[aria-selected="true"] em{color:var(--accent)}
+@media (max-width:900px){
+  .index{border-right:0;border-bottom:1px solid var(--rule);padding:14px 0}
+  .index__list{flex-direction:row;overflow-x:auto;gap:0}
+  .tab{border-top:0;border-left:1px solid var(--rule-soft);white-space:nowrap;grid-template-columns:1fr;min-width:150px}
+}
+
+/* ---------- sheet ---------- */
+.sheets{padding:clamp(20px,3.4vw,40px) clamp(16px,3.4vw,44px) 0;min-width:0}
+.sheet{display:none}
+.sheet.is-active{display:block;animation:fade .28s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.sheet__head{border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:26px}
+.sheet__no{color:var(--accent);display:block;margin-bottom:10px}
+.sheet__head h1{font-size:clamp(1.9rem,4.2vw,2.9rem)}
+.sheet__head p{margin-top:12px;max-width:62ch;color:var(--ink-2)}
+
+/* ---------- generic blocks ---------- */
+.lede{max-width:66ch}
+.rule{height:1px;background:var(--rule);margin:34px 0}
+.h2{font-size:clamp(1.15rem,2.2vw,1.5rem);margin-bottom:14px}
+.h3{font-size:1rem;letter-spacing:-.015em;margin-bottom:6px}
+.sec{margin:38px 0}
+.sec__label{color:var(--accent);border-top:1px solid var(--ink);padding-top:8px;margin-bottom:18px;display:block}
+
+/* ---------- data table ---------- */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:13.5px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500;background:var(--paper-2)}
+td b{color:var(--ink);font-weight:700}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);color:var(--accent);white-space:nowrap;font-size:11px}
+
+/* ---------- swatches / type specimens ---------- */
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.sw{background:var(--paper);padding:0}
+.sw__chip{height:74px}
+.sw__meta{padding:9px 11px}
+.sw__meta b{display:block;color:var(--ink);font-size:12.5px;letter-spacing:-.01em}
+.sw__meta span{color:var(--ink-3);font-family:var(--mono);font-size:10px;letter-spacing:.08em}
+
+.specimen{border:1px solid var(--rule);padding:20px;display:grid;gap:14px}
+.specimen div{border-bottom:1px solid var(--rule-soft);padding-bottom:14px}
+.specimen div:last-child{border-bottom:0;padding-bottom:0}
+.specimen .lbl{color:var(--ink-3);margin-bottom:7px;display:block}
+
+/* ---------- wireframe canvas ---------- */
+.canvas{
+  border:1px solid var(--rule);background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px;
+  padding:0;overflow:hidden;
+}
+.canvas__bar{
+  display:flex;align-items:center;gap:8px;padding:7px 12px;
+  border-bottom:1px solid var(--rule);background:var(--paper-2);color:var(--ink-3);
+}
+.canvas__bar i{width:8px;height:8px;border:1px solid var(--rule);display:block;border-radius:50%}
+
+.band{display:grid;grid-template-columns:104px minmax(0,1fr);gap:clamp(10px,2vw,20px);border-bottom:1px dashed var(--rule);padding:clamp(14px,2.4vw,22px) clamp(10px,2vw,18px)}
+.band:last-child{border-bottom:0}
+.band__key{display:flex;flex-direction:column;gap:5px}
+.cal{
+  width:21px;height:21px;border:1px solid var(--accent);color:var(--accent);
+  display:grid;place-items:center;font-family:var(--mono);font-size:10px;font-weight:700;border-radius:50%;
+}
+.band__key b{color:var(--ink);font-size:11.5px;line-height:1.3;letter-spacing:-.01em}
+.band__key span{color:var(--ink-3);font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase}
+.band__art{display:flex;flex-direction:column;gap:9px;min-width:0}
+@media (max-width:640px){
+  .band{grid-template-columns:1fr;gap:10px}
+  .band__key{flex-direction:row;align-items:center;flex-wrap:wrap;gap:8px}
+}
+
+/* wireframe primitives */
+.g{background:var(--paper-2);border:1px solid var(--rule-soft);min-height:14px}
+.g--img{background-image:repeating-linear-gradient(45deg,var(--hatch) 0 1px,transparent 1px 8px);position:relative}
+.g--ink{background:var(--ink);border-color:var(--ink)}
+.g--pad{padding:11px 13px;display:flex;flex-direction:column;gap:7px;justify-content:center}
+.g--tag{position:relative}
+.g--tag::after{
+  content:attr(data-tag);position:absolute;left:7px;top:6px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+}
+.t{height:7px;background:var(--paper-3);display:block}
+.t--h{height:17px;background:var(--ink);opacity:.78}
+.t--h2{height:12px;background:var(--ink);opacity:.55}
+.t--m{height:6px;background:var(--accent);opacity:.5}
+.w95{width:95%}.w85{width:85%}.w75{width:75%}.w65{width:65%}.w55{width:55%}.w45{width:45%}.w35{width:35%}.w25{width:25%}.w15{width:15%}
+.row{display:flex;gap:9px;align-items:stretch}
+.row--top{align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:7px;min-width:0;flex:1}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+@media (max-width:640px){.grid4,.grid5{grid-template-columns:repeat(2,1fr)}.grid3{grid-template-columns:1fr 1fr}}
+.btn-wf{border:1px solid var(--ink);height:26px;display:flex;align-items:center;padding:0 12px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);width:max-content}
+.btn-wf--solid{background:var(--ink);color:var(--paper)}
+.wf-nav{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--rule);padding-bottom:9px}
+.wf-nav .t{flex:0 0 auto}
+
+/* keyed notes */
+.notes{display:grid;gap:0;border:1px solid var(--rule);margin-top:22px}
+.notes li{display:grid;grid-template-columns:30px 92px minmax(0,1fr);gap:12px;padding:12px 14px;border-bottom:1px solid var(--rule-soft);align-items:start}
+.notes li:last-child{border-bottom:0}
+.notes li:nth-child(odd){background:var(--paper-2)}
+.notes .cal{margin-top:1px}
+.notes b{color:var(--ink);font-size:12px;letter-spacing:-.01em;line-height:1.35}
+.notes p{font-size:13px}
+.notes .mv{color:var(--accent);display:block;margin-top:5px}
+@media (max-width:640px){.notes li{grid-template-columns:30px minmax(0,1fr)}.notes li b{grid-column:2}.notes li p{grid-column:2}}
+
+/* callout / aside */
+.flagbox{border:1px solid var(--flag);border-left-width:3px;padding:13px 15px;margin:22px 0}
+.flagbox b{color:var(--flag);display:block;margin-bottom:4px}
+.keybox{border:1px solid var(--rule);background:var(--paper-2);padding:15px 17px;margin:22px 0}
+.keybox b{color:var(--ink);display:block;margin-bottom:5px}
+
+/* title block */
+.titleblock{
+  border:1px solid var(--ink);margin:34px 0 46px;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(118px,1fr));
+}
+.titleblock div{padding:9px 12px;border-right:1px solid var(--rule)}
+.titleblock div:last-child{border-right:0}
+.titleblock span{display:block;color:var(--ink-3);margin-bottom:3px}
+.titleblock b{color:var(--ink);font-size:12.5px;font-weight:700;letter-spacing:-.01em}
+.pager{display:flex;gap:9px;margin:0 0 46px}
+.pager button{
+  border:1px solid var(--rule);background:transparent;color:var(--ink-2);cursor:pointer;
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:9px 14px;
+}
+.pager button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.pager button:disabled{opacity:.35;cursor:default}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+</style>
+
+<div class="topbar">
+  <div class="topbar__mark"><span></span>COSMOX</div>
+  <div class="topbar__meta mono">
+    <div>Project <b>Website redesign</b></div>
+    <div>Direction <b>Swiss / precision-minimal</b></div>
+    <div>Stack <b>Next.js · Tailwind · Motion</b></div>
+    <div>Rev <b class="tnum">A</b></div>
+  </div>
+  <button class="themer" id="themer" type="button">Theme</button>
+</div>
+
+<div class="doc">
+  <nav class="index" aria-label="Sheet index">
+    <div class="index__head mono">Sheet index — 11 sheets</div>
+    <div class="index__list" role="tablist" aria-orientation="vertical" id="tablist">
+      <button class="tab" role="tab" aria-selected="true"  data-sheet="s00"><em>00</em><span>Design direction</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-sheet="s01"><em>01</em><span>Sitemap &amp; navigation</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-sheet="s02"><em>02</em><span>Home</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-sheet="s03"><em>03</em><span>Divisions</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-sheet="s04"><em>04</em><span>Products &amp; spec sheet</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-sheet="s05"><em>05</em><span>Industries</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-sheet="s06"><em>06</em><span>Services</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-sheet="s07"><em>07</em><span>Company</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-sheet="s08"><em>08</em><span>Contact &amp; quote</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-sheet="s09"><em>09</em><span>Component library</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-sheet="s10"><em>10</em><span>Build plan</span></button>
+    </div>
+  </nav>
+
+  <main class="sheets" id="sheets">
+
+  <!-- ================= SHEET 00 ================= -->
+  <section class="sheet is-active" id="s00" role="tabpanel" aria-label="Design direction">
+    <div class="sheet__head">
+      <span class="sheet__no mono">Sheet 00 — Design direction</span>
+      <h1>Precision as the brand.</h1>
+      <p>Cosmox sells purity, tolerance and repeatability. The site should behave the same way: a strict grid, hairline rules, oversized type, near-zero decoration, and one accent used only where it means something. Everything below is a token, not a suggestion — it maps directly to <code>tailwind.config.ts</code> in Sheet 10.</p>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">A — Palette</span>
+      <p class="lede" style="margin-bottom:18px">Neutrals carry a faint cool-green bias so the paper reads as drafting vellum rather than office white. Teal is the only accent and appears on roughly 2% of any given screen: active nav, links, keyed numerals, one hairline on hover. Rust is semantic only — it flags regulatory notes and export restrictions, never decoration.</p>
+      <div class="swatches">
+        <div class="sw"><div class="sw__chip" style="background:#F5F6F3"></div><div class="sw__meta"><b>Paper</b><span>#F5F6F3</span></div></div>
+        <div class="sw"><div class="sw__chip" style="background:#E1E4DD"></div><div class="sw__meta"><b>Paper 3</b><span>#E1E4DD</span></div></div>
+        <div class="sw"><div class="sw__chip" style="background:#C7CCC3"></div><div class="sw__meta"><b>Rule</b><span>#C7CCC3</span></div></div>
+        <div class="sw"><div class="sw__chip" style="background:#4A514C"></div><div class="sw__meta"><b>Ink 2</b><span>#4A514C</span></div></div>
+        <div class="sw"><div class="sw__chip" style="background:#15191A"></div><div class="sw__meta"><b>Ink</b><span>#15191A</span></div></div>
+        <div class="sw"><div class="sw__chip" style="background:#0E7C6B"></div><div class="sw__meta"><b>Accent</b><span>#0E7C6B</span></div></div>
+        <div class="sw"><div class="sw__chip" style="background:#B4441F"></div><div class="sw__meta"><b>Flag</b><span>#B4441F</span></div></div>
+      </div>
+      <div class="keybox">
+        <b>Carried over from the current site</b>
+        <p>The existing teal <code>#16a394</code> is desaturated and deepened to <code>#0E7C6B</code> so it survives on a light ground without glowing. The corporate navy <code>#073b57</code> is retired — navy plus teal plus white is the generic chemicals-industry palette, and dropping it is most of what separates this from a template.</p>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">B — Typography</span>
+      <p class="lede" style="margin-bottom:18px">Two families, three roles. A neo-grotesque does display and body — single-family typesetting is the Swiss discipline, and the contrast comes from scale and weight rather than a second voice. Monospace is a co-lead, not a caption face: it carries every label, CAS number, specification value and sheet code on the site.</p>
+      <div class="specimen">
+        <div>
+          <span class="lbl mono">Display — 700, tracking −0.035em, clamp(2.6rem, 6vw, 4.6rem)</span>
+          <div style="font-size:clamp(2rem,5.4vw,3.6rem);font-weight:700;letter-spacing:-.035em;color:var(--ink);line-height:1.02">Advanced chemistry for<br>the industries that build<br>everything else.</div>
+        </div>
+        <div>
+          <span class="lbl mono">Section heading — 700, tracking −0.025em, 1.5rem</span>
+          <div style="font-size:1.5rem;font-weight:700;letter-spacing:-.025em;color:var(--ink)">Halogen-free flame retardants</div>
+        </div>
+        <div>
+          <span class="lbl mono">Body — 400, 16px / 1.62, max 68ch</span>
+          <p style="max-width:68ch">Every product ships with a technical data sheet, a safety data sheet and a certificate of analysis against the batch. Where a grade is developed to a customer specification, the specification itself becomes the acceptance criterion.</p>
+        </div>
+        <div>
+          <span class="lbl mono">Utility / data — mono, 10.5px, tracking 0.13em, uppercase</span>
+          <div class="mono tnum" style="color:var(--ink-2);display:flex;gap:22px;flex-wrap:wrap">
+            <span>CAS 000-00-0</span><span>Purity ≥ 99.5%</span><span>Lot 0000-00</span><span>REACH registered</span>
+          </div>
+        </div>
+      </div>
+      <div class="flagbox">
+        <b>Font loading — decide before build</b>
+        <p>The wireframes render in Helvetica Neue with an Arial fallback. For production, licence a real grotesque with a wide weight range and true tabular figures — Söhne, Neue Haas Grotesk Display, ABC Diatype or Aeonik all fit. Self-host as woff2 via <code>next/font/local</code> so there is no CDN dependency and no layout shift. Budget for this: a licensed face is the single biggest visual difference between premium and template.</p>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">C — Grid, spacing &amp; rules</span>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Token</th><th>Value</th><th>Applied to</th></tr></thead>
+          <tbody>
+            <tr><td class="num">grid</td><td><b>12 columns</b>, 24px gutter, 1440px max, 1px visible column rules on desktop</td><td>Every page. Content snaps to column edges — nothing is optically centred.</td></tr>
+            <tr><td class="num">margin</td><td><b>clamp(20px, 5vw, 80px)</b></td><td>Page edge. Generous side margin is what makes it read expensive.</td></tr>
+            <tr><td class="num">rhythm</td><td><b>8px base</b> · section padding 96 / 128 / 160px</td><td>Vertical space is the primary luxury signal — use the largest value that still reads as one page.</td></tr>
+            <tr><td class="num">radius</td><td><b>0px everywhere</b></td><td>No exceptions. Rounded corners break the drafting language instantly.</td></tr>
+            <tr><td class="num">border</td><td><b>1px solid rule</b>, never a shadow</td><td>Cards, tables, inputs, image frames. Shadows are banned site-wide.</td></tr>
+            <tr><td class="num">measure</td><td><b>62–68ch</b></td><td>All running text. Long paragraphs sit in columns 1–6 or 4–9, never full bleed.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">D — Motion</span>
+      <p class="lede" style="margin-bottom:16px">Restraint is the point. Four movements, one easing curve <code>[0.22, 1, 0.36, 1]</code>, everything gated behind <code>prefers-reduced-motion</code>.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Movement</th><th>Where</th><th>Spec</th></tr></thead>
+          <tbody>
+            <tr><td><b>Rule draw</b></td><td>Section headings</td><td>Hairline scales from <code>scaleX(0)</code> to 1 on enter, 600ms. The only decorative motion allowed.</td></tr>
+            <tr><td><b>Row reveal</b></td><td>Division &amp; product tables</td><td>Rows fade + rise 8px, 40ms stagger, once only.</td></tr>
+            <tr><td><b>Image mask</b></td><td>All photography</td><td>Clip-path wipe from bottom, 700ms, paired with a 1.04→1.0 scale.</td></tr>
+            <tr><td><b>Hover state</b></td><td>Table rows, nav</td><td>Background shifts to paper-2 and an accent hairline draws left→right in 180ms. No lift, no shadow, no scale.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="keybox">
+        <b>Explicitly rejected</b>
+        <p>Parallax hero, count-up statistics, glassmorphic cards, gradient text, scroll-jacking, animated background particles, and the five-slide crossfading hero currently on <code>index.html</code>. Each of them is a signal of a template. A single still photograph held at rest, at scale, outperforms all of them on this brief.</p>
+      </div>
+    </div>
+
+    <div class="titleblock mono">
+      <div><span>Project</span><b>Cosmox Chemicals</b></div>
+      <div><span>Sheet</span><b class="tnum">00 of 10</b></div>
+      <div><span>Title</span><b>Design direction</b></div>
+      <div><span>Scale</span><b>NTS</b></div>
+      <div><span>Status</span><b>For review</b></div>
+    </div>
+  </section>
+
+  <!-- ================= SHEET 01 ================= -->
+  <section class="sheet" id="s01" role="tabpanel" aria-label="Sitemap and navigation">
+    <div class="sheet__head">
+      <span class="sheet__no mono">Sheet 01 — Sitemap &amp; navigation</span>
+      <h1>Ten nav items become five.</h1>
+      <p>The current header carries About · Divisions · Products · Industries · Applications · Capabilities · R&amp;D · Innovation · Sustainability · Contact. Four of those are the same content sliced differently, and a ten-item bar cannot look premium at any width. The restructure below loses nothing — every existing page survives as a section or a child route.</p>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">A — Old structure → new structure</span>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Existing page</th><th>Becomes</th><th>Reasoning</th></tr></thead>
+          <tbody>
+            <tr><td class="num">index</td><td><b>/</b> — Home</td><td>Rebuilt entirely. Sheet 02.</td></tr>
+            <tr><td class="num">divisions</td><td><b>/divisions</b> + <b>/divisions/[slug]</b></td><td>Ten divisions become ten real routes instead of one 296-line scroll.</td></tr>
+            <tr><td class="num">products</td><td><b>/products</b> + <b>/products/[slug]</b></td><td>Becomes a filterable catalogue over a real data file, plus per-product spec sheets. Sheet 04.</td></tr>
+            <tr><td class="num">industries</td><td><b>/industries/[slug]</b></td><td>Ten industry routes.</td></tr>
+            <tr><td class="num">applications</td><td>merged into <b>/industries/[slug]</b></td><td>The applications copy is already organised by industry — it is the same content read twice. Merging removes a whole duplicated page.</td></tr>
+            <tr><td class="num">capabilities</td><td><b>/services</b> + <b>/company/manufacturing</b></td><td>Split: what you <em>sell</em> (custom synthesis, contract manufacturing, technical support, export) goes to Services; what you <em>own</em> (plants, labs, QC) goes to Company.</td></tr>
+            <tr><td class="num">rnd</td><td><b>/services/research</b></td><td>R&amp;D is a service you offer clients, not a company fact. Selling it explicitly is the biggest commercial gain in this restructure.</td></tr>
+            <tr><td class="num">innovation</td><td>merged into <b>/services/research</b></td><td>Substantially overlaps R&amp;D in the source copy.</td></tr>
+            <tr><td class="num">sustainability</td><td><b>/company/sustainability</b></td><td>Kept whole — it is a genuine differentiator for the halogen-free line.</td></tr>
+            <tr><td class="num">about</td><td><b>/company</b></td><td>Becomes the parent of the company cluster.</td></tr>
+            <tr><td class="num">contact</td><td><b>/contact</b> + <b>/quote</b></td><td>General contact and a structured quote request are different jobs with different forms. Sheet 08.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="keybox">
+        <b>Why Services is new — and why it matters most</b>
+        <p>You asked for a product <em>and service</em> site. Right now the service offering is invisible: custom synthesis, lab-to-commercial scale-up, tailored formulation, regulatory documentation and export handling are all buried as bullet points inside "Capabilities". Those are the highest-margin things Cosmox sells and the reason a buyer picks you over a distributor. Giving them a top-level home with their own enquiry route is the single highest-value change in this plan.</p>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">B — Primary navigation</span>
+      <div class="canvas">
+        <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">Header — 1440 × 72 · sticky, hairline bottom, no shadow</span></div>
+        <div class="band">
+          <div class="band__key"><span class="cal">1</span><b>Header</b><span>72px</span></div>
+          <div class="band__art">
+            <div class="wf-nav">
+              <div class="t t--h" style="width:104px"></div>
+              <div style="flex:1"></div>
+              <div class="t" style="width:58px"></div><div class="t" style="width:62px"></div>
+              <div class="t" style="width:52px"></div><div class="t" style="width:58px"></div>
+              <div class="btn-wf">Request a quote</div>
+            </div>
+            <div class="mono" style="color:var(--ink-3)">Products · Industries · Services · Company · [Request a quote]</div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">2</span><b>Mega panel</b><span>on hover / focus</span></div>
+          <div class="band__art">
+            <div class="g" style="padding:14px;display:grid;grid-template-columns:1.3fr 1fr 1fr .9fr;gap:16px">
+              <div class="col">
+                <div class="t t--m w45"></div>
+                <div class="t w85"></div><div class="t w75"></div><div class="t w85"></div><div class="t w65"></div><div class="t w75"></div>
+              </div>
+              <div class="col">
+                <div class="t t--m w55"></div>
+                <div class="t w75"></div><div class="t w85"></div><div class="t w65"></div>
+              </div>
+              <div class="col">
+                <div class="t t--m w45"></div>
+                <div class="t w85"></div><div class="t w65"></div><div class="t w75"></div>
+              </div>
+              <div class="g g--img g--tag" data-tag="IMG 4:5" style="min-height:104px"></div>
+            </div>
+            <div class="mono" style="color:var(--ink-3)">Col 1 — 10 divisions · Col 2 — by industry · Col 3 — by form/grade · Col 4 — featured</div>
+          </div>
+        </div>
+      </div>
+      <ol class="notes">
+        <li><span class="cal">1</span><b>Header</b><p>Logotype left, four links centre-left on the grid (not centred in the viewport), quote CTA hard right. Hairline bottom rule only — the current site's white bar with a shadow goes. On scroll past 80px the bar height drops 72→56px and the logotype contracts to the mark; nothing fades or blurs.</p><span class="mv mono">Motion — height transition 240ms, no backdrop-filter</span></li>
+        <li><span class="cal">2</span><b>Mega panel</b><p>Products and Industries open a full-width panel on hover and on keyboard focus. Four columns: all ten divisions, then the two cross-cuts a buyer actually thinks in — "by industry" and "by form/grade" — then one featured image. Panel is paper-coloured with a hairline, drops flush under the header with no gap, and closes on Escape.</p><span class="mv mono">Motion — panel height auto, 180ms; contents do not stagger</span></li>
+      </ol>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">C — Full route map</span>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Route</th><th>Type</th><th>Count</th><th>Sheet</th></tr></thead>
+          <tbody>
+            <tr><td class="num">/</td><td>Static</td><td>1</td><td>02</td></tr>
+            <tr><td class="num">/divisions</td><td>Static index</td><td>1</td><td>03</td></tr>
+            <tr><td class="num">/divisions/[slug]</td><td>Generated from content</td><td>10</td><td>03</td></tr>
+            <tr><td class="num">/products</td><td>Filterable catalogue</td><td>1</td><td>04</td></tr>
+            <tr><td class="num">/products/[slug]</td><td>Spec sheet, generated</td><td>~40 at launch</td><td>04</td></tr>
+            <tr><td class="num">/industries/[slug]</td><td>Generated from content</td><td>10</td><td>05</td></tr>
+            <tr><td class="num">/services</td><td>Static</td><td>1</td><td>06</td></tr>
+            <tr><td class="num">/services/[slug]</td><td>Static</td><td>4</td><td>06</td></tr>
+            <tr><td class="num">/company + children</td><td>Static</td><td>4</td><td>07</td></tr>
+            <tr><td class="num">/contact · /quote</td><td>Static + form</td><td>2</td><td>08</td></tr>
+            <tr><td class="num">/legal/*</td><td>MDX</td><td>3</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lede" style="margin-top:14px">Roughly <b>77 routes</b> at launch, of which 60 are generated from two content files. Nothing is hand-authored twice.</p>
+    </div>
+
+    <div class="titleblock mono">
+      <div><span>Project</span><b>Cosmox Chemicals</b></div>
+      <div><span>Sheet</span><b class="tnum">01 of 10</b></div>
+      <div><span>Title</span><b>Sitemap &amp; navigation</b></div>
+      <div><span>Scale</span><b>NTS</b></div>
+      <div><span>Status</span><b>For review</b></div>
+    </div>
+  </section>
+
+  <!-- ================= SHEET 02 ================= -->
+  <section class="sheet" id="s02" role="tabpanel" aria-label="Home">
+    <div class="sheet__head">
+      <span class="sheet__no mono">Sheet 02 — Home</span>
+      <h1>One page, eleven bands, one idea.</h1>
+      <p>The home page has one job: convince a procurement engineer in Stuttgart or Ohio that this is a serious manufacturer within four seconds, then route them into the catalogue. Every band below either builds credibility or routes. Nothing is there to fill space.</p>
+    </div>
+
+    <div class="canvas">
+      <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">/ — Home · 1440px viewport · total scroll ≈ 6.2 screens</span></div>
+
+      <div class="band">
+        <div class="band__key"><span class="cal">1</span><b>Header</b><span>72px · sticky</span></div>
+        <div class="band__art">
+          <div class="wf-nav">
+            <div class="t t--h" style="width:104px"></div><div style="flex:1"></div>
+            <div class="t" style="width:58px"></div><div class="t" style="width:62px"></div>
+            <div class="t" style="width:52px"></div><div class="t" style="width:58px"></div>
+            <div class="btn-wf">Request a quote</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="band">
+        <div class="band__key"><span class="cal">2</span><b>Hero</b><span>88vh · split 6/6</span></div>
+        <div class="band__art">
+          <div class="row row--top">
+            <div class="col" style="flex:1.05;gap:12px;justify-content:center">
+              <div class="mono" style="color:var(--ink-3)">EST. 2011 · SURAT, GUJARAT · 10 DIVISIONS</div>
+              <div class="t t--h w95"></div><div class="t t--h w85"></div><div class="t t--h w55"></div>
+              <div style="height:6px"></div>
+              <div class="t w75"></div><div class="t w65"></div>
+              <div style="height:6px"></div>
+              <div class="row" style="gap:8px"><div class="btn-wf btn-wf--solid">Explore products</div><div class="btn-wf">Download capability deck</div></div>
+            </div>
+            <div class="g g--img g--tag" data-tag="IMG 4:5 — plant, held still" style="flex:.95;min-height:210px"></div>
+          </div>
+          <div class="g" style="height:26px;display:flex;align-items:center;padding:0 10px;gap:26px;overflow:hidden">
+            <div class="t w15" style="flex:0 0 auto;width:76px"></div><div class="t" style="flex:0 0 auto;width:92px"></div>
+            <div class="t" style="flex:0 0 auto;width:64px"></div><div class="t" style="flex:0 0 auto;width:88px"></div>
+            <div class="t" style="flex:0 0 auto;width:70px"></div><div class="t" style="flex:0 0 auto;width:96px"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="band">
+        <div class="band__key"><span class="cal">3</span><b>Positioning</b><span>160px pad</span></div>
+        <div class="band__art">
+          <div style="padding:8px 0 8px 22%;display:flex;flex-direction:column;gap:9px">
+            <div class="t t--h2 w95"></div><div class="t t--h2 w95"></div><div class="t t--h2 w45"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="band">
+        <div class="band__key"><span class="cal">4</span><b>Divisions table</b><span>10 rows · signature</span></div>
+        <div class="band__art">
+          <div class="row" style="border-bottom:1px solid var(--rule);padding-bottom:6px">
+            <div class="mono" style="color:var(--ink-3);flex:0 0 40px">No.</div>
+            <div class="mono" style="color:var(--ink-3);flex:1.4">Division</div>
+            <div class="mono" style="color:var(--ink-3);flex:1.6">Representative products</div>
+            <div class="mono" style="color:var(--ink-3);flex:0 0 30px">→</div>
+          </div>
+          <div class="row" style="align-items:center;padding:7px 0;border-bottom:1px solid var(--rule-soft)">
+            <div class="mono tnum" style="color:var(--accent);flex:0 0 40px">01</div>
+            <div style="flex:1.4"><div class="t t--h2 w85"></div></div>
+            <div style="flex:1.6;display:flex;flex-direction:column;gap:5px"><div class="t w75"></div><div class="t w55"></div></div>
+            <div style="flex:0 0 30px"><div class="t w45"></div></div>
+          </div>
+          <div class="row" style="align-items:center;padding:7px 0;border-bottom:1px solid var(--rule-soft);background:var(--accent-soft)">
+            <div class="mono tnum" style="color:var(--accent);flex:0 0 40px">02</div>
+            <div style="flex:1.4"><div class="t t--h2 w95"></div></div>
+            <div style="flex:1.6;display:flex;flex-direction:column;gap:5px"><div class="t w85"></div><div class="t w45"></div></div>
+            <div class="g g--img" style="flex:0 0 64px;min-height:38px"></div>
+          </div>
+          <div class="row" style="align-items:center;padding:7px 0;border-bottom:1px solid var(--rule-soft)">
+            <div class="mono tnum" style="color:var(--accent);flex:0 0 40px">03</div>
+            <div style="flex:1.4"><div class="t t--h2 w75"></div></div>
+            <div style="flex:1.6;display:flex;flex-direction:column;gap:5px"><div class="t w85"></div><div class="t w65"></div></div>
+            <div style="flex:0 0 30px"><div class="t w45"></div></div>
+          </div>
+          <div class="mono" style="color:var(--ink-3);padding-top:4px">…rows 04–10 · hovered row 02 shows thumbnail sliding in from right</div>
+        </div>
+      </div>
+
+      <div class="band">
+        <div class="band__key"><span class="cal">5</span><b>Capability strip</b><span>4 col</span></div>
+        <div class="band__art">
+          <div class="grid4">
+            <div class="g g--pad" style="min-height:88px"><div class="t t--m w25"></div><div class="t t--h2 w75"></div><div class="t w95"></div><div class="t w65"></div></div>
+            <div class="g g--pad" style="min-height:88px"><div class="t t--m w25"></div><div class="t t--h2 w85"></div><div class="t w95"></div><div class="t w55"></div></div>
+            <div class="g g--pad" style="min-height:88px"><div class="t t--m w25"></div><div class="t t--h2 w65"></div><div class="t w95"></div><div class="t w75"></div></div>
+            <div class="g g--pad" style="min-height:88px"><div class="t t--m w25"></div><div class="t t--h2 w75"></div><div class="t w85"></div><div class="t w65"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="band">
+        <div class="band__key"><span class="cal">6</span><b>Industries rail</b><span>h-scroll</span></div>
+        <div class="band__art">
+          <div class="row" style="gap:9px">
+            <div class="g g--img g--tag" data-tag="IMG 4:5" style="flex:0 0 21%;min-height:132px"></div>
+            <div class="g g--img g--tag" data-tag="IMG 4:5" style="flex:0 0 21%;min-height:132px"></div>
+            <div class="g g--img g--tag" data-tag="IMG 4:5" style="flex:0 0 21%;min-height:132px"></div>
+            <div class="g g--img g--tag" data-tag="IMG 4:5" style="flex:0 0 21%;min-height:132px"></div>
+            <div class="g g--img" style="flex:1;min-height:132px;opacity:.5"></div>
+          </div>
+          <div class="mono" style="color:var(--ink-3)">10 cards · drag + wheel · counter 01/10 bottom-left · no arrows</div>
+        </div>
+      </div>
+
+      <div class="band">
+        <div class="band__key"><span class="cal">7</span><b>Numbers</b><span>full bleed · inverted</span></div>
+        <div class="band__art">
+          <div class="g g--ink" style="padding:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--ink)">
+            <div style="padding:4px 12px 4px 0;border-right:1px solid rgba(255,255,255,.22)"><div class="t" style="background:var(--paper);opacity:.9;height:20px;width:58%"></div><div class="t" style="background:var(--paper);opacity:.4;margin-top:8px;width:72%"></div></div>
+            <div style="padding:4px 12px;border-right:1px solid rgba(255,255,255,.22)"><div class="t" style="background:var(--paper);opacity:.9;height:20px;width:66%"></div><div class="t" style="background:var(--paper);opacity:.4;margin-top:8px;width:60%"></div></div>
+            <div style="padding:4px 12px;border-right:1px solid rgba(255,255,255,.22)"><div class="t" style="background:var(--paper);opacity:.9;height:20px;width:52%"></div><div class="t" style="background:var(--paper);opacity:.4;margin-top:8px;width:78%"></div></div>
+            <div style="padding:4px 0 4px 12px"><div class="t" style="background:var(--paper);opacity:.9;height:20px;width:70%"></div><div class="t" style="background:var(--paper);opacity:.4;margin-top:8px;width:64%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="band">
+        <div class="band__key"><span class="cal">8</span><b>Compliance</b><span>logo row</span></div>
+        <div class="band__art">
+          <div class="grid5">
+            <div class="g g--img" style="min-height:44px"></div><div class="g g--img" style="min-height:44px"></div>
+            <div class="g g--img" style="min-height:44px"></div><div class="g g--img" style="min-height:44px"></div>
+            <div class="g g--img" style="min-height:44px"></div>
+          </div>
+          <div class="mono" style="color:var(--ink-3)">ISO 9001 · ISO 14001 · REACH · GMP · RoHS — greyscale marks, 1px frame, no colour</div>
+        </div>
+      </div>
+
+      <div class="band">
+        <div class="band__key"><span class="cal">9</span><b>R&amp;D teaser</b><span>asymmetric 5/5</span></div>
+        <div class="band__art">
+          <div class="row row--top">
+            <div class="g g--img g--tag" data-tag="IMG 3:2 — lab" style="flex:1.1;min-height:150px"></div>
+            <div class="col" style="flex:.9;padding-top:44px;gap:8px">
+              <div class="t t--m w35"></div>
+              <div class="t t--h2 w85"></div><div class="t t--h2 w55"></div>
+              <div style="height:4px"></div>
+              <div class="t w95"></div><div class="t w85"></div><div class="t w75"></div>
+              <div class="btn-wf" style="margin-top:6px">Custom synthesis →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="band">
+        <div class="band__key"><span class="cal">10</span><b>CTA band</b><span>split</span></div>
+        <div class="band__art">
+          <div class="row" style="border:1px solid var(--ink);padding:18px;align-items:center">
+            <div class="col" style="flex:1.5"><div class="t t--h w85"></div><div class="t w65"></div></div>
+            <div class="row" style="flex:1;justify-content:flex-end;gap:8px"><div class="btn-wf btn-wf--solid">Request a quote</div><div class="btn-wf">Talk to a chemist</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="band">
+        <div class="band__key"><span class="cal">11</span><b>Footer</b><span>4 col + wordmark</span></div>
+        <div class="band__art">
+          <div class="grid4">
+            <div class="col"><div class="t t--m w45"></div><div class="t w75"></div><div class="t w85"></div><div class="t w65"></div><div class="t w75"></div></div>
+            <div class="col"><div class="t t--m w55"></div><div class="t w85"></div><div class="t w65"></div><div class="t w75"></div></div>
+            <div class="col"><div class="t t--m w45"></div><div class="t w75"></div><div class="t w85"></div></div>
+            <div class="col"><div class="t t--m w65"></div><div class="t w95"></div><div class="t w85"></div><div class="t w75"></div></div>
+          </div>
+          <div class="t t--h" style="width:100%;height:40px;opacity:.1;margin-top:8px"></div>
+          <div class="mono" style="color:var(--ink-3)">Oversized COSMOX wordmark, clipped by the viewport edge, 10% ink</div>
+        </div>
+      </div>
+    </div>
+
+    <ol class="notes">
+      <li><span class="cal">1</span><b>Header</b><p>As Sheet 01. On the home page only, it starts transparent over the hero image and gains the paper background once the hero leaves the viewport.</p></li>
+      <li><span class="cal">2</span><b>Hero</b><p>Split 6/6 on the 12-column grid, never a full-bleed background with text laid over it. Left: mono metadata line, then a three-line headline at clamp(2.6rem, 6vw, 4.6rem), then one sentence, then two buttons. Right: a single portrait photograph of plant or reactor hardware, held completely still. Height is 88vh, not 100vh — the cropped next band is what tells the visitor to scroll.</p><span class="mv mono">Motion — headline lines rise 12px on load, 60ms stagger; image mask-wipes over 700ms</span></li>
+      <li><span class="cal">2b</span><b>Division ticker</b><p>A 26px strip pinned to the hero's bottom edge running the ten division names in mono at a slow constant speed. It is the one ambient movement on the page and it doubles as a table of contents. Pauses on hover, hidden under reduced-motion.</p></li>
+      <li><span class="cal">3</span><b>Positioning statement</b><p>Three lines of 32–40px text indented to column 4, on bare paper, with 160px of padding above and below. No image, no card, no icon. This much empty space around one short statement is the clearest premium signal on the page and costs nothing to build.</p></li>
+      <li><span class="cal">4</span><b>Divisions table</b><p><b>The signature module.</b> Ten divisions as table rows, not a grid of ten cards — a grid of ten cards is what every chemicals competitor ships. Each row: mono numeral, division name at 24px, three representative products in muted mono, arrow. Hovering a row tints it, draws an accent hairline, and slides a small thumbnail in from the right edge. Rows link to <code>/divisions/[slug]</code>. This is the one real risk in the design and it is the thing people will remember.</p><span class="mv mono">Motion — rows reveal on enter, 40ms stagger; thumbnail slides 24px, 220ms</span></li>
+      <li><span class="cal">5</span><b>Capability strip</b><p>Four columns — Manufacturing, R&amp;D, Quality &amp; compliance, Export &amp; logistics. Mono numeral, short heading, two lines, text link. Separated by vertical hairlines, not boxes.</p></li>
+      <li><span class="cal">6</span><b>Industries rail</b><p>Horizontally scrolling rail of ten 4:5 cards, last card deliberately cropped by the viewport edge so the overflow is legible. Drag, wheel and keyboard all work; a mono counter reads 01/10. No arrow buttons — they clutter the composition.</p></li>
+      <li><span class="cal">7</span><b>Numbers</b><p>Full-bleed inverted band, the only ink-ground section on the page. Four figures at 56px in tabular mono with hairline dividers: divisions, countries served, products, years. Numbers are printed, not counted up.</p></li>
+      <li><span class="cal">8</span><b>Compliance</b><p>Five certification marks in greyscale on paper, each in a 1px frame, evenly spaced. For an export buyer this band does more selling than any headline — it belongs above the fold on mobile, so it moves up one position under 768px.</p></li>
+      <li><span class="cal">9</span><b>R&amp;D teaser</b><p>Deliberately asymmetric: image occupies columns 1–6, text sits in columns 7–11 and starts 44px lower than the image top. The broken baseline is what keeps a strict grid from reading as rigid. Routes to <code>/services/research</code>.</p></li>
+      <li><span class="cal">10</span><b>CTA band</b><p>One hairline rectangle spanning the full grid. Statement left, two buttons right — "Request a quote" is solid, "Talk to a chemist" is outlined. Two verbs, two different intents, both real.</p></li>
+      <li><span class="cal">11</span><b>Footer</b><p>Four link columns, the registered address and both phone numbers in mono, then an oversized COSMOX wordmark clipped by the viewport bottom at 10% opacity. Legal line last.</p></li>
+    </ol>
+
+    <div class="flagbox">
+      <b>Assets required before this page can be built</b>
+      <p>One portrait plant photograph for the hero, ten 4:5 industry images, ten division thumbnails, one lab image, and five certification marks. Photography is the gap the current site's README already flags — the layout is built around a still image doing the work that five animated SVG slides are doing today, so commissioning a half-day plant and lab shoot is a hard dependency, not a nice-to-have.</p>
+    </div>
+
+    <div class="titleblock mono">
+      <div><span>Project</span><b>Cosmox Chemicals</b></div>
+      <div><span>Sheet</span><b class="tnum">02 of 10</b></div>
+      <div><span>Title</span><b>Home</b></div>
+      <div><span>Scale</span><b>NTS</b></div>
+      <div><span>Status</span><b>For review</b></div>
+    </div>
+  </section>
+
+  <!-- ================= SHEET 03 ================= -->
+  <section class="sheet" id="s03" role="tabpanel" aria-label="Divisions">
+    <div class="sheet__head">
+      <span class="sheet__no mono">Sheet 03 — Divisions</span>
+      <h1>Ten divisions, ten routes.</h1>
+      <p>Today all ten divisions live in one 296-line page. Split into real routes, each division gets its own URL to send a buyer to, its own metadata, and its own place in search — and the template is authored once and generated ten times from a content file.</p>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">A — /divisions (index)</span>
+      <div class="canvas">
+        <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">/divisions — index</span></div>
+        <div class="band">
+          <div class="band__key"><span class="cal">1</span><b>Page head</b><span>columns 1–7</span></div>
+          <div class="band__art">
+            <div class="mono" style="color:var(--ink-3)">COMPANY / DIVISIONS</div>
+            <div class="t t--h w75"></div><div class="t t--h w45"></div>
+            <div style="height:4px"></div><div class="t w85"></div><div class="t w65"></div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">2</span><b>Expanded table</b><span>10 rows</span></div>
+          <div class="band__art">
+            <div class="row" style="align-items:flex-start;padding:9px 0;border-top:1px solid var(--rule)">
+              <div class="mono tnum" style="color:var(--accent);flex:0 0 42px">01</div>
+              <div class="col" style="flex:1.3"><div class="t t--h2 w85"></div><div class="t w65"></div></div>
+              <div class="col" style="flex:1.1"><div class="t w75"></div><div class="t w85"></div><div class="t w55"></div></div>
+              <div class="g g--img" style="flex:0 0 90px;min-height:56px"></div>
+            </div>
+            <div class="row" style="align-items:flex-start;padding:9px 0;border-top:1px solid var(--rule)">
+              <div class="mono tnum" style="color:var(--accent);flex:0 0 42px">02</div>
+              <div class="col" style="flex:1.3"><div class="t t--h2 w75"></div><div class="t w75"></div></div>
+              <div class="col" style="flex:1.1"><div class="t w85"></div><div class="t w65"></div><div class="t w75"></div></div>
+              <div class="g g--img" style="flex:0 0 90px;min-height:56px"></div>
+            </div>
+            <div class="mono" style="color:var(--ink-3);padding-top:6px">…rows 03–10 identical · sticky filter chips above on scroll</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">B — /divisions/[slug] (detail)</span>
+      <div class="canvas">
+        <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">/divisions/lithium-metal-additives — template × 10</span></div>
+        <div class="band">
+          <div class="band__key"><span class="cal">3</span><b>Division hero</b><span>60vh</span></div>
+          <div class="band__art">
+            <div class="row row--top">
+              <div class="col" style="flex:1.1;gap:9px">
+                <div class="mono" style="color:var(--ink-3)">DIVISION</div>
+                <div class="t t--h" style="width:34%;height:44px;opacity:.14"></div>
+                <div class="t t--h w85"></div><div class="t t--h w55"></div>
+                <div class="t w95"></div><div class="t w75"></div>
+              </div>
+              <div class="g g--img g--tag" data-tag="IMG 4:5" style="flex:.9;min-height:172px"></div>
+            </div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">4</span><b>Sticky sub-nav</b><span>left rail</span></div>
+          <div class="band__art">
+            <div class="row row--top">
+              <div class="col" style="flex:0 0 22%;gap:6px;border-right:1px solid var(--rule);padding-right:12px">
+                <div class="t t--m w75"></div><div class="t w65"></div><div class="t w75"></div><div class="t w55"></div><div class="t w65"></div>
+              </div>
+              <div class="col" style="flex:1;gap:9px">
+                <div class="t t--h2 w45"></div>
+                <div class="t w95"></div><div class="t w85"></div><div class="t w75"></div>
+                <div style="height:6px"></div>
+                <div class="t t--h2 w35"></div>
+                <div class="row" style="border-top:1px solid var(--rule);padding-top:6px">
+                  <div class="mono" style="color:var(--ink-3);flex:1.4">Product</div>
+                  <div class="mono" style="color:var(--ink-3);flex:.7">CAS</div>
+                  <div class="mono" style="color:var(--ink-3);flex:.7">Grade</div>
+                  <div class="mono" style="color:var(--ink-3);flex:.5">TDS</div>
+                </div>
+                <div class="row" style="border-top:1px solid var(--rule-soft);padding-top:6px"><div style="flex:1.4"><div class="t w75"></div></div><div style="flex:.7"><div class="t w65"></div></div><div style="flex:.7"><div class="t w45"></div></div><div style="flex:.5"><div class="t t--m w35"></div></div></div>
+                <div class="row" style="border-top:1px solid var(--rule-soft);padding-top:6px"><div style="flex:1.4"><div class="t w85"></div></div><div style="flex:.7"><div class="t w55"></div></div><div style="flex:.7"><div class="t w45"></div></div><div style="flex:.5"><div class="t t--m w35"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">5</span><b>Applications</b><span>2 col</span></div>
+          <div class="band__art">
+            <div class="grid2">
+              <div class="g g--pad" style="min-height:76px"><div class="t t--m w35"></div><div class="t w85"></div><div class="t w95"></div><div class="t w65"></div></div>
+              <div class="g g--pad" style="min-height:76px"><div class="t t--m w45"></div><div class="t w95"></div><div class="t w75"></div><div class="t w85"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">6</span><b>Export &amp; R&amp;D</b><span>inverted</span></div>
+          <div class="band__art">
+            <div class="g g--ink" style="padding:16px;display:flex;gap:16px;align-items:center">
+              <div class="col" style="flex:1.4"><div class="t" style="background:var(--paper);opacity:.85;height:14px;width:70%"></div><div class="t" style="background:var(--paper);opacity:.35;width:88%"></div></div>
+              <div class="btn-wf" style="border-color:var(--paper);color:var(--paper)">Request this division’s catalogue</div>
+            </div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">7</span><b>Related</b><span>3 up</span></div>
+          <div class="band__art">
+            <div class="grid3">
+              <div class="g g--img" style="min-height:70px"></div><div class="g g--img" style="min-height:70px"></div><div class="g g--img" style="min-height:70px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ol class="notes">
+        <li><span class="cal">1</span><b>Page head</b><p>Breadcrumb in mono, two-line title, one paragraph in columns 1–7. Every interior page in the site opens exactly this way — consistency here is what makes the site feel engineered.</p></li>
+        <li><span class="cal">2</span><b>Expanded table</b><p>Same table as the home page but with a description line and a thumbnail always visible. Sticky filter chips appear on scroll so a buyer can narrow to a segment without leaving the page.</p></li>
+        <li><span class="cal">3</span><b>Division hero</b><p>The division number is set at 44px in a very light ink tint behind the title — a drafting sheet number, not decoration. It encodes the division's real position in the portfolio.</p></li>
+        <li><span class="cal">4</span><b>Sticky sub-nav + product table</b><p>Left rail pins the five sections the source content already uses: Focus, Products, Applications, Capabilities, Export &amp; R&amp;D. Right column holds the content. Products appear as a data table with CAS, grade and a TDS download link — not as cards. Rows link through to the spec sheet in Sheet 04.</p><span class="mv mono">Motion — active rail item marked by an accent hairline that slides between items, 200ms</span></li>
+        <li><span class="cal">5</span><b>Applications</b><p>Two columns of hairline-framed blocks. Content comes straight from the existing division copy with no rewriting needed.</p></li>
+        <li><span class="cal">6</span><b>Export &amp; R&amp;D band</b><p>Inverted band with a division-specific CTA. The ask is concrete — "request this division's catalogue" converts far better than a generic contact link.</p></li>
+        <li><span class="cal">7</span><b>Related divisions</b><p>Three cross-links, chosen by shared industry rather than by adjacent number.</p></li>
+      </ol>
+    </div>
+
+    <div class="titleblock mono">
+      <div><span>Project</span><b>Cosmox Chemicals</b></div>
+      <div><span>Sheet</span><b class="tnum">03 of 10</b></div>
+      <div><span>Title</span><b>Divisions</b></div>
+      <div><span>Scale</span><b>NTS</b></div>
+      <div><span>Status</span><b>For review</b></div>
+    </div>
+  </section>
+
+  <!-- ================= SHEET 04 ================= -->
+  <section class="sheet" id="s04" role="tabpanel" aria-label="Products and spec sheet">
+    <div class="sheet__head">
+      <span class="sheet__no mono">Sheet 04 — Products &amp; spec sheet</span>
+      <h1>The catalogue is the product.</h1>
+      <p>This is where a technical buyer actually spends their time, and where the current site is weakest — products are prose today. Two screens: a filterable catalogue that behaves like a database, and a per-product spec sheet that behaves like a TDS. Get these right and the rest of the site is supporting material.</p>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">A — /products (catalogue)</span>
+      <div class="canvas">
+        <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">/products?division=…&amp;industry=…&amp;form=… — URL-driven filters</span></div>
+        <div class="band">
+          <div class="band__key"><span class="cal">1</span><b>Search head</b><span>columns 1–8</span></div>
+          <div class="band__art">
+            <div class="mono" style="color:var(--ink-3)">PRODUCTS</div>
+            <div class="t t--h w55"></div>
+            <div class="row" style="gap:8px;margin-top:4px">
+              <div class="g" style="flex:1;height:34px;display:flex;align-items:center;padding:0 10px"><div class="t w35"></div></div>
+              <div class="btn-wf btn-wf--solid" style="height:34px">Search</div>
+            </div>
+            <div class="mono" style="color:var(--ink-3)">Search by name, CAS number or synonym · fuzzy match</div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">2</span><b>Filter rail</b><span>0 0 216px</span></div>
+          <div class="band__art">
+            <div class="row row--top">
+              <div class="col" style="flex:0 0 26%;gap:8px;border-right:1px solid var(--rule);padding-right:12px">
+                <div class="t t--m w55"></div>
+                <div class="row" style="gap:6px;align-items:center"><div class="g" style="width:11px;height:11px;flex:0 0 11px"></div><div class="t w75"></div></div>
+                <div class="row" style="gap:6px;align-items:center"><div class="g g--ink" style="width:11px;height:11px;flex:0 0 11px"></div><div class="t w85"></div></div>
+                <div class="row" style="gap:6px;align-items:center"><div class="g" style="width:11px;height:11px;flex:0 0 11px"></div><div class="t w65"></div></div>
+                <div style="height:6px"></div>
+                <div class="t t--m w45"></div>
+                <div class="row" style="gap:6px;align-items:center"><div class="g" style="width:11px;height:11px;flex:0 0 11px"></div><div class="t w75"></div></div>
+                <div class="row" style="gap:6px;align-items:center"><div class="g" style="width:11px;height:11px;flex:0 0 11px"></div><div class="t w85"></div></div>
+                <div style="height:6px"></div>
+                <div class="t t--m w65"></div>
+                <div class="row" style="gap:6px;align-items:center"><div class="g" style="width:11px;height:11px;flex:0 0 11px"></div><div class="t w55"></div></div>
+              </div>
+              <div class="col" style="flex:1;gap:0">
+                <div class="row" style="padding-bottom:6px;border-bottom:1px solid var(--ink)">
+                  <div class="mono" style="color:var(--ink-3);flex:1.5">Product</div>
+                  <div class="mono" style="color:var(--ink-3);flex:.8">CAS</div>
+                  <div class="mono" style="color:var(--ink-3);flex:1">Division</div>
+                  <div class="mono" style="color:var(--ink-3);flex:.6">Grade</div>
+                  <div class="mono" style="color:var(--ink-3);flex:.5">Docs</div>
+                </div>
+                <div class="row" style="padding:8px 0;border-bottom:1px solid var(--rule-soft)"><div style="flex:1.5"><div class="t t--h2 w85"></div></div><div style="flex:.8"><div class="t w75"></div></div><div style="flex:1"><div class="t w65"></div></div><div style="flex:.6"><div class="t w55"></div></div><div style="flex:.5"><div class="t t--m w45"></div></div></div>
+                <div class="row" style="padding:8px 0;border-bottom:1px solid var(--rule-soft);background:var(--accent-soft)"><div style="flex:1.5"><div class="t t--h2 w75"></div></div><div style="flex:.8"><div class="t w85"></div></div><div style="flex:1"><div class="t w75"></div></div><div style="flex:.6"><div class="t w45"></div></div><div style="flex:.5"><div class="t t--m w45"></div></div></div>
+                <div class="row" style="padding:8px 0;border-bottom:1px solid var(--rule-soft)"><div style="flex:1.5"><div class="t t--h2 w95"></div></div><div style="flex:.8"><div class="t w65"></div></div><div style="flex:1"><div class="t w85"></div></div><div style="flex:.6"><div class="t w55"></div></div><div style="flex:.5"><div class="t t--m w45"></div></div></div>
+                <div class="row" style="padding:8px 0;border-bottom:1px solid var(--rule-soft)"><div style="flex:1.5"><div class="t t--h2 w65"></div></div><div style="flex:.8"><div class="t w75"></div></div><div style="flex:1"><div class="t w65"></div></div><div style="flex:.6"><div class="t w45"></div></div><div style="flex:.5"><div class="t t--m w45"></div></div></div>
+                <div class="mono" style="color:var(--ink-3);padding-top:6px">42 results · 24 per page · row hover draws accent hairline</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">B — /products/[slug] (spec sheet)</span>
+      <div class="canvas">
+        <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">/products/12-hydroxy-lithium-stearate — template × ~40</span></div>
+        <div class="band">
+          <div class="band__key"><span class="cal">3</span><b>Identity</b><span>7/5 split</span></div>
+          <div class="band__art">
+            <div class="row row--top">
+              <div class="col" style="flex:1.2;gap:8px">
+                <div class="mono" style="color:var(--ink-3)">PRODUCTS / DIVISION 01</div>
+                <div class="t t--h w85"></div>
+                <div class="row" style="gap:16px;margin-top:2px">
+                  <div class="col" style="gap:4px"><div class="t t--m w75" style="width:44px"></div><div class="t" style="width:66px"></div></div>
+                  <div class="col" style="gap:4px"><div class="t t--m" style="width:52px"></div><div class="t" style="width:58px"></div></div>
+                  <div class="col" style="gap:4px"><div class="t t--m" style="width:38px"></div><div class="t" style="width:72px"></div></div>
+                </div>
+                <div class="t w95"></div><div class="t w85"></div>
+              </div>
+              <div class="col" style="flex:.8;border:1px solid var(--ink);padding:12px;gap:8px">
+                <div class="t t--m w45"></div>
+                <div class="btn-wf btn-wf--solid" style="width:100%;justify-content:center">Request a quote</div>
+                <div class="btn-wf" style="width:100%;justify-content:center">Download TDS</div>
+                <div class="btn-wf" style="width:100%;justify-content:center">Download SDS</div>
+                <div class="t w85"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">4</span><b>Structure</b><span>optional</span></div>
+          <div class="band__art">
+            <div class="row">
+              <div class="g g--img g--tag" data-tag="SVG — molecular structure" style="flex:.7;min-height:96px"></div>
+              <div class="col" style="flex:1.3;gap:6px">
+                <div class="t t--m w35"></div>
+                <div class="row" style="border-bottom:1px solid var(--rule-soft);padding-bottom:5px"><div style="flex:1"><div class="t w45"></div></div><div style="flex:1"><div class="t w65"></div></div></div>
+                <div class="row" style="border-bottom:1px solid var(--rule-soft);padding-bottom:5px"><div style="flex:1"><div class="t w55"></div></div><div style="flex:1"><div class="t w45"></div></div></div>
+                <div class="row" style="border-bottom:1px solid var(--rule-soft);padding-bottom:5px"><div style="flex:1"><div class="t w35"></div></div><div style="flex:1"><div class="t w75"></div></div></div>
+                <div class="row" style="padding-bottom:5px"><div style="flex:1"><div class="t w45"></div></div><div style="flex:1"><div class="t w55"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">5</span><b>Spec tabs</b><span>4 tabs</span></div>
+          <div class="band__art">
+            <div class="row" style="gap:0;border-bottom:1px solid var(--ink)">
+              <div class="mono" style="padding:6px 12px;border:1px solid var(--ink);border-bottom:0;color:var(--ink);background:var(--paper-2)">Specifications</div>
+              <div class="mono" style="padding:6px 12px;color:var(--ink-3)">Applications</div>
+              <div class="mono" style="padding:6px 12px;color:var(--ink-3)">Packaging</div>
+              <div class="mono" style="padding:6px 12px;color:var(--ink-3)">Handling</div>
+            </div>
+            <div class="row" style="padding:7px 0;border-bottom:1px solid var(--rule-soft)"><div style="flex:1.4"><div class="t w65"></div></div><div style="flex:1"><div class="t w45"></div></div><div style="flex:.8"><div class="t w55"></div></div></div>
+            <div class="row" style="padding:7px 0;border-bottom:1px solid var(--rule-soft)"><div style="flex:1.4"><div class="t w75"></div></div><div style="flex:1"><div class="t w55"></div></div><div style="flex:.8"><div class="t w45"></div></div></div>
+            <div class="row" style="padding:7px 0;border-bottom:1px solid var(--rule-soft)"><div style="flex:1.4"><div class="t w55"></div></div><div style="flex:1"><div class="t w65"></div></div><div style="flex:.8"><div class="t w35"></div></div></div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">6</span><b>Used in</b><span>+ related</span></div>
+          <div class="band__art">
+            <div class="grid4">
+              <div class="g g--img" style="min-height:64px"></div><div class="g g--img" style="min-height:64px"></div>
+              <div class="g g--img" style="min-height:64px"></div><div class="g g--img" style="min-height:64px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ol class="notes">
+        <li><span class="cal">1</span><b>Search head</b><p>One search field matching product name, CAS number and synonym, with fuzzy matching. A buyer who arrives knowing a CAS number should reach the product in one action.</p></li>
+        <li><span class="cal">2</span><b>Filter rail + results table</b><p>Facets: division, industry, physical form, grade, certification. Every filter writes to the URL so a sales rep can send a filtered link. Results are a dense table — Product, CAS, Division, Grade, Docs — because that is how a chemicals catalogue is actually read. A card grid here would be slower to scan and would look like a shop.</p><span class="mv mono">Motion — results re-sort with a 30ms row stagger; no spinner, table dims to 60% while pending</span></li>
+        <li><span class="cal">3</span><b>Product identity</b><p>Name, then a mono data strip — CAS, formula, purity — then a short description. Right column is a hairline-framed action card that sticks on scroll: Request a quote, Download TDS, Download SDS. Quote is the primary action on every product page in the site.</p></li>
+        <li><span class="cal">4</span><b>Structure &amp; identifiers</b><p>Optional inline SVG of the molecular structure alongside a two-column identifier table (synonyms, EC number, HS code, appearance). Where no structure exists, the table spans the full width and the layout does not break.</p></li>
+        <li><span class="cal">5</span><b>Specification tabs</b><p>Four tabs — Specifications, Applications, Packaging, Handling. Specifications is a real table with property, value and test method columns, set in tabular figures. This is the page element that makes Cosmox look like a manufacturer rather than a trader.</p></li>
+        <li><span class="cal">6</span><b>Used in / related</b><p>Industry cards this product serves, then related products from the same division.</p></li>
+      </ol>
+      <div class="keybox">
+        <b>Content model dependency</b>
+        <p>This sheet assumes a structured <code>products.json</code> — name, slug, CAS, division, grade, form, specifications array, applications, industries, TDS/SDS file paths. That file does not exist yet and cannot be extracted reliably from the current prose. Building it for ~40 launch products is the largest content task in the project and should start in parallel with design, not after it.</p>
+      </div>
+    </div>
+
+    <div class="titleblock mono">
+      <div><span>Project</span><b>Cosmox Chemicals</b></div>
+      <div><span>Sheet</span><b class="tnum">04 of 10</b></div>
+      <div><span>Title</span><b>Products &amp; spec sheet</b></div>
+      <div><span>Scale</span><b>NTS</b></div>
+      <div><span>Status</span><b>For review</b></div>
+    </div>
+  </section>
+
+  <!-- ================= SHEET 05 ================= -->
+  <section class="sheet" id="s05" role="tabpanel" aria-label="Industries">
+    <div class="sheet__head">
+      <span class="sheet__no mono">Sheet 05 — Industries</span>
+      <h1>Ten industries, applications folded in.</h1>
+      <p>The existing Industries and Applications pages describe the same ten sectors twice. Merged, each industry becomes one page that answers a buyer's three questions in order: what do you sell me, what does it do in my process, and what does it save me.</p>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">A — /industries (index)</span>
+      <div class="canvas">
+        <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">/industries — alternating offset grid</span></div>
+        <div class="band">
+          <div class="band__key"><span class="cal">1</span><b>Offset grid</b><span>2 col · staggered</span></div>
+          <div class="band__art">
+            <div class="grid2" style="align-items:start">
+              <div class="col">
+                <div class="g g--img g--tag" data-tag="IMG 4:3" style="min-height:118px"></div>
+                <div class="mono tnum" style="color:var(--accent)">01</div>
+                <div class="t t--h2 w75"></div><div class="t w85"></div>
+              </div>
+              <div class="col" style="padding-top:52px">
+                <div class="g g--img g--tag" data-tag="IMG 4:3" style="min-height:118px"></div>
+                <div class="mono tnum" style="color:var(--accent)">02</div>
+                <div class="t t--h2 w65"></div><div class="t w75"></div>
+              </div>
+              <div class="col">
+                <div class="g g--img g--tag" data-tag="IMG 4:3" style="min-height:118px"></div>
+                <div class="mono tnum" style="color:var(--accent)">03</div>
+                <div class="t t--h2 w85"></div><div class="t w65"></div>
+              </div>
+              <div class="col" style="padding-top:52px">
+                <div class="g g--img g--tag" data-tag="IMG 4:3" style="min-height:118px"></div>
+                <div class="mono tnum" style="color:var(--accent)">04</div>
+                <div class="t t--h2 w75"></div><div class="t w85"></div>
+              </div>
+            </div>
+            <div class="mono" style="color:var(--ink-3)">Right column offset 52px · collapses to single column under 768px</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">B — /industries/[slug] (detail)</span>
+      <div class="canvas">
+        <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">/industries/automotive-transportation — template × 10</span></div>
+        <div class="band">
+          <div class="band__key"><span class="cal">2</span><b>Industry hero</b><span>full-bleed 21:9</span></div>
+          <div class="band__art">
+            <div class="g g--img g--tag" data-tag="IMG 21:9 — sector imagery" style="min-height:104px"></div>
+            <div class="mono" style="color:var(--ink-3)">INDUSTRIES / 01</div>
+            <div class="t t--h w65"></div><div class="t w85"></div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">3</span><b>Products used</b><span>table</span></div>
+          <div class="band__art">
+            <div class="row" style="border-bottom:1px solid var(--ink);padding-bottom:6px">
+              <div class="mono" style="color:var(--ink-3);flex:1.4">Product</div>
+              <div class="mono" style="color:var(--ink-3);flex:1.2">Function in this sector</div>
+              <div class="mono" style="color:var(--ink-3);flex:.6">Division</div>
+            </div>
+            <div class="row" style="padding:7px 0;border-bottom:1px solid var(--rule-soft)"><div style="flex:1.4"><div class="t t--h2 w75"></div></div><div style="flex:1.2"><div class="t w85"></div></div><div style="flex:.6"><div class="t t--m w55"></div></div></div>
+            <div class="row" style="padding:7px 0;border-bottom:1px solid var(--rule-soft)"><div style="flex:1.4"><div class="t t--h2 w85"></div></div><div style="flex:1.2"><div class="t w75"></div></div><div style="flex:.6"><div class="t t--m w45"></div></div></div>
+            <div class="row" style="padding:7px 0;border-bottom:1px solid var(--rule-soft)"><div style="flex:1.4"><div class="t t--h2 w65"></div></div><div style="flex:1.2"><div class="t w95"></div></div><div style="flex:.6"><div class="t t--m w55"></div></div></div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">4</span><b>Applications</b><span>merged page</span></div>
+          <div class="band__art">
+            <div class="row row--top">
+              <div class="col" style="flex:.55"><div class="t t--m w75"></div></div>
+              <div class="col" style="flex:1.45;gap:8px">
+                <div class="row" style="gap:9px;border-top:1px solid var(--rule);padding-top:7px"><div class="mono tnum" style="color:var(--accent);flex:0 0 26px">01</div><div class="col"><div class="t t--h2 w65"></div><div class="t w95"></div></div></div>
+                <div class="row" style="gap:9px;border-top:1px solid var(--rule);padding-top:7px"><div class="mono tnum" style="color:var(--accent);flex:0 0 26px">02</div><div class="col"><div class="t t--h2 w75"></div><div class="t w85"></div></div></div>
+                <div class="row" style="gap:9px;border-top:1px solid var(--rule);padding-top:7px"><div class="mono tnum" style="color:var(--accent);flex:0 0 26px">03</div><div class="col"><div class="t t--h2 w55"></div><div class="t w95"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">5</span><b>Benefits</b><span>4 col</span></div>
+          <div class="band__art">
+            <div class="grid4">
+              <div class="g g--pad" style="min-height:70px"><div class="t t--m w35"></div><div class="t w85"></div><div class="t w65"></div></div>
+              <div class="g g--pad" style="min-height:70px"><div class="t t--m w35"></div><div class="t w75"></div><div class="t w85"></div></div>
+              <div class="g g--pad" style="min-height:70px"><div class="t t--m w35"></div><div class="t w95"></div><div class="t w55"></div></div>
+              <div class="g g--pad" style="min-height:70px"><div class="t t--m w35"></div><div class="t w65"></div><div class="t w85"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">6</span><b>Technical support</b><span>+ CTA</span></div>
+          <div class="band__art">
+            <div class="row" style="border:1px solid var(--ink);padding:16px;align-items:center">
+              <div class="col" style="flex:1.5"><div class="t t--h2 w75"></div><div class="t w85"></div></div>
+              <div class="btn-wf btn-wf--solid">Talk to a sector specialist</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ol class="notes">
+        <li><span class="cal">1</span><b>Offset grid</b><p>Two columns with the right column pushed down 52px. The stagger keeps a ten-item grid from reading as a spreadsheet while staying strictly on the grid. Images are 4:3, numbered, with the industry name beneath — caption under image, never overlaid.</p><span class="mv mono">Motion — image mask-wipe on enter, alternating direction per column</span></li>
+        <li><span class="cal">2</span><b>Industry hero</b><p>Full-bleed 21:9 sector photograph, then breadcrumb, title and one paragraph on the grid below it. The wide crop is the only full-bleed image in the site apart from the hero — it earns its place by signalling a change of context.</p></li>
+        <li><span class="cal">3</span><b>Products used</b><p>The commercial heart of the page: which Cosmox products serve this sector, what each one does here, and which division makes it. Every row links to a spec sheet. This table is generated by querying <code>products.json</code> for the industry tag, so it can never drift out of sync with the catalogue.</p></li>
+        <li><span class="cal">4</span><b>Applications</b><p>The former Applications page, merged in as a numbered list. Numbering is justified here — the source content describes a process order, from material selection through to finished component.</p></li>
+        <li><span class="cal">5</span><b>Industry benefits</b><p>Four hairline blocks. Kept short deliberately; the detail lives in the products table above it.</p></li>
+        <li><span class="cal">6</span><b>Technical support CTA</b><p>Sector-specific ask. Routes to <code>/contact</code> with the department pre-selected as Technical.</p></li>
+      </ol>
+    </div>
+
+    <div class="titleblock mono">
+      <div><span>Project</span><b>Cosmox Chemicals</b></div>
+      <div><span>Sheet</span><b class="tnum">05 of 10</b></div>
+      <div><span>Title</span><b>Industries</b></div>
+      <div><span>Scale</span><b>NTS</b></div>
+      <div><span>Status</span><b>For review</b></div>
+    </div>
+  </section>
+
+  <!-- ================= SHEET 06 ================= -->
+  <section class="sheet" id="s06" role="tabpanel" aria-label="Services">
+    <div class="sheet__head">
+      <span class="sheet__no mono">Sheet 06 — Services</span>
+      <h1>The half of the business the site never mentions.</h1>
+      <p>Four services, currently invisible: custom synthesis, contract manufacturing &amp; scale-up, technical &amp; application support, and export &amp; regulatory. Each gets a page with a stated process, a stated scale range, and its own enquiry route. This is the section that changes what the site is worth.</p>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">A — /services (index)</span>
+      <div class="canvas">
+        <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">/services — four services</span></div>
+        <div class="band">
+          <div class="band__key"><span class="cal">1</span><b>Statement</b><span>columns 1–7</span></div>
+          <div class="band__art">
+            <div class="mono" style="color:var(--ink-3)">SERVICES</div>
+            <div class="t t--h w85"></div><div class="t t--h w45"></div>
+            <div class="t w95"></div><div class="t w75"></div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">2</span><b>Service rows</b><span>4 rows</span></div>
+          <div class="band__art">
+            <div class="row row--top" style="border-top:1px solid var(--ink);padding:10px 0;gap:14px">
+              <div class="mono tnum" style="color:var(--accent);flex:0 0 34px">01</div>
+              <div class="col" style="flex:1.1"><div class="t t--h2 w75"></div><div class="t w95"></div><div class="t w65"></div></div>
+              <div class="col" style="flex:.8;gap:5px"><div class="t t--m w45"></div><div class="t w75"></div><div class="t w65"></div></div>
+              <div class="g g--img" style="flex:0 0 88px;min-height:56px"></div>
+            </div>
+            <div class="row row--top" style="border-top:1px solid var(--rule);padding:10px 0;gap:14px">
+              <div class="mono tnum" style="color:var(--accent);flex:0 0 34px">02</div>
+              <div class="col" style="flex:1.1"><div class="t t--h2 w85"></div><div class="t w85"></div><div class="t w75"></div></div>
+              <div class="col" style="flex:.8;gap:5px"><div class="t t--m w55"></div><div class="t w65"></div><div class="t w75"></div></div>
+              <div class="g g--img" style="flex:0 0 88px;min-height:56px"></div>
+            </div>
+            <div class="mono" style="color:var(--ink-3);padding-top:6px">…rows 03–04 · each links to /services/[slug]</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">B — /services/[slug] · process page</span>
+      <div class="canvas">
+        <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">/services/custom-synthesis</span></div>
+        <div class="band">
+          <div class="band__key"><span class="cal">3</span><b>Hero</b><span>split</span></div>
+          <div class="band__art">
+            <div class="row row--top">
+              <div class="col" style="flex:1.15;gap:8px">
+                <div class="mono" style="color:var(--ink-3)">SERVICES / 01</div>
+                <div class="t t--h w85"></div><div class="t t--h w45"></div>
+                <div class="t w95"></div><div class="t w75"></div>
+                <div class="btn-wf btn-wf--solid" style="margin-top:5px">Start an enquiry</div>
+              </div>
+              <div class="g g--img g--tag" data-tag="IMG 4:5 — lab" style="flex:.85;min-height:160px"></div>
+            </div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">4</span><b>Process</b><span>5 steps · sequence</span></div>
+          <div class="band__art">
+            <div class="row" style="gap:0;align-items:stretch">
+              <div class="col" style="flex:1;border-left:1px solid var(--accent);padding-left:9px;gap:5px"><div class="mono tnum" style="color:var(--accent)">01</div><div class="t t--h2 w85"></div><div class="t w95"></div><div class="t w65"></div></div>
+              <div class="col" style="flex:1;border-left:1px solid var(--rule);padding-left:9px;margin-left:9px;gap:5px"><div class="mono tnum" style="color:var(--ink-3)">02</div><div class="t t--h2 w75"></div><div class="t w85"></div><div class="t w75"></div></div>
+              <div class="col" style="flex:1;border-left:1px solid var(--rule);padding-left:9px;margin-left:9px;gap:5px"><div class="mono tnum" style="color:var(--ink-3)">03</div><div class="t t--h2 w85"></div><div class="t w75"></div><div class="t w85"></div></div>
+              <div class="col" style="flex:1;border-left:1px solid var(--rule);padding-left:9px;margin-left:9px;gap:5px"><div class="mono tnum" style="color:var(--ink-3)">04</div><div class="t t--h2 w65"></div><div class="t w95"></div><div class="t w55"></div></div>
+              <div class="col" style="flex:1;border-left:1px solid var(--rule);padding-left:9px;margin-left:9px;gap:5px"><div class="mono tnum" style="color:var(--ink-3)">05</div><div class="t t--h2 w75"></div><div class="t w85"></div><div class="t w75"></div></div>
+            </div>
+            <div class="mono" style="color:var(--ink-3)">Enquiry → feasibility → lab sample → pilot batch → commercial supply</div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">5</span><b>Scale table</b><span>hard numbers</span></div>
+          <div class="band__art">
+            <div class="row" style="border-bottom:1px solid var(--ink);padding-bottom:6px">
+              <div class="mono" style="color:var(--ink-3);flex:1">Stage</div>
+              <div class="mono" style="color:var(--ink-3);flex:1">Batch size</div>
+              <div class="mono" style="color:var(--ink-3);flex:1">Lead time</div>
+              <div class="mono" style="color:var(--ink-3);flex:1">Documentation</div>
+            </div>
+            <div class="row" style="padding:7px 0;border-bottom:1px solid var(--rule-soft)"><div style="flex:1"><div class="t w55"></div></div><div style="flex:1"><div class="t w45"></div></div><div style="flex:1"><div class="t w35"></div></div><div style="flex:1"><div class="t w65"></div></div></div>
+            <div class="row" style="padding:7px 0;border-bottom:1px solid var(--rule-soft)"><div style="flex:1"><div class="t w45"></div></div><div style="flex:1"><div class="t w55"></div></div><div style="flex:1"><div class="t w35"></div></div><div style="flex:1"><div class="t w75"></div></div></div>
+            <div class="row" style="padding:7px 0"><div style="flex:1"><div class="t w65"></div></div><div style="flex:1"><div class="t w45"></div></div><div style="flex:1"><div class="t w45"></div></div><div style="flex:1"><div class="t w55"></div></div></div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">6</span><b>Confidentiality</b><span>flagged</span></div>
+          <div class="band__art">
+            <div class="g g--pad" style="border-left:3px solid var(--flag);min-height:56px"><div class="t t--m w35" style="background:var(--flag);opacity:.6"></div><div class="t w95"></div><div class="t w75"></div></div>
+          </div>
+        </div>
+      </div>
+      <ol class="notes">
+        <li><span class="cal">1</span><b>Statement</b><p>One paragraph making the offer concrete: Cosmox develops and manufactures to a customer's specification, not only from a catalogue.</p></li>
+        <li><span class="cal">2</span><b>Service rows</b><p>Same table language as divisions, so the site has one navigational idiom rather than several. Middle column lists what is included; the thumbnail is small and secondary.</p></li>
+        <li><span class="cal">3</span><b>Service hero</b><p>Standard split with a single primary action — "Start an enquiry" — which opens the quote form pre-scoped to that service.</p></li>
+        <li><span class="cal">4</span><b>Process</b><p>Five stages separated by vertical hairlines, the active first stage marked in accent. Numbering is real here: this is a genuine sequence a client moves through, and stating it plainly is what makes an unfamiliar buyer comfortable committing.</p><span class="mv mono">Motion — hairlines draw top-to-bottom on enter, 80ms stagger</span></li>
+        <li><span class="cal">5</span><b>Scale table</b><p>Batch size, lead time and documentation per stage. Publishing real ranges is unusual in this industry and disproportionately effective — it filters out unqualified enquiries and signals confidence.</p></li>
+        <li><span class="cal">6</span><b>Confidentiality note</b><p>Flag-coloured left border: NDA terms, IP ownership, sample handling. A custom-synthesis buyer looks for this before they look at anything else.</p></li>
+      </ol>
+      <div class="keybox">
+        <b>Copy required</b>
+        <p>Unlike every other sheet, this content does not exist in the source RTFs in usable form. Four service pages need writing from scratch — roughly 400 words each plus the process and scale tables. Flag this early; it is the critical path item for launch.</p>
+      </div>
+    </div>
+
+    <div class="titleblock mono">
+      <div><span>Project</span><b>Cosmox Chemicals</b></div>
+      <div><span>Sheet</span><b class="tnum">06 of 10</b></div>
+      <div><span>Title</span><b>Services</b></div>
+      <div><span>Scale</span><b>NTS</b></div>
+      <div><span>Status</span><b>Content pending</b></div>
+    </div>
+  </section>
+
+  <!-- ================= SHEET 07 ================= -->
+  <section class="sheet" id="s07" role="tabpanel" aria-label="Company">
+    <div class="sheet__head">
+      <span class="sheet__no mono">Sheet 07 — Company</span>
+      <h1>Proof, not adjectives.</h1>
+      <p>Four routes: <code>/company</code>, <code>/company/manufacturing</code>, <code>/company/sustainability</code>, <code>/company/quality</code>. The source copy is heavy on words like "state-of-the-art" and light on evidence. The layout is built to demand specifics — every claim block has a slot for a number, a certificate or a photograph.</p>
+    </div>
+
+    <div class="canvas">
+      <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">/company — parent page</span></div>
+      <div class="band">
+        <div class="band__key"><span class="cal">1</span><b>Statement</b><span>large type</span></div>
+        <div class="band__art">
+          <div class="mono" style="color:var(--ink-3)">COMPANY</div>
+          <div class="t t--h w95"></div><div class="t t--h w85"></div><div class="t t--h w35"></div>
+        </div>
+      </div>
+      <div class="band">
+        <div class="band__key"><span class="cal">2</span><b>Facility</b><span>full-bleed</span></div>
+        <div class="band__art">
+          <div class="g g--img g--tag" data-tag="IMG 21:9 — plant exterior" style="min-height:104px"></div>
+          <div class="row" style="gap:20px"><div class="mono" style="color:var(--ink-3)">MANGROL, PIPODARA · SURAT · GUJARAT 394110</div></div>
+        </div>
+      </div>
+      <div class="band">
+        <div class="band__key"><span class="cal">3</span><b>Mission / vision</b><span>2 col</span></div>
+        <div class="band__art">
+          <div class="grid2">
+            <div class="col" style="border-top:1px solid var(--ink);padding-top:9px"><div class="t t--m w35"></div><div class="t w95"></div><div class="t w85"></div><div class="t w65"></div></div>
+            <div class="col" style="border-top:1px solid var(--ink);padding-top:9px"><div class="t t--m w25"></div><div class="t w85"></div><div class="t w95"></div><div class="t w55"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="band">
+        <div class="band__key"><span class="cal">4</span><b>Values table</b><span>5 rows</span></div>
+        <div class="band__art">
+          <div class="row" style="padding:7px 0;border-top:1px solid var(--rule)"><div style="flex:0 0 30%"><div class="t t--h2 w65"></div></div><div style="flex:1"><div class="t w95"></div></div></div>
+          <div class="row" style="padding:7px 0;border-top:1px solid var(--rule)"><div style="flex:0 0 30%"><div class="t t--h2 w75"></div></div><div style="flex:1"><div class="t w85"></div></div></div>
+          <div class="row" style="padding:7px 0;border-top:1px solid var(--rule)"><div style="flex:0 0 30%"><div class="t t--h2 w55"></div></div><div style="flex:1"><div class="t w95"></div></div></div>
+          <div class="mono" style="color:var(--ink-3);padding-top:5px">Quality · Innovation · Integrity · Sustainability · Customer focus</div>
+        </div>
+      </div>
+      <div class="band">
+        <div class="band__key"><span class="cal">5</span><b>Global presence</b><span>map</span></div>
+        <div class="band__art">
+          <div class="row row--top">
+            <div class="g g--img g--tag" data-tag="SVG — world map, ink dots" style="flex:1.5;min-height:120px"></div>
+            <div class="col" style="flex:.7;gap:7px">
+              <div class="t t--m w55"></div>
+              <div class="row" style="border-bottom:1px solid var(--rule-soft);padding-bottom:5px"><div style="flex:1"><div class="t w65"></div></div><div style="flex:.4"><div class="t w75"></div></div></div>
+              <div class="row" style="border-bottom:1px solid var(--rule-soft);padding-bottom:5px"><div style="flex:1"><div class="t w55"></div></div><div style="flex:.4"><div class="t w65"></div></div></div>
+              <div class="row" style="border-bottom:1px solid var(--rule-soft);padding-bottom:5px"><div style="flex:1"><div class="t w75"></div></div><div style="flex:.4"><div class="t w55"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="band">
+        <div class="band__key"><span class="cal">6</span><b>Child pages</b><span>3 up</span></div>
+        <div class="band__art">
+          <div class="grid3">
+            <div class="col"><div class="g g--img" style="min-height:78px"></div><div class="t t--h2 w75"></div><div class="t w85"></div></div>
+            <div class="col"><div class="g g--img" style="min-height:78px"></div><div class="t t--h2 w65"></div><div class="t w95"></div></div>
+            <div class="col"><div class="g g--img" style="min-height:78px"></div><div class="t t--h2 w85"></div><div class="t w75"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ol class="notes">
+      <li><span class="cal">1</span><b>Statement</b><p>Three lines at display size on bare paper. Replaces the current About page's opening paragraph — one sentence at scale outperforms four paragraphs of qualification.</p></li>
+      <li><span class="cal">2</span><b>Facility</b><p>Full-bleed 21:9 plant exterior with the registered address set in mono beneath. Naming the location plainly is a credibility move for an export buyer verifying a supplier.</p></li>
+      <li><span class="cal">3</span><b>Mission &amp; vision</b><p>Two columns under hairline rules. Kept short. No icons.</p></li>
+      <li><span class="cal">4</span><b>Values</b><p>The five existing core values as a two-column table — name left, one line of substantiation right. A table forces each value to be justified in a sentence, which is exactly the discipline this content needs. Not numbered: these are a set, not a sequence.</p></li>
+      <li><span class="cal">5</span><b>Global presence</b><p>Inline SVG world map, ink dots on paper, no colour fills or hover tooltips. Beside it a table of regions and market counts. Static — an animated or interactive map would break the restraint the rest of the site maintains.</p></li>
+      <li><span class="cal">6</span><b>Child pages</b><p>Manufacturing, Quality &amp; compliance, Sustainability. Each is the same interior template: page head, alternating image/text sections, one data table, CTA.</p></li>
+    </ol>
+
+    <div class="keybox">
+      <b>Sustainability page — one deviation</b>
+      <p><code>/company/sustainability</code> is the only interior page that leads with numbers rather than an image: waste reduction, energy per tonne, halogen-free share of portfolio, water recycled. Set at display size in tabular mono against bare paper. The halogen-free flame retardant line is a genuine environmental differentiator and it deserves to be argued with figures, not photographs of leaves.</p>
+    </div>
+
+    <div class="titleblock mono">
+      <div><span>Project</span><b>Cosmox Chemicals</b></div>
+      <div><span>Sheet</span><b class="tnum">07 of 10</b></div>
+      <div><span>Title</span><b>Company</b></div>
+      <div><span>Scale</span><b>NTS</b></div>
+      <div><span>Status</span><b>For review</b></div>
+    </div>
+  </section>
+
+  <!-- ================= SHEET 08 ================= -->
+  <section class="sheet" id="s08" role="tabpanel" aria-label="Contact and quote">
+    <div class="sheet__head">
+      <span class="sheet__no mono">Sheet 08 — Contact &amp; quote</span>
+      <h1>Two forms, two intents.</h1>
+      <p>A general enquiry and a quote request are different transactions. Splitting them lets the quote form ask the questions that let sales respond with a real price on the first reply — product, grade, quantity, destination, timeline.</p>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">A — /quote</span>
+      <div class="canvas">
+        <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">/quote — structured request</span></div>
+        <div class="band">
+          <div class="band__key"><span class="cal">1</span><b>Form</b><span>7 cols</span></div>
+          <div class="band__art">
+            <div class="row row--top">
+              <div class="col" style="flex:1.3;gap:11px">
+                <div class="mono" style="color:var(--ink-3)">SECTION 01 — WHAT YOU NEED</div>
+                <div class="col" style="gap:4px"><div class="t t--m w25"></div><div class="g" style="height:30px"></div></div>
+                <div class="row" style="gap:9px">
+                  <div class="col" style="gap:4px;flex:1"><div class="t t--m w45"></div><div class="g" style="height:30px"></div></div>
+                  <div class="col" style="gap:4px;flex:1"><div class="t t--m w35"></div><div class="g" style="height:30px"></div></div>
+                </div>
+                <div class="row" style="gap:9px">
+                  <div class="col" style="gap:4px;flex:1"><div class="t t--m w55"></div><div class="g" style="height:30px"></div></div>
+                  <div class="col" style="gap:4px;flex:1"><div class="t t--m w45"></div><div class="g" style="height:30px"></div></div>
+                </div>
+                <div class="mono" style="color:var(--ink-3);margin-top:4px">SECTION 02 — WHO YOU ARE</div>
+                <div class="row" style="gap:9px">
+                  <div class="col" style="gap:4px;flex:1"><div class="t t--m w35"></div><div class="g" style="height:30px"></div></div>
+                  <div class="col" style="gap:4px;flex:1"><div class="t t--m w55"></div><div class="g" style="height:30px"></div></div>
+                </div>
+                <div class="col" style="gap:4px"><div class="t t--m w25"></div><div class="g" style="height:54px"></div></div>
+                <div class="btn-wf btn-wf--solid" style="height:32px">Send request</div>
+              </div>
+              <div class="col" style="flex:.7;gap:9px;border-left:1px solid var(--rule);padding-left:14px">
+                <div class="t t--m w55"></div>
+                <div class="t w85"></div><div class="t w95"></div><div class="t w65"></div>
+                <div style="height:6px"></div>
+                <div class="t t--m w45"></div>
+                <div class="t w75"></div><div class="t w85"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">B — /contact</span>
+      <div class="canvas">
+        <div class="canvas__bar mono"><i></i><i></i><i></i><span style="margin-left:6px">/contact — departments &amp; offices</span></div>
+        <div class="band">
+          <div class="band__key"><span class="cal">2</span><b>Departments</b><span>4 col</span></div>
+          <div class="band__art">
+            <div class="grid4">
+              <div class="g g--pad" style="min-height:84px"><div class="t t--m w45"></div><div class="t w85"></div><div class="t w65"></div><div class="t t--m w75" style="margin-top:auto"></div></div>
+              <div class="g g--pad" style="min-height:84px"><div class="t t--m w55"></div><div class="t w75"></div><div class="t w85"></div><div class="t t--m w65" style="margin-top:auto"></div></div>
+              <div class="g g--pad" style="min-height:84px"><div class="t t--m w45"></div><div class="t w95"></div><div class="t w55"></div><div class="t t--m w75" style="margin-top:auto"></div></div>
+              <div class="g g--pad" style="min-height:84px"><div class="t t--m w65"></div><div class="t w75"></div><div class="t w85"></div><div class="t t--m w65" style="margin-top:auto"></div></div>
+            </div>
+            <div class="mono" style="color:var(--ink-3)">Sales · Technical &amp; R&amp;D · Export · General — each with direct email + phone</div>
+          </div>
+        </div>
+        <div class="band">
+          <div class="band__key"><span class="cal">3</span><b>Office</b><span>map + address</span></div>
+          <div class="band__art">
+            <div class="row row--top">
+              <div class="col" style="flex:.85;gap:7px"><div class="t t--m w45"></div><div class="t w95"></div><div class="t w85"></div><div class="t w75"></div><div class="t w55"></div></div>
+              <div class="g g--img g--tag" data-tag="MAP — static, greyscale" style="flex:1.15;min-height:126px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ol class="notes">
+        <li><span class="cal">1</span><b>Quote form</b><p>Two labelled sections rather than a multi-step wizard — a wizard hides the length and increases abandonment. Section 01 asks product, grade, quantity, destination country and required-by date. Section 02 asks name, company, email, phone and notes. Fields are hairline-bottom-ruled only, no boxes; labels sit above in mono. Right column carries response-time commitment and what happens next.</p><span class="mv mono">Motion — focused field's bottom rule turns accent and thickens to 2px, 120ms</span></li>
+        <li><span class="cal">2</span><b>Departments</b><p>Four routing cards. The current site's contact page has placeholder emails and bare <code>+91-</code> phone numbers in three of four blocks — these must be real before launch or the cards should be reduced to a single general contact. A dead email address does more damage than a missing one.</p></li>
+        <li><span class="cal">3</span><b>Office</b><p>Full registered address, both confirmed phone numbers, GST/IEC if published, and a static greyscale map image. Static, not an embedded interactive map — it loads instantly, needs no API key, and matches the visual language.</p></li>
+      </ol>
+      <div class="flagbox">
+        <b>Open items carried from the current site</b>
+        <p>Missing: department email addresses and phone numbers, social media URLs, form backend, and confirmation of the trading name ("Cosmox Chemicals" vs "Cosmox International Pvt. Ltd."). All four block launch of this sheet. Recommend Resend or Formspree for the backend with a server action, plus honeypot and rate limiting — a public quote form on a chemicals site attracts volume spam.</p>
+      </div>
+    </div>
+
+    <div class="titleblock mono">
+      <div><span>Project</span><b>Cosmox Chemicals</b></div>
+      <div><span>Sheet</span><b class="tnum">08 of 10</b></div>
+      <div><span>Title</span><b>Contact &amp; quote</b></div>
+      <div><span>Scale</span><b>NTS</b></div>
+      <div><span>Status</span><b>Blocked — data</b></div>
+    </div>
+  </section>
+
+  <!-- ================= SHEET 09 ================= -->
+  <section class="sheet" id="s09" role="tabpanel" aria-label="Component library">
+    <div class="sheet__head">
+      <span class="sheet__no mono">Sheet 09 — Component library</span>
+      <h1>Twenty-two components build the whole site.</h1>
+      <p>Every layout in sheets 02–08 is assembled from the list below. Build these first, in isolation, then compose pages from them — page work after that is arrangement, not invention.</p>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Component</th><th>Used on</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="num">Header</td><td>All</td><td>Sticky, height-collapsing, transparent variant for home only.</td></tr>
+          <tr><td class="num">MegaPanel</td><td>Header</td><td>4-column. Hover + focus + Escape. Closes on route change.</td></tr>
+          <tr><td class="num">Footer</td><td>All</td><td>4 columns, address block, clipped wordmark.</td></tr>
+          <tr><td class="num">PageHead</td><td>All interior</td><td>Breadcrumb, title, lede in columns 1–7. One component, no variants.</td></tr>
+          <tr><td class="num">SplitHero</td><td>Home, division, service</td><td>Props: eyebrow, title, body, actions, image, ratio.</td></tr>
+          <tr><td class="num">BleedHero</td><td>Industry, company</td><td>21:9 image + head below.</td></tr>
+          <tr><td class="num">IndexTable</td><td>Home, divisions, services</td><td><b>The signature component.</b> Rows with numeral, title, meta, hover thumbnail. Generic over row shape.</td></tr>
+          <tr><td class="num">DataTable</td><td>Products, industries, specs</td><td>Sortable, tabular figures, sticky header, horizontal scroll under 768px.</td></tr>
+          <tr><td class="num">FilterRail</td><td>Products</td><td>Checkbox facets bound to URL search params.</td></tr>
+          <tr><td class="num">SearchField</td><td>Products, header</td><td>Fuzzy match over name, CAS, synonym.</td></tr>
+          <tr><td class="num">SpecTabs</td><td>Product</td><td>4 tabs, URL hash-addressable so a tab can be linked directly.</td></tr>
+          <tr><td class="num">ActionCard</td><td>Product, division</td><td>Sticky. Quote + TDS + SDS.</td></tr>
+          <tr><td class="num">StickySubNav</td><td>Division, company, service</td><td>Scroll-spy left rail with sliding accent marker.</td></tr>
+          <tr><td class="num">ProcessRow</td><td>Services</td><td>N stages, vertical hairlines, sequence numbering.</td></tr>
+          <tr><td class="num">ScrollRail</td><td>Home industries</td><td>Drag, wheel, keyboard, mono counter. No arrow buttons.</td></tr>
+          <tr><td class="num">StatBand</td><td>Home, sustainability</td><td>Inverted, tabular mono figures, hairline dividers. Values printed, not animated.</td></tr>
+          <tr><td class="num">OffsetGrid</td><td>Industries index</td><td>2 columns, right column offset 52px, collapses at 768px.</td></tr>
+          <tr><td class="num">FeatureBlock</td><td>Most pages</td><td>Hairline-framed block: label, heading, 2 lines. The generic filler unit.</td></tr>
+          <tr><td class="num">CTABand</td><td>Most pages</td><td>Hairline rectangle, statement left, 1–2 actions right.</td></tr>
+          <tr><td class="num">MarkRow</td><td>Home, quality</td><td>Greyscale certification marks in 1px frames.</td></tr>
+          <tr><td class="num">Form + Field</td><td>Quote, contact</td><td>Rule-only fields, mono labels above, accent focus rule. Zod-validated.</td></tr>
+          <tr><td class="num">WorldMap</td><td>Company</td><td>Static inline SVG, ink dots. No interaction.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="keybox">
+      <b>The one rule that keeps it coherent</b>
+      <p>Three container treatments exist and no others: <b>bare paper</b> (default), <b>1px hairline frame</b> (blocks, cards, inputs, images), and <b>inverted ink</b> (stat bands, division CTA). No shadows, no fills, no rounded corners, no gradients. Any new component must land in one of those three or it does not ship. Most premium sites are not doing something clever — they are refusing to do six things at once.</p>
+    </div>
+
+    <div class="titleblock mono">
+      <div><span>Project</span><b>Cosmox Chemicals</b></div>
+      <div><span>Sheet</span><b class="tnum">09 of 10</b></div>
+      <div><span>Title</span><b>Component library</b></div>
+      <div><span>Scale</span><b>NTS</b></div>
+      <div><span>Status</span><b>For review</b></div>
+    </div>
+  </section>
+
+  <!-- ================= SHEET 10 ================= -->
+  <section class="sheet" id="s10" role="tabpanel" aria-label="Build plan">
+    <div class="sheet__head">
+      <span class="sheet__no mono">Sheet 10 — Build plan</span>
+      <h1>Next.js, two content files, six phases.</h1>
+      <p>Nothing here is speculative — every route in Sheet 01 maps to a file below, and 60 of the 77 routes generate from two JSON files. The content work is larger than the code work, which is the usual shape of a project like this and the usual reason it slips.</p>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">A — Route structure</span>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Path</th><th>Renders</th></tr></thead>
+          <tbody>
+            <tr><td class="num">app/layout.tsx</td><td>Header, Footer, font loading via next/font/local, theme tokens.</td></tr>
+            <tr><td class="num">app/page.tsx</td><td>Home — Sheet 02.</td></tr>
+            <tr><td class="num">app/divisions/page.tsx</td><td>IndexTable over divisions.json.</td></tr>
+            <tr><td class="num">app/divisions/[slug]/page.tsx</td><td>generateStaticParams → 10 pages.</td></tr>
+            <tr><td class="num">app/products/page.tsx</td><td>FilterRail + DataTable. searchParams-driven, server-rendered.</td></tr>
+            <tr><td class="num">app/products/[slug]/page.tsx</td><td>generateStaticParams → ~40 spec sheets.</td></tr>
+            <tr><td class="num">app/industries/[slug]/page.tsx</td><td>generateStaticParams → 10 pages.</td></tr>
+            <tr><td class="num">app/services/[slug]/page.tsx</td><td>4 pages, MDX bodies.</td></tr>
+            <tr><td class="num">app/company/[...slug]/page.tsx</td><td>4 pages, MDX bodies.</td></tr>
+            <tr><td class="num">app/quote · app/contact</td><td>Server actions + Zod + Resend.</td></tr>
+            <tr><td class="num">content/divisions.json</td><td>10 records — drives 3 route groups.</td></tr>
+            <tr><td class="num">content/products.json</td><td>~40 records — drives catalogue, spec sheets, industry tables.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="keybox">
+        <b>Why JSON and not a CMS</b>
+        <p>At 10 divisions and 40 products with infrequent updates, a headless CMS adds a subscription, an API dependency and an editor's learning curve for no gain. Two typed JSON files in the repo give full type safety, instant builds and version history. Revisit only if a non-technical editor needs to publish weekly — at which point Sanity drops in behind the same TypeScript types without touching a single component.</p>
+      </div>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">B — Phases</span>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Phase</th><th>Work</th><th>Depends on</th><th>Est.</th></tr></thead>
+          <tbody>
+            <tr><td class="num">01</td><td><b>Foundation</b> — Next.js + Tailwind, tokens from Sheet 00, licensed font self-hosted, Header/Footer/PageHead, grid utilities.</td><td>Font licence</td><td>3–4 d</td></tr>
+            <tr><td class="num">02</td><td><b>Content model</b> — author divisions.json and products.json, define TypeScript types, migrate RTF copy.</td><td>Product data from technical team</td><td>5–8 d</td></tr>
+            <tr><td class="num">03</td><td><b>Components</b> — the 22 in Sheet 09, built in isolation with a preview route.</td><td>01</td><td>6–8 d</td></tr>
+            <tr><td class="num">04</td><td><b>Pages</b> — compose sheets 02–08 from components.</td><td>02, 03</td><td>6–8 d</td></tr>
+            <tr><td class="num">05</td><td><b>Motion &amp; polish</b> — the four movements, reduced-motion, focus states, responsive passes at 1440/1024/768/390.</td><td>04</td><td>3–4 d</td></tr>
+            <tr><td class="num">06</td><td><b>Launch</b> — forms + spam protection, metadata and OG images per route, sitemap, redirects from old .html URLs, Lighthouse pass, deploy.</td><td>05, contact data</td><td>2–3 d</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lede" style="margin-top:14px">Roughly <b>25–35 working days</b> for one developer. Phase 02 runs in parallel with 01 and 03 if someone else owns the data — that is the difference between five weeks and seven.</p>
+    </div>
+
+    <div class="sec">
+      <span class="sec__label mono">C — Critical path</span>
+      <div class="flagbox">
+        <b>Four things gate launch and none of them are code</b>
+        <p><b>1 — Photography.</b> Half a day at the plant and lab. The whole design rests on a small number of good still images. <b>2 — Product data.</b> CAS numbers, specifications and test methods for the launch set, from the technical team. <b>3 — Services copy.</b> Four pages that do not exist in any current source. <b>4 — Contact details.</b> Real department emails and phone numbers. Start all four now; the code cannot wait for them, but the launch will.</p>
+      </div>
+      <div class="keybox">
+        <b>Redirects</b>
+        <p>The current site's eleven <code>.html</code> URLs must 301 to their new routes in <code>next.config.js</code> — <code>/divisions.html → /divisions</code>, <code>/applications.html → /industries</code>, <code>/rnd.html → /services/research</code>, and so on. Cheap to do, expensive to forget.</p>
+      </div>
+    </div>
+
+    <div class="titleblock mono">
+      <div><span>Project</span><b>Cosmox Chemicals</b></div>
+      <div><span>Sheet</span><b class="tnum">10 of 10</b></div>
+      <div><span>Title</span><b>Build plan</b></div>
+      <div><span>Scale</span><b>NTS</b></div>
+      <div><span>Status</span><b>For review</b></div>
+    </div>
+  </section>
+
+  <div class="pager">
+    <button type="button" id="prev">← Previous sheet</button>
+    <button type="button" id="next">Next sheet →</button>
+  </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  var tabs   = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sheets = Array.prototype.slice.call(document.querySelectorAll('.sheet'));
+  var prev   = document.getElementById('prev');
+  var next   = document.getElementById('next');
+  var i      = 0;
+
+  function show(n){
+    i = Math.max(0, Math.min(sheets.length - 1, n));
+    tabs.forEach(function(t, k){ t.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
+    sheets.forEach(function(s, k){ s.classList.toggle('is-active', k === i); });
+    prev.disabled = i === 0;
+    next.disabled = i === sheets.length - 1;
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
+  tabs.forEach(function(t, k){ t.addEventListener('click', function(){ show(k); }); });
+  prev.addEventListener('click', function(){ show(i - 1); });
+  next.addEventListener('click', function(){ show(i + 1); });
+
+  document.addEventListener('keydown', function(e){
+    if (e.target.closest('input, textarea')) return;
+    if (e.key === 'ArrowRight') show(i + 1);
+    if (e.key === 'ArrowLeft')  show(i - 1);
+  });
+
+  var root = document.documentElement;
+  document.getElementById('themer').addEventListener('click', function(){
+    var dark = root.getAttribute('data-theme') === 'dark' ||
+      (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    root.setAttribute('data-theme', dark ? 'light' : 'dark');
+  });
+
+  show(0);
+})();
+</script>

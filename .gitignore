@@ -1,0 +1,16 @@
+node_modules
+.next
+out
+.DS_Store
+*.tsbuildinfo
+
+# Local, machine-specific Claude Code permissions
+.claude/settings.local.json
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel
