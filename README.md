@@ -131,12 +131,51 @@ Two pieces, both in `app/globals.css` and `components/SmoothScroll.tsx`:
   applied both and every jump landed a whole header-height (143px) too low. Of
   the two, the scrollport rule is the one to keep: it also holds a focused
   element clear of the header when tabbing, which the `[id]` rule could not do.
-- Lenis smooths the wheel, and takes the anchor jumps too (`anchors: true` —
-  it resolves a target through the same `scroll-margin` / `scroll-padding` the
-  browser uses, so headings land exactly where the native behaviour put them).
+- Lenis smooths the wheel, and takes the anchor jumps too (it resolves a target
+  through the same `scroll-margin` / `scroll-padding` the browser uses, so
+  headings land exactly where the native behaviour put them).
   While it is running, `SmoothScroll` puts `.has-lenis` on `<html>` and that
   turns the native behaviour off, so the two can never both animate the same
   scroll.
+
+**How fast the wheel is, and why that number.** Lenis takes either a `lerp` or a
+`duration` + `easing`, runs one or the other, and lets `duration` win when both
+are set — which is how you end up with a `lerp` that never runs. The wheel here
+is on `lerp: 0.16`; the anchors keep a `duration` of their own, because a jump
+from the footer to the top should not take proportionally longer than a short
+one. 0.16 came out of driving 30 wheel ticks of 100px, 33ms apart, over the
+DevTools Protocol and sampling `scrollY` every frame — how far behind the input
+the page is when the last tick lands, and how long after it the page rests:
+
+| setting | lag at last tick | settle |
+|---|---|---|
+| `duration: 1.05` + expo-out | 201px | 834ms |
+| `lerp: 0.10` (Lenis default) | 224px | 1018ms |
+| `lerp: 0.14` | 153px | 669ms |
+| **`lerp: 0.16`** | **130px** | **567ms** |
+| `lerp: 0.20` | 100px | 435ms |
+
+Below ~0.12 the page visibly trails the hand on a long flick; above ~0.22 the
+glide is gone and it may as well be the native wheel. It is the one knob —
+move it and re-measure, because the 1.05s duration it replaced did not read as
+slow from the source either.
+
+Touch is left native (`syncTouch: false`): re-driving a phone's scroll from JS
+costs the browser its own off-thread scrolling and reads as lag on exactly the
+devices that can least afford it. `allowNestedScroll: true` lets anything that
+can actually scroll in the gesture's direction — the country panel below 640px,
+the rails, any overflow box — keep the wheel rather than have it stolen for the
+page. `stopInertiaOnNavigate: true` drops the coast when an internal link is
+clicked, so a route cannot open part-way down because the wheel was still
+moving when the router did.
+
+The stylesheet rules Lenis ships in `lenis/dist/lenis.css` are transcribed into
+`globals.css` next to `.has-lenis` rather than imported: one stylesheet is the
+rule here, and a second one linked out of `node_modules` would drift the moment
+the package updated. `html.lenis, html.lenis body { height: auto }` is the
+load-bearing one — Lenis measures the content to know its own scroll limit, and
+a page pinned to `height: 100%` measures as one viewport and refuses to scroll
+past it.
 
 **Why `.has-lenis` and not Lenis's own class.** This used to hang off
 `.lenis-smooth`, which Lenis only applies *while* a smooth scroll is in flight.
