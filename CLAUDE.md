@@ -206,11 +206,25 @@ under the 900px query; row 1 is now the taller row, set by the brand capsule.
 
 ### Motion
 
-Lenis smooths the wheel **and the anchor jumps** (`anchors: true`), and `SmoothScroll` puts
+Lenis smooths the wheel **and the anchor jumps**, and `SmoothScroll` puts
 `.has-lenis` on `<html>` for as long as it lives, which switches the native `scroll-behavior: smooth`
 off. Do not go back to Lenis's own `.lenis-smooth` for that: it is only present *during* a smooth
 scroll, so at rest the native behaviour stayed live and fought the router's scroll on navigation —
-which is what made a route land part-way down the page instead of at the top. `.rise` reveals on
+which is what made a route land part-way down the page instead of at the top.
+
+The wheel runs on `lerp: 0.16` and the anchors on their own `duration`/`easing` — Lenis runs one
+path or the other and **`duration` wins whenever both are set**, so a `lerp` next to a `duration` is a
+`lerp` that never runs. 0.16 is measured, not picked: the header comment in `SmoothScroll` carries the
+lag/settle numbers for five candidates, and that is the one knob to move if the feel is wrong.
+Re-measure rather than reason about it — the 1.05s duration this replaced did not read as slow from
+the source either. Touch is deliberately left native (`syncTouch: false`): re-driving a phone's scroll
+from JS costs the browser its own off-thread scrolling. `allowNestedScroll` lets an inner scroller
+keep the wheel instead of having it stolen for the page, and `stopInertiaOnNavigate` drops the
+coast when an internal link is clicked. The rest of what Lenis needs in CSS is transcribed into
+`globals.css` beside `.has-lenis` rather than imported from `node_modules` — one stylesheet is
+the rule, and `html.lenis { height: auto }` is the load-bearing rule of the set.
+
+`.rise` reveals on
 scroll, and the division tiles hang their own motion off it: `.tile::before` is a 3-D plane that
 starts almost edge-on at `rotateY(89.5deg)` — about 4px of picture, read as one vertical line down
 the card's centre — and opens like a door to 0° when its own row scrolls in (`.rise` is on each

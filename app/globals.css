@@ -128,7 +128,23 @@ html {
   scroll-padding-top: calc(var(--header-h) + 1rem);
 }
 html.has-lenis { scroll-behavior: auto; }
-html.lenis-stopped { overflow: hidden; }
+
+/* The rest of what Lenis needs, transcribed from `lenis/dist/lenis.css` rather
+   than imported — one stylesheet is the rule here, and a second one linked out
+   of `node_modules` would drift the moment the package updated. Lenis puts all
+   of these classes on <html> itself, because the scroll wrapper is the window.
+   `height: auto` is the load-bearing one: Lenis measures the content to know
+   its own limit, and a page pinned to `height: 100%` measures as one viewport
+   and refuses to scroll past it. */
+html.lenis,
+html.lenis body { height: auto; }
+html.lenis-stopped { overflow: clip; }
+html.lenis [data-lenis-prevent],
+html.lenis [data-lenis-prevent-wheel],
+html.lenis [data-lenis-prevent-touch] { overscroll-behavior: contain; }
+/* an iframe swallows the wheel and leaves the page stranded mid-scroll; it
+   only has to stand aside while a smooth scroll is actually running */
+html.lenis.lenis-smooth iframe { pointer-events: none; }
 
 body {
   margin: 0;
