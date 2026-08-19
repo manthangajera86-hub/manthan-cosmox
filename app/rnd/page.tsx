@@ -49,7 +49,7 @@ export default function RndPage() {
             <p>Joint development, custom synthesis and application testing — from first concept to validated commercial supply.</p>
           </div>
           <div className="btn-row">
-            <Link className="btn btn--red" href="/contact">Propose a project</Link>
+            <Link className="btn btn--gold" href="/contact">Propose a project</Link>
           </div>
         </div>
       </div>

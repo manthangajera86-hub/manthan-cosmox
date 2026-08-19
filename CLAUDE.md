@@ -45,6 +45,19 @@ radius scale, `--inset`/`--edge-in`, shadows), then the landing-page blocks, the
 styles of their own — they emit the class names this stylesheet defines. Keep it that way; a stray
 `style={{…}}` or a second stylesheet is how a hand-tuned system starts drifting.
 
+**The accent is the logo's gold, and it is four tokens, not one.** The palette used to be a red
+averaged from the three reference sites; it comes from the mark now. Gold is a material rather than
+a UI colour — every gold in the artwork is between 1.2:1 and 2.7:1 on white, so none of them can be
+text on paper — so the accent does what the mark does and runs **deep on paper, bright on night**:
+`--gold` (#d4a94e) is a *fill* only and takes `--ink` type, never white; `--gold-lift` (#e9cd85) is
+gold as a foreground on dark grounds only; `--gold-deep` (#a2763f) is affordances and small marks on
+paper (focus rings, underlines, bullets, the check glyph — the one value clearing 3:1 on paper, sand
+and night alike); `--gold-text` (#8a6330) is the only one that can be text on paper. Pick by the
+ground the thing sits on, not by eye, and re-measure if you change a value — the table in
+"The colour" in `README.md` carries every number and how they were checked. `--gold-lift` is the old
+`--dust` renamed; `--red`, `--red-deep`, `--red-dupont`, `--terracotta` and `--stone` are gone, and
+`.btn--red` is `.btn--gold`.
+
 The type scale (17 / 21.25 / 25.5 / 31.875 / 38.25 / 51 / 63.75 / 106.25px) is the literal set of
 sizes measured on the three reference sites, made fluid with `clamp()` — don't introduce off-scale
 sizes. The two faces are real and self-hosted: `next/font/google` loads **Inter** and **EB Garamond**
@@ -138,7 +151,8 @@ Three things to keep in mind when editing:
 
 ### Data, not markup
 
-`lib/nav.ts` holds the ten nav links and `NAV_MENU`, the dropdown content. A `NAV_MENU` link is a
+`lib/nav.ts` holds the nine nav links and `NAV_MENU`, the dropdown content. There is no Home
+link — the brand capsule is the way home, and it opens `NAV_MENU['/']`. A `NAV_MENU` link is a
 whole href: the eight topic families list their topic pages, while `/` and `/about` still jump to
 `id` attributes on their own headings. `lib/products.ts` holds all 40 grades **and** the industry facet the finder
 renders — the two used to be coupled by hand across two files. Each grade carries `s` (its own slug)
@@ -171,7 +185,8 @@ Below the ten product groups sit the **40 grades**, each with a page of its own 
 industries, one line — because the numbers a buyer needs come on the TDS/SDS. The finder's results
 link straight to them, and each group page lists its own.
 
-Everything is still prerendered: 117 static routes — 13, plus 64 topics, plus 40 grades.
+Everything is still prerendered: 117 static routes — 13, plus 64 topics, plus 40 grades — plus
+`app/icon.svg`, which the build lists as a route of its own.
 
 ### Header
 
@@ -201,8 +216,13 @@ dropdowns switch off. The country menu is the exception and stays available at e
 your market is not a desktop-only thing to want, so below 640px it stacks to one column, follows the
 header's own 1rem padding instead of `--edge`, and scrolls inside itself. `--header-h` in `globals.css` is the measured height of the whole header and
 feeds every banner's top padding plus `scroll-padding-top`; re-measure it if you add a row or change
-anything that alters a capsule's box — padding, border, or glyph size. Currently 128px, and 158px
-under the 900px query; row 1 is now the taller row, set by the brand capsule.
+anything that alters a capsule's box — padding, border, or glyph size. It has three steps, all
+measured: 139px one row, 169 once the nav wraps (≤860px), 199 at ≤461px where it takes a third row.
+Row 1 is the taller row, set by the brand capsule, which is enlarged inside `.hdr__top` only —
+`.brand` is the footer's lock-up too. The logo's dropdown is the large panel: full width between the
+page edges, listing every section with its glyph from `NAV`'s `icon` (path `d` strings, not markup)
+beside the home page's headings. Those glyphs were briefly on the nav links themselves, which cost
+the row ~200px and pushed its wrap to 1008px — hence the tile treatment in the panel instead.
 
 ### Motion
 
@@ -261,9 +281,28 @@ the record of why a block looks the way it does.
 
 All photography is placeholder Unsplash imagery — none of it is Cosmox's own plant, lab or product,
 and a visitor will read it as such. Each picture is one `.bg-*` line in `globals.css` pointing at
-`/img/…` in `public/`; interior banners re-use home-page pictures via `.bg-page-*`. The header logo
-is a placeholder hexagon SVG in `components/BrandMark.tsx`. The contact form has no backend. See
-"Photography" and "Still to fill in" in `README.md`.
+`/img/…` in `public/`; interior banners re-use home-page pictures via `.bg-page-*`. The contact form
+has no backend. See "Photography" and "Still to fill in" in `README.md`.
+
+**The logo is real** and is no longer one of these. `components/BrandMark.tsx` is the mark — the
+planet, its α and the orbit ring — traced from `updated logo.jpeg` in the repo root, which is the
+master artwork; `public/logo/` holds the full lock-up and the one-colour cuts, and `app/icon.svg` is
+the favicon. **Every constant in the mark was fitted to the pixels, so re-measure rather than
+nudge** — the planet is c (631.02, 464.17) r 255.31 (median rim residual 0.06px) and the orbit is
+c (629.28, 463.74), 348.05 × 113.26, −24.92°, stroke 24.2, gap 44.4. The orbit is **not** concentric
+with the planet, and assuming it is costs 1.7px sd; glyph outlines are corner-pinned before they are
+simplified, which is worth ~7px at the sharp apexes. The α is reconstructed where the ring covers it
+by testing that the glyph shows on *both* sides of the ring — **on the ring's near half only**,
+because the far half runs behind the planet and straight through the top of the bowl. Deviation from
+the traced contour cannot catch a mistake in the mask itself; check the glyph's area and centroid
+against the source as well. "The logo" in `README.md` has the table, the
+three defects that pass found, and how each number was measured. Two of its colours come from the page rather than from the logo: `--logo-ink` (the
+orbit ring) and `--logo-void` (the gap holding that ring off the planet) are tokens in `globals.css`,
+set to the light-background cut on `:root` and flipped on `.brand`. Flip both on any other dark
+panel that carries the mark — a black ring on `--night` is an invisible ring. `BrandMark` takes an
+`id` prefix because it renders twice per page and its gradient ids would otherwise collide. It is
+672 × 519, not square, so `.brand__mark` sets height and leaves width `auto`; the brand capsule grew
+203 → 215px and no header breakpoint moved. See "The logo" in `README.md`.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

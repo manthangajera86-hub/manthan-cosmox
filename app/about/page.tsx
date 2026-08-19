@@ -137,7 +137,7 @@ export default function AboutPage() {
             <p>We are your strategic partner in advanced chemical solutions — dedicated to enabling industrial efficiency, safety and sustainability worldwide.</p>
           </div>
           <div className="btn-row">
-            <Link className="btn btn--red" href="/contact">Start a conversation</Link>
+            <Link className="btn btn--gold" href="/contact">Start a conversation</Link>
           </div>
         </div>
       </div>

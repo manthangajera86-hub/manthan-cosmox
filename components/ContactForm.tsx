@@ -56,11 +56,11 @@ export default function ContactForm() {
         </div>
       </div>
       <div className="btn-row" style={{ marginTop: "1.4rem" }}>
-        <button className="btn btn--red" type="submit">
+        <button className="btn btn--gold" type="submit">
           Send enquiry
         </button>
       </div>
-      <p className="form-note" role="status" aria-live="polite" style={status ? { color: "var(--red)" } : undefined}>
+      <p className={`form-note${status ? " is-live" : ""}`} role="status" aria-live="polite">
         {status ??
           "This form needs a backend or form service connected before it can deliver messages."}
       </p>

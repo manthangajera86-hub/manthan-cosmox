@@ -99,7 +99,7 @@ export default function GradePage({
               <p><T>Technical and safety documentation, packaging options and export paperwork — tell us the specification you need to hit.</T></p>
             </div>
             <div className="btn-row">
-              <Link className="btn btn--red" href="/contact"><T>Request TDS / SDS</T></Link>
+              <Link className="btn btn--gold" href="/contact"><T>Request TDS / SDS</T></Link>
               <Link className="btn btn--outline" href="/finder"><T>Back to the finder</T></Link>
             </div>
           </div>

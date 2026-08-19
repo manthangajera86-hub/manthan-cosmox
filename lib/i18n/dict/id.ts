@@ -6,7 +6,7 @@ import type { Dict } from "./types";
 const id: Dict = {
   // --- navigation and header ------------------------------------------------
   "Home": "Beranda",
-  "Our Story": "Tentang kami",
+  "About us": "Tentang kami",
   "Divisions": "Divisi",
   "Products": "Produk",
   "Industries": "Industri",
@@ -19,6 +19,8 @@ const id: Dict = {
   "Product Finder": "Pencari produk",
   "Skip to content": "Lompat ke konten",
   "Visit page": "Buka halaman",
+  "Sections": "Bagian",
+  "On the home page": "Di halaman beranda",
   "Explore": "Selengkapnya",
   "Previous": "Sebelumnya",
   "Next": "Berikutnya",
@@ -291,7 +293,6 @@ const id: Dict = {
   "Company": "Perusahaan",
   "Offering": "Penawaran",
   "Get in touch": "Hubungi kami",
-  "About us": "Tentang kami",
   "Product finder": "Pencari produk",
   "All rights reserved.": "Hak cipta dilindungi undang-undang.",
   "Manufacturer & exporter of speciality chemicals":

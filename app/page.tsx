@@ -27,7 +27,7 @@ export default function HomePage() {
             manufactured to specification and exported worldwide.
           </p>
           <div className="hero__actions">
-            <Link className="btn btn--red" href="/finder">
+            <Link className="btn btn--gold" href="/finder">
               Find a product
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
             </Link>
@@ -222,7 +222,7 @@ export default function HomePage() {
           </nav>
 
           <div className="pband__actions">
-            <Link className="btn btn--red" href="/products">
+            <Link className="btn btn--gold" href="/products">
               All products
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
             </Link>
@@ -242,7 +242,7 @@ export default function HomePage() {
           <p>Forty grades across ten divisions, filtered by the industry you are
           formulating for or searched by chemistry name — every one with
           technical and safety documentation.</p>
-          <span className="btn btn--red">Explore the finder
+          <span className="btn btn--gold">Explore the finder
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
           </span>
         </div>
@@ -778,7 +778,7 @@ export default function HomePage() {
             <p>Custom grades, tailored formulations and technical collaboration — from pilot batch to commercial supply.</p>
           </div>
           <div className="btn-row">
-            <Link className="btn btn--red" href="/contact">Talk to our team</Link>
+            <Link className="btn btn--gold" href="/contact">Talk to our team</Link>
             <Link className="btn btn--outline" href="/capabilities">Our capabilities</Link>
           </div>
         </div>

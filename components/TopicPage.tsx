@@ -125,7 +125,7 @@ export default function TopicPage({
               <p><T>Technical data, packaging options and export documentation — tell us what you need and the right team will come back to you.</T></p>
             </div>
             <div className="btn-row">
-              <Link className="btn btn--red" href="/contact"><T>Start a conversation</T></Link>
+              <Link className="btn btn--gold" href="/contact"><T>Start a conversation</T></Link>
             </div>
           </div>
         </div>

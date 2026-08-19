@@ -20,30 +20,59 @@
 
 :root {
   /* --- palette ---------------------------------------------------------- */
-  /* ink from lilly (rgb 25,25,25); warm neutrals are aditya birla's extracted
-     muted/dark-muted/light-vibrant; red is the blend of all three brand reds
-     (#b70f1b AB · #d31710 Lilly · #e4001c DuPont). */
+  /* The palette is the logo's. It used to be a blend of the three reference
+     sites' brand reds (#b70f1b AB · #d31710 Lilly · #e4001c DuPont); the mark
+     is gold, graphite and white, so the accent is gold and the reds are gone.
+     The layout attributions further down still stand — those are about
+     structure, and only the colour moved.
+
+     Gold is a material, not a UI colour, and that is the whole difficulty: the
+     logo's own golds score 1.2–2.7:1 on white, so not one of them can carry
+     text on paper. What the mark does instead is what the palette does — its
+     gradient runs bright at the top and deep at the bottom, and its ring is
+     black on white and white on black. So the accent runs **deep on paper and
+     bright on night**, and the four tokens below are that one hue at the four
+     jobs it actually has. Every pairing is measured; the number after each is
+     its contrast against the ground it is used on. */
   --ink:        #191919;
-  --ink-soft:   #55504b;
-  --ink-mute:   #857f78;
+  --ink-soft:   #574f45;
+  --ink-mute:   #877f72;
   --paper:      #ffffff;
 
-  --red:        #c8141e;
-  --red-deep:   #8f0d15;
-  --red-dupont: #e4001c;
+  /* the mark's body gold. A *fill*, never a foreground: solid grounds and
+     ornamental rules. Type on it is --ink (8.0:1), never white (2.2:1). */
+  --gold:       #d4a94e;
+  /* the highlight band off the top of the planet — gold as a foreground, but
+     only on a dark ground (11.9:1 on --night). This was --dust. */
+  --gold-lift:  #e9cd85;
+  /* the deep end of the gradient. Affordances and marks that carry meaning on
+     paper but should not read as heavy as body copy: focus rings (4.0:1 on
+     paper, 3.6 on sand, 4.6 on night — the one value that clears 3:1 on all
+     three), underlines, the check glyph. */
+  --gold-deep:  #a2763f;
+  /* the only member of the family that can be *text* on paper: 5.4:1 on white,
+     4.7:1 on sand. Section headings, kickers, links, hovers. */
+  --gold-text:  #8a6330;
 
-  --sand:       #f4f0ea;
-  --sand-deep:  #e8dfd3;
-  --line:       #ded6ca;
-  --line-soft:  #ece6dd;
+  --sand:       #f5f1e8;
+  --sand-deep:  #eae1d2;
+  --line:       #ded5c6;
+  --line-soft:  #ece6da;
 
-  --warm:       #8a7e71;   /* AB muted        */
-  --warm-deep:  #593731;   /* AB dark muted   */
-  --terracotta: #ac574c;   /* AB vibrant      */
-  --dust:       #e3aa7a;   /* AB light vibrant*/
-  --stone:      #bdc4cc;   /* AB light muted  */
-  --night:      #17130f;
+  --warm:       #8a7c66;   /* the media stand-in gradient, gold end     */
+  --warm-deep:  #33302b;   /* ...and its graphite end, off the planet   */
+  --night:      #17130f;   /* the mark's own ground, in the capsules    */
   --night-2:    #241d18;
+
+  /* The two colours in the logo that are not the logo's own. The mark
+     (`components/BrandMark.tsx`) is gold-and-graphite everywhere, but its orbit
+     ring has to be legible against whatever it floats over, and the gap that
+     holds that ring off the planet has to *be* whatever it floats over. These
+     are the light-background cut; `.brand` flips them, and any dark panel that
+     ever carries the mark should flip them too. Same pair as the `--ink`/
+     `--void` in the standalone files under `public/logo/`. */
+  --logo-ink:   #0b0b0b;
+  --logo-void:  var(--paper);
 
   /* --- type ------------------------------------------------------------- */
   /* Both faces are real now: `next/font` loads them in app/layout.tsx and
@@ -73,10 +102,18 @@
   --wrap: 1280px;
   --gut:  clamp(1.25rem, 5vw, 5rem);
   --edge: clamp(1.25rem, 5.6vw, 81px);   /* AB pins headings 81px from edge */
-  --header-h: 128px;   /* the two rows — measured, keep in sync. 127 → 123 when
-                          the capsule borders came off, then → 128 when the
-                          brand became a capsule and its padding made row 1 the
-                          taller one. */
+  --header-h: 139px;   /* The measured height of the whole header, and the one
+                          number every banner's top padding and
+                          `scroll-padding-top` is built on. Three states, all
+                          measured, the last two in Responsive: 139 while the
+                          nav is one row, 169 once it wraps (≤860px), 199 on a
+                          phone narrow enough for a third row (≤461px). The one
+                          row measures 137–138px depending on where the fluid
+                          label size lands, so this sits a pixel or two above
+                          it rather than exactly on it. Its history: 127 → 123
+                          when the capsule borders came off, → 128 when the
+                          brand became a capsule, → 139 when that capsule was
+                          enlarged. */
 
   /* --- radii ------------------------------------------------------------ */
   /* The reference sites are all square-cornered; this build deliberately is
@@ -179,7 +216,7 @@ h4 { font-size: var(--fs-body); }
 p { margin: 0 0 1.1em; }
 p:last-child { margin-bottom: 0; }
 
-::selection { background: var(--red); color: #fff; }
+::selection { background: var(--gold); color: var(--ink); }
 
 .wrap {
   width: min(var(--wrap), 100% - var(--gut) * 2);
@@ -204,7 +241,7 @@ p:last-child { margin-bottom: 0; }
 .skip-link:focus { left: 1rem; top: 1rem; }
 
 :focus-visible {
-  outline: 2px solid var(--red);
+  outline: 2px solid var(--gold-deep);
   outline-offset: 3px;
 }
 
@@ -256,8 +293,15 @@ p:last-child { margin-bottom: 0; }
   background: var(--night);
   text-decoration: none;
   color: #fff;
+  /* the capsule is the ground the mark sits on, in the header and the footer
+     alike, so the ring goes white and its gap goes the capsule's own near-black */
+  --logo-ink: #fff;
+  --logo-void: var(--night);
 }
-.brand__mark { width: 30px; height: 30px; flex: none; }
+/* the mark is 672 x 519 in its own units — wider than tall, because the orbit
+   ring reaches past the planet on both sides. Height is what reads as its size,
+   so height is what is set; `width: auto` keeps the ring from being squashed. */
+.brand__mark { height: 30px; width: auto; flex: none; }
 .brand__name {
   font-size: 19px;
   font-weight: 800;
@@ -271,9 +315,28 @@ p:last-child { margin-bottom: 0; }
   font-weight: 600;
   letter-spacing: .22em;
   text-transform: uppercase;
-  color: var(--dust);
+  color: var(--gold-lift);
   margin-top: 3px;
 }
+
+/* The header's copy of the capsule is the larger one. It is the only control
+   in the bar that is a *name* rather than a label, and it is now the only way
+   home, so it is sized to be found rather than to match the buttons beside it:
+   the mark goes 30 → 40px and the wordmark 19 → 24px. Everything here is
+   scoped to `.hdr__top`, because `.brand` is also the footer's lock-up, where
+   it sits in a column of body copy and has no reason to grow.
+
+   This sets row 1's height, which is to say it sets `--header-h` — 127 → 143px
+   flat, and the two-row value with it. Re-measure both if any of these numbers
+   move; the token feeds every banner's top padding and `scroll-padding-top`. */
+.hdr__top .brand {
+  gap: .7rem;
+  padding: 6px 19px 6px 11px;
+}
+.hdr__top .brand__mark { height: 40px; width: auto; }
+.hdr__top .brand__name { font-size: 24px; }
+.hdr__top .brand__name span { font-size: 11px; letter-spacing: .2em; margin-top: 4px; }
+.hdr__top .brand__caret { width: 15px; height: 15px; }
 /* the logo carries a dropdown like the nav links do, and a logo is not
    normally a menu — this is the affordance that says it is */
 .brand__caret {
@@ -305,7 +368,7 @@ p:last-child { margin-bottom: 0; }
 
    Only the radius transitions: the fill no longer changes on scroll, but the
    nav capsule still swaps its stadium for a rounded rectangle when the links
-   wrap below 940px. */
+   wrap below 860px. */
 .cap {
   display: inline-flex;
   align-items: center;
@@ -416,12 +479,75 @@ p:last-child { margin-bottom: 0; }
 /* the nav panels centre under the nav capsule, which is itself centred; the
    logo sits hard left, so its panel drops from the left edge instead — same
    surface, anchored to the thing that opened it */
+/* The logo's panel is the large one — it is the only menu here that is about
+   the whole site rather than one page, so it takes the full width between the
+   page edges and gives each section a tile instead of a line. Three columns:
+   what the company is, every section with its glyph, and the home page's own
+   headings. A nav panel is 940px and centred; this one starts at `--edge` and
+   ends at the far one. */
 .navmenu--brand {
   left: var(--edge);
   transform: none;
-  width: min(760px, calc(100vw - 2 * var(--edge)));
+  width: calc(100vw - 2 * var(--edge));
+  grid-template-columns: minmax(230px, 300px) minmax(0, 1.9fr) minmax(0, .95fr);
+  gap: 1.6rem 3rem;
+  padding: 1.9rem 2rem;
   animation-name: navmenu-in-left;
 }
+/* the two right-hand columns each get a heading, so they are stacks, not cells */
+.brandmenu__col { min-width: 0; }
+.brandmenu__col .navmenu__kicker { margin-bottom: .9rem; }
+
+/* Every section of the site, three to a row. The glyph sits in a tile of its
+   own: at this size the strokes are legible, which is the whole reason they
+   moved off the bar — nine of them in one capsule row read as a strip of
+   pictograms, and each was 14px of thin line beside a 12px word. */
+.brandmenu__sections {
+  display: grid;
+  /* Three columns, so nine sections make a square block. Not `auto-fit`: that
+     found four columns on a 1920 screen, which leaves the ninth stranded on a
+     row of its own, and one column under 1100, which made the panel 561px tall.
+     The count is chosen per width instead — see Responsive. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.brandmenu__sections a {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: .5rem .6rem;
+  border-radius: var(--r-sm);
+  color: rgba(255, 255, 255, .88);
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: none;
+  transition: background .2s var(--ease), color .2s var(--ease);
+}
+.brandmenu__sections a:hover,
+.brandmenu__sections a:focus-visible { background: rgba(255, 255, 255, .1); color: #fff; }
+
+.brandmenu__icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: var(--r-xs);
+  background: rgba(255, 255, 255, .08);
+  color: var(--gold-lift);
+  transition: background .2s var(--ease), color .2s var(--ease);
+}
+.brandmenu__icon svg { width: 19px; height: 19px; }
+.brandmenu__sections a:hover .brandmenu__icon,
+.brandmenu__sections a:focus-visible .brandmenu__icon {
+  background: var(--gold);
+  color: var(--night);
+}
+
 @keyframes navmenu-in-left {
   from { opacity: 0; transform: translateY(-6px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -429,7 +555,7 @@ p:last-child { margin-bottom: 0; }
 
 .navmenu__kicker {
   margin: 0 0 .55rem;
-  color: var(--dust);
+  color: var(--gold-lift);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: .16em;
@@ -451,10 +577,10 @@ p:last-child { margin-bottom: 0; }
   letter-spacing: .08em;
   text-transform: uppercase;
   text-decoration: none;
-  border-bottom: 1px solid var(--red);
+  border-bottom: 1px solid var(--gold);
   padding-bottom: 3px;
 }
-.navmenu__go:hover { color: var(--dust); }
+.navmenu__go:hover { color: var(--gold-lift); }
 
 .navmenu__links {
   display: grid;
@@ -477,6 +603,12 @@ p:last-child { margin-bottom: 0; }
 }
 .navmenu__links a:hover,
 .navmenu__links a:focus-visible { background: rgba(255, 255, 255, .1); color: #fff; }
+
+/* the home page's headings inside the logo's panel: one column, because the
+   panel already carries a three-column grid of sections and a second grid
+   beside it reads as a table. This has to sit after `.navmenu__links` — the two
+   selectors tie on specificity, so source order is the whole argument. */
+.navmenu__links--single { grid-template-columns: minmax(0, 1fr); }
 
 /* the open link keeps its hover fill while its panel is showing — the same in
    both scroll states now that the capsule no longer inverts */
@@ -526,7 +658,7 @@ p:last-child { margin-bottom: 0; }
 
 .regionmenu__head {
   margin: 0 0 .5rem;
-  color: var(--dust);
+  color: var(--gold-lift);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: .16em;
@@ -572,7 +704,7 @@ p:last-child { margin-bottom: 0; }
   font-weight: 700;
   letter-spacing: .06em;
   text-align: center;
-  color: var(--dust);
+  color: var(--gold-lift);
 }
 
 .regionmenu__names {
@@ -593,14 +725,14 @@ p:last-child { margin-bottom: 0; }
   line-height: 1.25;
   color: rgba(255, 255, 255, .55);
 }
-.regionmenu__opt.is-current .regionmenu__lang { color: var(--dust); }
+.regionmenu__opt.is-current .regionmenu__lang { color: var(--gold-lift); }
 
 .regionmenu__tick {
   width: 14px;
   height: 14px;
   flex: none;
   margin-left: auto;
-  color: var(--dust);
+  color: var(--gold-lift);
 }
 
 /* spans both columns of the inherited `.navmenu` grid */
@@ -754,7 +886,7 @@ p:last-child { margin-bottom: 0; }
 .hero__eyebrow::before {
   content: "";
   width: 46px; height: 2px;
-  background: var(--red);
+  background: var(--gold);
 }
 
 /* AB's headline: light weight, a hairline rule, then heavy — one line at
@@ -819,8 +951,11 @@ p:last-child { margin-bottom: 0; }
 .btn:hover { transform: translateY(-1px); }
 .btn svg { width: 16px; height: 16px; }
 
-.btn--red    { background: var(--red); color: #fff; }
-.btn--red:hover { background: var(--red-deep); }
+/* gold takes ink, not white — white on this fill is 2.2:1. And it *brightens*
+   on hover rather than darkening: a darker gold cannot hold ink type (4.35:1),
+   and metal catching the light is the right gesture for it anyway. */
+.btn--gold   { background: var(--gold); color: var(--ink); }
+.btn--gold:hover { background: var(--gold-lift); }
 .btn--ink    { background: var(--ink); color: #fff; }
 .btn--ink:hover { background: #000; }
 .btn--ghost  { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .55); }
@@ -911,7 +1046,8 @@ section.band--full {
 section.band--full > .bleed { padding-inline: var(--edge); }
 .bg-night h2, .bg-night h3 { color: #fff; }
 
-/* AB's red section heading, pinned to the page edge */
+/* AB's section heading, pinned to the page edge — its colour is now the
+   logo's deep gold, the one member of the family that can be text on paper */
 .sec-head {
   display: flex;
   align-items: baseline;
@@ -921,12 +1057,12 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   margin-bottom: clamp(2rem, 4vw, 3.5rem);
 }
 .sec-head h2 {
-  color: var(--red);
+  color: var(--gold-text);
   font-size: var(--fs-lg);
   font-weight: 400;
   letter-spacing: -.01em;
 }
-.bg-night .sec-head h2 { color: var(--red); }
+.bg-night .sec-head h2 { color: var(--gold-lift); }
 .sec-head p {
   max-width: 44ch;
   margin: 0;
@@ -937,7 +1073,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .eyebrow {
   display: inline-block;
   margin-bottom: 1.1rem;
-  color: var(--red);
+  color: var(--gold-text);
   font-size: var(--fs-fine);
   font-weight: 700;
   letter-spacing: .2em;
@@ -952,7 +1088,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   font-weight: 700;
   font-size: 16px;
   text-decoration: none;
-  border-bottom: 2px solid var(--red);
+  border-bottom: 2px solid var(--gold-deep);
   padding-bottom: 3px;
   transition: gap .25s var(--ease);
 }
@@ -1018,7 +1154,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 
 .proof__kicker {
   margin: 1.4rem 0 .6rem;
-  color: var(--red);
+  color: var(--gold-text);
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: .17em;
@@ -1044,7 +1180,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   gap: .5rem;
   margin-top: 1.1rem;
   padding-bottom: 4px;
-  border-bottom: 1px solid var(--red);
+  border-bottom: 1px solid var(--gold-deep);
   color: var(--ink);
   font-size: 12.5px;
   font-weight: 700;
@@ -1054,7 +1190,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   transition: color .25s var(--ease), border-color .25s var(--ease);
 }
 .proof__link:hover,
-.proof__link:focus-visible { color: var(--red); }
+.proof__link:focus-visible { color: var(--gold-text); }
 
 /* ==========================================================================
    Three-up actions — Lilly's row of tasks with pill CTAs
@@ -1115,7 +1251,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   width: 34px; height: 3px;
   margin-bottom: 1.5rem;
   border-radius: var(--r-pill);
-  background: var(--red);
+  background: var(--gold);
 }
 .tri__item:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
 .tri__item h3 {
@@ -1145,7 +1281,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   color: var(--ink-mute);
 }
 .crumbs a { color: var(--ink); text-decoration: none; }
-.crumbs a:hover { color: var(--red-dupont); text-decoration: underline; }
+.crumbs a:hover { color: var(--gold-text); text-decoration: underline; }
 
 /* compact search band on the home page — routes to finder.html */
 
@@ -1180,7 +1316,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   cursor: pointer;
 }
 .facets__clear svg { width: 15px; height: 15px; }
-.facets__clear:hover { color: var(--red-dupont); }
+.facets__clear:hover { color: var(--gold-text); }
 
 .facet { border-bottom: 1px solid var(--line-soft); }
 .facet__btn {
@@ -1223,10 +1359,10 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
 }
 .facet input:checked {
-  border-color: var(--red-dupont);
-  box-shadow: inset 0 0 0 4px var(--red-dupont);
+  border-color: var(--gold-deep);
+  box-shadow: inset 0 0 0 4px var(--gold-deep);
 }
-.facet label:hover { color: var(--red-dupont); }
+.facet label:hover { color: var(--gold-text); }
 
 .finder__search {
   position: relative;
@@ -1282,7 +1418,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   margin-bottom: .35rem;
 }
 .results h4 a { text-decoration: none; }
-.results h4 a:hover { color: var(--red-dupont); }
+.results h4 a:hover { color: var(--gold-text); }
 .results p { margin: 0; color: var(--ink-soft); }
 .results .tag {
   display: inline-block;
@@ -1345,7 +1481,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 }
 .btab-pill:hover { border-color: var(--ink); }
 .btab-pill:has(input:checked) { background: var(--ink); border-color: var(--ink); color: #fff; }
-.btab-pill:has(input:focus-visible) { outline: 2px solid var(--red); outline-offset: 3px; }
+.btab-pill:has(input:focus-visible) { outline: 2px solid var(--gold-deep); outline-offset: 3px; }
 
 .btabs__panel { display: none; }
 .btabs:has(#biz-products:checked) .btabs__panel[data-view="products"],
@@ -1357,11 +1493,11 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   border-collapse: collapse;
   text-align: left;
 }
-/* the red rubric a record's body uses, here as the header row */
+/* the gold rubric a record's body uses, here as the header row */
 .btab thead th {
   padding: 0 0 .8rem;
   border-bottom: 2px solid var(--line);
-  color: var(--red);
+  color: var(--gold-text);
   font-size: var(--fs-fine);
   font-weight: 700;
   letter-spacing: .16em;
@@ -1405,7 +1541,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   border-bottom: 1px solid transparent;
   transition: color .25s var(--ease), border-color .25s var(--ease);
 }
-.btab tbody tr:hover a { color: var(--red); border-bottom-color: var(--red); }
+.btab tbody tr:hover a { color: var(--gold-text); border-bottom-color: var(--gold-deep); }
 .btab tbody tr:last-child th,
 .btab tbody tr:last-child td { border-bottom: none; }
 
@@ -1455,7 +1591,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 }
 .pband__inner { position: relative; width: 100%; }
 
-/* the hero's eyebrow, red dash and all — this band is the hero's sibling, not
+/* the hero's eyebrow, gold dash and all — this band is the hero's sibling, not
    a section head */
 .pband__kicker {
   display: inline-flex;
@@ -1471,7 +1607,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .pband__kicker::before {
   content: "";
   width: 46px; height: 2px;
-  background: var(--red);
+  background: var(--gold);
 }
 
 /* one step above the finder panel's heading below it, and set sentence-case so
@@ -1576,7 +1712,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 }
 .fcta__kicker {
   margin: 0 0 1rem;
-  color: var(--dust);
+  color: var(--gold-lift);
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: .18em;
@@ -1597,8 +1733,8 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 }
 /* the whole panel is the link, so the button is a span that reacts with it */
 .fcta .btn { pointer-events: none; }
-.fcta:hover .btn--red,
-.fcta:focus-visible .btn--red { background: var(--red-deep); }
+.fcta:hover .btn--gold,
+.fcta:focus-visible .btn--gold { background: var(--gold-lift); }
 
 /* ==========================================================================
    Divisions — Aditya Birla's dark editorial tile grid
@@ -1709,7 +1845,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   font-size: var(--fs-fine);
   font-weight: 700;
   letter-spacing: .2em;
-  color: var(--dust);
+  color: var(--gold-lift);
 }
 .tile h3 {
   margin-top: auto;
@@ -1913,7 +2049,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 }
 .aslide__idx {
   margin: 0 0 .9rem;
-  color: var(--dust);
+  color: var(--gold-lift);
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: .18em;
@@ -2173,7 +2309,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .crow__go svg { width: 18px; height: 18px; }
 
 .crow:hover .crow__num,
-.crow:focus-visible .crow__num { color: var(--dust); }
+.crow:focus-visible .crow__num { color: var(--gold-lift); }
 .crow:hover h3,
 .crow:focus-visible h3 { color: #fff; }
 .crow:hover p,
@@ -2256,7 +2392,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   content: "";
   width: 34px; height: 2px;
   flex: none;
-  background: var(--red);
+  background: var(--gold);
 }
 .dpan h3 {
   margin: 0;
@@ -2311,7 +2447,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   letter-spacing: -.025em;
   line-height: 1.05;
 }
-.force h2 b { color: var(--red); font-weight: 400; }
+.force h2 b { color: var(--gold-lift); font-weight: 400; }
 .force p {
   max-width: 58ch;
   margin: 1.6rem auto 0;
@@ -2333,7 +2469,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   padding: 2rem 1.6rem;
   text-align: left;
 }
-.pillars svg { width: 30px; height: 30px; color: var(--dust); margin-bottom: 1.1rem; }
+.pillars svg { width: 30px; height: 30px; color: var(--gold-lift); margin-bottom: 1.1rem; }
 .pillars h3 { font-size: 19px; font-weight: 700; margin-bottom: .5rem; }
 .pillars p { margin: 0; font-size: var(--fs-body); color: rgba(255, 255, 255, .6); max-width: none; }
 
@@ -2361,7 +2497,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   font-weight: 600;
   letter-spacing: .16em;
   text-transform: uppercase;
-  color: var(--red);
+  color: var(--gold-text);
 }
 .mcard h3 {
   font-size: var(--fs-body);
@@ -2391,7 +2527,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   left: 0; top: 12%; bottom: 12%;
   width: 5px;
   border-radius: 0 var(--r-pill) var(--r-pill) 0;
-  background: var(--red);
+  background: var(--gold);
 }
 .cta h2 {
   font-size: var(--fs-lg);
@@ -2510,7 +2646,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .page-hero .crumbs::before {
   content: "";
   width: 46px; height: 2px;
-  background: var(--red);
+  background: var(--gold);
   margin-right: .4rem;
 }
 .page-hero .crumbs a { color: rgba(255, 255, 255, .82); }
@@ -2570,7 +2706,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 }
 .page-hero__num {
   margin: 0 0 .3rem;
-  color: var(--dust);
+  color: var(--gold-lift);
   font-size: var(--fs-fine);
   font-weight: 800;
   letter-spacing: .2em;
@@ -2589,7 +2725,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   color: inherit;
 }
 .tcard__num {
-  color: var(--red);
+  color: var(--gold-text);
   font-size: var(--fs-fine);
   font-weight: 800;
   letter-spacing: .18em;
@@ -2605,7 +2741,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   margin-top: 1.2rem;
   padding-bottom: 4px;
   align-self: flex-start;
-  border-bottom: 1px solid var(--red);
+  border-bottom: 1px solid var(--gold-deep);
   color: var(--ink);
   font-size: 12.5px;
   font-weight: 700;
@@ -2615,9 +2751,9 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 }
 .tcard__go svg { width: 16px; height: 16px; }
 .tcard:hover .tcard__go,
-.tcard:focus-visible .tcard__go { color: var(--red); gap: .8rem; }
+.tcard:focus-visible .tcard__go { color: var(--gold-text); gap: .8rem; }
 
-/* the columns of a topic page: the same red rubric a record's body uses, at
+/* the columns of a topic page: the same gold rubric a record's body uses, at
    page scale rather than inside a card (the h4 rule is shared, below) */
 .topic-body {
   display: grid;
@@ -2652,10 +2788,10 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   transition: border-color .25s var(--ease), transform .3s var(--ease-out);
 }
 .grade-list a:hover,
-.grade-list a:focus-visible { border-color: var(--red); transform: translateX(3px); }
+.grade-list a:focus-visible { border-color: var(--gold-deep); transform: translateX(3px); }
 .grade-list__name { font-size: var(--fs-body); font-weight: 700; color: var(--ink); }
 .grade-list__teaser { font-size: var(--fs-body); color: var(--ink-soft); }
-.grade-list a:hover .grade-list__name { color: var(--red); }
+.grade-list a:hover .grade-list__name { color: var(--gold-text); }
 
 @media (max-width: 640px) {
   .grade-list a { grid-template-columns: 1fr; }
@@ -2663,7 +2799,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 
 .grade-fact { margin: 0 0 .3rem; font-size: var(--fs-body); }
 .grade-fact a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
-.grade-fact a:hover { color: var(--red); border-color: var(--red); }
+.grade-fact a:hover { color: var(--gold-text); border-color: var(--gold-deep); }
 .grade-fact--mute { color: var(--ink-mute); }
 
 /* previous / next / all, along the foot of a topic page */
@@ -2679,7 +2815,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .topic-walk__link--next { text-align: right; }
 .topic-walk__dir {
   display: block;
-  color: var(--red);
+  color: var(--gold-text);
   font-size: var(--fs-fine);
   font-weight: 700;
   letter-spacing: .14em;
@@ -2692,7 +2828,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   font-weight: 600;
   color: var(--ink);
 }
-.topic-walk__link:hover .topic-walk__title { color: var(--red); }
+.topic-walk__link:hover .topic-walk__title { color: var(--gold-text); }
 .topic-walk__all {
   font-size: var(--fs-fine);
   font-weight: 700;
@@ -2702,7 +2838,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   text-decoration: none;
   white-space: nowrap;
 }
-.topic-walk__all:hover { color: var(--red); }
+.topic-walk__all:hover { color: var(--gold-text); }
 
 @media (max-width: 720px) {
   .topic-walk { grid-template-columns: 1fr 1fr; }
@@ -2719,9 +2855,11 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .lede { font-size: var(--fs-base); line-height: 1.5; color: var(--ink-soft); }
 .bg-night .lede { color: rgba(255, 255, 255, .72); }
 
-/* the red eyebrow only clears 3:1 against the night ground, which is fine for
-   a 38px heading and not for 13px tracked caps — so those take the dust */
-.bg-night .eyebrow { color: var(--dust); }
+/* the deep gold that carries text on paper is 3.4:1 on the night ground —
+   fine for a 38px heading, not for 13px tracked caps, so those take the
+   highlight gold instead (11.9:1). The old red had the same split and a worse
+   number: 3.15:1 for the heading itself. */
+.bg-night .eyebrow { color: var(--gold-lift); }
 
 /* the centred heading block above a grid — the landing page's .sec-head is a
    two-column baseline row, which is the wrong shape for these */
@@ -2826,8 +2964,8 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   width: 46px; height: 46px;
   flex: none;
   border-radius: 50%;
-  background: var(--red);
-  color: #fff;
+  background: var(--gold);
+  color: var(--ink);
   font-size: 15px;
   font-weight: 800;
   letter-spacing: 0;
@@ -2853,7 +2991,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 4px;
-  background: var(--red);
+  background: var(--gold);
 }
 .detail:hover {
   border-color: var(--sand-deep);
@@ -2882,7 +3020,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .detail__body h4,
 .topic-body h4 {
   margin-bottom: .7rem;
-  color: var(--red);
+  color: var(--gold-text);
   font-size: var(--fs-fine);
   font-weight: 700;
   letter-spacing: .16em;
@@ -2909,7 +3047,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .detail__img {
   grid-row: 1 / -1;
   min-height: 220px;
-  /* bled out by the card's own padding, less the 4px the red rule occupies —
+  /* bled out by the card's own padding, less the 4px the gold rule occupies —
      the filter makes this a stacking context, so it would otherwise paint over
      the rule and leave it showing only below the picture */
   margin: calc(var(--d-pad) * -1) 0
@@ -2963,22 +3101,25 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   left: 0; top: .58em;
   width: 8px; height: 2px;
   border-radius: var(--r-pill);
-  background: var(--red);
+  /* a bullet sits *in* the text and is only 8x2px, so it takes the deep gold
+     the check glyph below takes, not the fill gold the wide rules take — at
+     --gold the dash reads washed out beside the checks in the same layout */
+  background: var(--gold-deep);
 }
 .list--check li::before {
   content: "";
   top: .42em;
   width: 6px; height: 10px;
   background: none;
-  border: solid var(--red);
+  border: solid var(--gold-deep);
   border-width: 0 2px 2px 0;
   transform: rotate(42deg);
 }
 .list strong { color: var(--ink); font-weight: 700; }
 .bg-night .list li { color: rgba(255, 255, 255, .72); }
 .bg-night .list strong { color: #fff; }
-.bg-night .list li::before { background: var(--dust); }
-.bg-night .list--check li::before { background: none; border-color: var(--dust); }
+.bg-night .list li::before { background: var(--gold-lift); }
+.bg-night .list--check li::before { background: none; border-color: var(--gold-lift); }
 
 .pills { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; padding: 0; list-style: none; }
 /* every pill in the markup is a jump link, so the anchor carries the padding
@@ -2993,7 +3134,7 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   color: var(--ink);
   transition: border-color .25s var(--ease), color .25s var(--ease);
 }
-.pills li:hover { border-color: var(--red); color: var(--red); }
+.pills li:hover { border-color: var(--gold-deep); color: var(--gold-text); }
 .pills a { display: block; padding: .42rem .9rem; text-decoration: none; }
 
 .value-grid { margin: 0; }
@@ -3020,9 +3161,9 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   font-size: var(--fs-body);
 }
 .contact-line:last-child { margin-bottom: 0; }
-.contact-line svg { width: 18px; height: 18px; flex: none; margin-top: .3em; color: var(--red); }
+.contact-line svg { width: 18px; height: 18px; flex: none; margin-top: .3em; color: var(--gold-text); }
 .contact-line a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
-.contact-line a:hover { color: var(--red); border-color: var(--red); }
+.contact-line a:hover { color: var(--gold-text); border-color: var(--gold-deep); }
 
 /* gaps the source copy left blank — see README, "Still to fill in" */
 .tbd { color: var(--ink-mute); font-style: italic; }
@@ -3054,10 +3195,14 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .field textarea { min-height: 140px; resize: vertical; }
 .field input:focus, .field select:focus, .field textarea:focus {
   outline: none;
-  border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(200, 20, 30, .12);
+  border-color: var(--gold-deep);
+  box-shadow: 0 0 0 3px rgba(162, 118, 63, .16);
 }
 .form-note { margin-top: 1rem; font-size: var(--fs-fine); color: var(--ink-mute); }
+/* the note goes from standing text to an answer once the form has been used.
+   It was an inline `style` on the element and named `--red`, which no longer
+   exists — a state belongs in here anyway. */
+.form-note.is-live { color: var(--gold-text); }
 
 /* ==========================================================================
    Reveal-on-scroll
@@ -3074,6 +3219,19 @@ section.band--full > .bleed { padding-inline: var(--edge); }
    Responsive
    ========================================================================== */
 
+/* The logo's panel is wide but not infinitely so: a section cell needs its
+   34px tile, its gap and the longest label ("Sustainability") — about 166px —
+   and three of those plus their gaps need ~530px of the middle column. That is
+   what the panel has down to about 1360px; below it the sections go two-up and
+   the three panel columns tighten so the home-page list keeps its measure. */
+@media (max-width: 1360px) {
+  .navmenu--brand {
+    grid-template-columns: minmax(200px, 260px) minmax(0, 1.6fr) minmax(0, .9fr);
+    gap: 1.4rem 2rem;
+  }
+  .brandmenu__sections { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 /* the nav row already wraps on its own — never a hamburger, matching the rest
    of the site. These just keep the capsules from crowding as it does. */
 @media (max-width: 1080px) {
@@ -3086,10 +3244,19 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   .caps__title { max-width: 24ch; }
 }
 
-/* below ~940px the ten links wrap inside their capsule; a stadium radius on a
-   two-row box reads as a mistake, so soften it to a rounded rectangle */
-@media (max-width: 940px) {
+/* Below 860px the nine links wrap inside their capsule; a stadium radius on a
+   two-row box reads as a mistake, so soften it to a rounded rectangle. 860 is
+   measured, not chosen: with the padding this query itself applies, one row
+   survives to 861px and wraps at 860 — measure it that way round, or the band
+   just above the breakpoint is one row wearing the two-row `--header-h`.
+
+   It went 940 → 860 when the Home tab came out of the nav. It was briefly 1008,
+   while the nine links carried glyphs on the bar itself: ~22px on every link,
+   ~200px on the row, which is most of what the glyphs moving into the logo's
+   panel gave back. Anything that changes a label or its padding moves it. */
+@media (max-width: 860px) {
   .nav-list { border-radius: 26px; padding: 5px 7px; }
+  :root { --header-h: 169px; }
 }
 
 @media (max-width: 1180px) {
@@ -3099,10 +3266,6 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 }
 
 @media (max-width: 900px) {
-  /* the nav capsule wraps to two rows here; the brand capsule now sets row 1's
-     height at every width in this band, so the 640px icon-only step no longer
-     moves it */
-  :root { --header-h: 158px; }
   .proof { grid-template-columns: 1fr; }
   .aslide__art { display: none; }   /* the ghost numeral would sit under the copy */
   .aslide { aspect-ratio: 4 / 3; }
@@ -3185,6 +3348,15 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   .hero__cue { display: none; }
   .apps__rail { --aslide-w: calc(80vw - var(--inset)); }   /* phones keep a sliver */
   .aslide { min-height: 430px; }   /* the copy needs the height the width lost */
+}
+
+/* The narrowest step: below 461px the nine links need a third row. This one
+   predates the icons — the token simply never carried a three-row value, so
+   every banner on a phone started 29px too high — and it sits last because
+   these `:root` steps are all the same specificity, so source order is what
+   decides which one a 390px window ends up with. */
+@media (max-width: 461px) {
+  :root { --header-h: 199px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="foot__grid">
           <div>
             <Link className="brand" href="/">
-              <BrandMark />
+              <BrandMark id="foot" />
               <span className="brand__name">
                 Cosmox<span>Chemicals</span>
               </span>

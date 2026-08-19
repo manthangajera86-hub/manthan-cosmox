@@ -7,7 +7,7 @@ import type { Dict } from "./types";
 const zh: Dict = {
   // --- navigation and header ------------------------------------------------
   "Home": "首页",
-  "Our Story": "关于我们",
+  "About us": "关于我们",
   "Divisions": "事业部",
   "Products": "产品",
   "Industries": "行业",
@@ -20,6 +20,8 @@ const zh: Dict = {
   "Product Finder": "产品查询",
   "Skip to content": "跳至正文",
   "Visit page": "访问页面",
+  "Sections": "版块",
+  "On the home page": "首页内容",
   "Explore": "了解详情",
   "Previous": "上一个",
   "Next": "下一个",
@@ -292,7 +294,6 @@ const zh: Dict = {
   "Company": "公司",
   "Offering": "业务与产品",
   "Get in touch": "联系我们",
-  "About us": "关于我们",
   "Product finder": "产品查询",
   "All rights reserved.": "版权所有。",
   "Manufacturer & exporter of speciality chemicals": "特种化学品制造商与出口商",

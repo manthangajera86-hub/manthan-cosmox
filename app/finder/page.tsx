@@ -44,7 +44,7 @@ export default function FinderPage() {
             <h2>Not finding the grade you need?</h2>
             <p>Custom formulations and specification work — tell us the property you are trying to hit and we will come back with options.</p>
             <div className="btn-row">
-              <Link className="btn btn--red" href="/contact">Request a grade</Link>
+              <Link className="btn btn--gold" href="/contact">Request a grade</Link>
               <Link className="btn btn--outline" href="/products">Browse by division</Link>
             </div>
           </div>

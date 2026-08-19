@@ -6,7 +6,7 @@ import type { Dict } from "./types";
 const vi: Dict = {
   // --- navigation and header ------------------------------------------------
   "Home": "Trang chủ",
-  "Our Story": "Về chúng tôi",
+  "About us": "Về chúng tôi",
   "Divisions": "Bộ phận",
   "Products": "Sản phẩm",
   "Industries": "Ngành công nghiệp",
@@ -19,6 +19,8 @@ const vi: Dict = {
   "Product Finder": "Tra cứu sản phẩm",
   "Skip to content": "Bỏ qua tới nội dung",
   "Visit page": "Xem trang",
+  "Sections": "Chuyên mục",
+  "On the home page": "Trên trang chủ",
   "Explore": "Tìm hiểu",
   "Previous": "Trước",
   "Next": "Tiếp",
@@ -291,7 +293,6 @@ const vi: Dict = {
   "Company": "Công ty",
   "Offering": "Sản phẩm & dịch vụ",
   "Get in touch": "Liên hệ",
-  "About us": "Về chúng tôi",
   "Product finder": "Tra cứu sản phẩm",
   "All rights reserved.": "Bảo lưu mọi quyền.",
   "Manufacturer & exporter of speciality chemicals":
