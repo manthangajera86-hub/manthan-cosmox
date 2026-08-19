@@ -102,7 +102,7 @@ export default function ContactPage() {
             <p>Reach out today for world-class service, expertise and support in specialty chemicals.</p>
           </div>
           <div className="btn-row">
-            <a className="btn btn--red" href="tel:+919265943799">Call +91 92659 43799</a>
+            <a className="btn btn--gold" href="tel:+919265943799">Call +91 92659 43799</a>
           </div>
         </div>
       </div>

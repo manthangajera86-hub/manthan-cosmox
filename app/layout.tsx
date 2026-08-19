@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, EB_Garamond } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -36,6 +36,14 @@ export const metadata: Metadata = {
   },
   description:
     "Cosmox Chemicals manufactures and exports metal soaps, halogen-free hypophosphite flame retardants, high-purity intermediates and functional materials from Surat, Gujarat, India.",
+};
+
+/* the browser's own chrome, on a phone. `--night` is the capsules' ground and
+   the mark's, so the bar above the page matches the bar inside it. This is a
+   `viewport` export, not `metadata` — themeColor in `metadata` builds, but
+   warns on every one of the 119 routes and is dropped. */
+export const viewport: Viewport = {
+  themeColor: "#17130f",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

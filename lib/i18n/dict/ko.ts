@@ -6,7 +6,7 @@ import type { Dict } from "./types";
 const ko: Dict = {
   // --- navigation and header ------------------------------------------------
   "Home": "홈",
-  "Our Story": "회사 소개",
+  "About us": "회사 소개",
   "Divisions": "사업부",
   "Products": "제품",
   "Industries": "산업 분야",
@@ -19,6 +19,8 @@ const ko: Dict = {
   "Product Finder": "제품 찾기",
   "Skip to content": "본문으로 건너뛰기",
   "Visit page": "페이지 보기",
+  "Sections": "섹션",
+  "On the home page": "홈 화면에서",
   "Explore": "자세히 보기",
   "Previous": "이전",
   "Next": "다음",
@@ -291,7 +293,6 @@ const ko: Dict = {
   "Company": "회사",
   "Offering": "사업 및 제품",
   "Get in touch": "연락처",
-  "About us": "회사 소개",
   "Product finder": "제품 찾기",
   "All rights reserved.": "All rights reserved.",
   "Manufacturer & exporter of speciality chemicals": "특수화학 제조 및 수출 기업",

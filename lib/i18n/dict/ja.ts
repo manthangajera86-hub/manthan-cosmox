@@ -6,7 +6,7 @@ import type { Dict } from "./types";
 const ja: Dict = {
   // --- navigation and header ------------------------------------------------
   "Home": "ホーム",
-  "Our Story": "会社概要",
+  "About us": "会社概要",
   "Divisions": "事業部",
   "Products": "製品",
   "Industries": "産業分野",
@@ -19,6 +19,8 @@ const ja: Dict = {
   "Product Finder": "製品検索",
   "Skip to content": "本文へスキップ",
   "Visit page": "ページを見る",
+  "Sections": "セクション",
+  "On the home page": "ホームページの内容",
   "Explore": "詳しく見る",
   "Previous": "前へ",
   "Next": "次へ",
@@ -291,7 +293,6 @@ const ja: Dict = {
   "Company": "会社情報",
   "Offering": "事業・製品",
   "Get in touch": "お問い合わせ",
-  "About us": "会社概要",
   "Product finder": "製品検索",
   "All rights reserved.": "All rights reserved.",
   "Manufacturer & exporter of speciality chemicals":

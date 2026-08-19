@@ -1,13 +1,17 @@
 "use client";
 
-/* Two capsules floating over the hero: the utility group in row 1, the ten nav
-   links in row 2. Transparent over a hero or banner, solid white once that has
-   scrolled past. Every route opens with one or the other, so the bar is always
-   floating; if a page is ever added without one, it needs the bar in normal
-   flow instead or the content will start underneath it.
+/* Two capsules floating over the hero: the utility group in row 1, the nine nav
+   links in row 2. There is no Home tab — the brand capsule is the way home, and
+   what it opens is the whole site: a full-width panel of every section with its
+   glyph, beside the home page's own headings. Transparent over a hero or banner,
+   solid white once that has scrolled past. Every route opens with one or the
+   other, so the bar is always floating; if a page is ever added without one, it
+   needs the bar in normal flow instead or the content will start underneath it.
 
-   There is no hamburger, by design — below 940px the links wrap inside their
-   capsule, and the dropdowns switch off. */
+   There is no hamburger, by design — the dropdowns switch off below 940px and
+   the links wrap inside their capsule below 860px (they used to wrap at 940
+   too, until the Home tab came out). The brand stays a plain link to `/` under
+   940, so home is still one tap away with no panel involved. */
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,9 +23,9 @@ import { useT } from "./LocaleProvider";
 
 const SHUT_DELAY = 160;
 
-/* The logo opens the same panel the Home tab does — it is the same link. It
-   needs a key of its own all the same, or hovering it would light the Home tab
-   up too and render both panels at once. */
+/* The logo is the only link to `/` in the header, and it opens the home panel,
+   `NAV_MENU['/']`. That panel keys off "brand" rather than "/" because `NAV`
+   no longer holds a `/` entry to key against. */
 const BRAND_KEY = "brand";
 
 /* The country panel shares the one `open` slot with the nav panels, so only one
@@ -55,8 +59,8 @@ export default function Header() {
     return () => io.disconnect();
   }, [pathname]);
 
-  /* the dropdowns are desktop-only — below 940px the nav wraps and they would
-     cover the page */
+  /* the dropdowns are desktop-only — below 940px a panel is most of the screen
+     and would cover the page it describes */
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 941px)");
     const sync = () => setWide(mq.matches);
@@ -96,7 +100,8 @@ export default function Header() {
 
   /* Clicking the tab you are already on is not a navigation, so the router
      does not scroll — you would stay wherever you had read to. Every tab
-     should open its page at the top, so send it there by hand. */
+     should open its page at the top, so send it there by hand. The brand does
+     the same, which is what takes you back up when you are already on `/`. */
   const toTop = (href: string) => () => {
     if (href === pathname) window.scrollTo({ top: 0, behavior: "instant" });
   };
@@ -126,10 +131,11 @@ export default function Header() {
             className="brand"
             href="/"
             onClick={toTop("/")}
+            aria-current={pathname === "/" ? "page" : undefined}
             aria-expanded={brandMenu && wide ? brandOpen : undefined}
             aria-controls={brandMenu && wide ? "navmenu-brand" : undefined}
           >
-            <BrandMark />
+            <BrandMark id="hdr" />
             <span className="brand__name">
               Cosmox<span>Chemicals</span>
             </span>
@@ -150,13 +156,49 @@ export default function Header() {
                   {t("Visit page")}<span aria-hidden="true">&#8594;</span>
                 </Link>
               </div>
-              <ul className="navmenu__links">
-                {brandMenu.links.map(([href, label]) => (
-                  <li key={href}>
-                    <Link href={href}>{t(label)}</Link>
-                  </li>
-                ))}
-              </ul>
+
+              {/* every section of the site, each with its glyph from `NAV`. The
+                  glyphs live here rather than on the bar: nine of them in one
+                  row is a row of pictograms, while here each has a tile of its
+                  own and room to be read. They are decoration beside a word
+                  that already names the page, so they stay `aria-hidden`. */}
+              <div className="brandmenu__col">
+                <p className="navmenu__kicker">{t("Sections")}</p>
+                <ul className="brandmenu__sections">
+                  {NAV.map((item) => (
+                    <li key={item.href}>
+                      <Link href={item.href} onClick={toTop(item.href)}>
+                        <span className="brandmenu__icon" aria-hidden="true">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            {item.icon.map((d) => (
+                              <path key={d} d={d} />
+                            ))}
+                          </svg>
+                        </span>
+                        {t(item.label)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="brandmenu__col">
+                <p className="navmenu__kicker">{t("On the home page")}</p>
+                <ul className="navmenu__links navmenu__links--single">
+                  {brandMenu.links.map(([href, label]) => (
+                    <li key={href}>
+                      <Link href={href}>{t(label)}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
         </div>

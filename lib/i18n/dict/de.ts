@@ -8,7 +8,7 @@ import type { Dict } from "./types";
 const de: Dict = {
   // --- navigation and header ------------------------------------------------
   "Home": "Startseite",
-  "Our Story": "Über uns",
+  "About us": "Über uns",
   "Divisions": "Geschäftsbereiche",
   "Products": "Produkte",
   "Industries": "Branchen",
@@ -21,6 +21,8 @@ const de: Dict = {
   "Product Finder": "Produktfinder",
   "Skip to content": "Zum Inhalt springen",
   "Visit page": "Seite ansehen",
+  "Sections": "Bereiche",
+  "On the home page": "Auf der Startseite",
   "Explore": "Entdecken",
   "Previous": "Zurück",
   "Next": "Weiter",
@@ -293,7 +295,6 @@ const de: Dict = {
   "Company": "Unternehmen",
   "Offering": "Angebot",
   "Get in touch": "Kontakt aufnehmen",
-  "About us": "Über uns",
   "Product finder": "Produktfinder",
   "All rights reserved.": "Alle Rechte vorbehalten.",
   "Manufacturer & exporter of speciality chemicals":

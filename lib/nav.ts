@@ -1,4 +1,7 @@
 /* Primary navigation, and the dropdown panel each link opens.
+   There is no Home link: the brand capsule is the way home, and it opens
+   `NAV_MENU['/']` — so that entry stays here even though no `NAV` item points
+   at it.
    The eight topic families list their topics — those hrefs must match a folder
    under `app/<family>/`, and `lib/topics.ts` is the list they come from, so add
    a topic in both places. `/` and `/about` still list headings on their own
@@ -6,26 +9,56 @@
    the page in front of the fragment, because the panels open from every route,
    not only from the page they describe. */
 
-export type NavLink = { href: string; label: string };
+/* `icon` is the `d` of one or more `<path>`s on a 24×24 grid, stroked in
+   `currentColor` — data rather than markup, like everything else in this file,
+   so the nav can stay one list and `Header` stays the only thing that renders.
+   They are drawn on the panel's terms, not the bar's: the logo's dropdown gives
+   each one a 34px tile at 19px, where two or three strokes read cleanly. They
+   were briefly on the nav capsule itself at 14px, which is what proved the
+   point — nine thin glyphs in one row read as a strip of pictograms, and they
+   cost the row ~200px, pushing its wrap from 860px up to 1008px. */
+export type NavLink = { href: string; label: string; icon: string[] };
 
 export const NAV: NavLink[] = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "Our Story" },
-  { href: "/divisions", label: "Divisions" },
-  { href: "/products", label: "Products" },
-  { href: "/industries", label: "Industries" },
-  { href: "/applications", label: "Applications" },
-  { href: "/capabilities", label: "Capabilities" },
-  { href: "/rnd", label: "R&D" },
-  { href: "/innovation", label: "Innovation" },
-  { href: "/sustainability", label: "Sustainability" },
+  { href: "/about", label: "About us",
+    /* the company: an office block */
+    icon: ["M4 21V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v15", "M14 11h4a2 2 0 0 1 2 2v8",
+           "M3 21h18", "M7.5 9h3", "M7.5 13h3"] },
+  { href: "/divisions", label: "Divisions",
+    /* ten units under one roof: a grid of separate squares */
+    icon: ["M4 4h6v6H4z", "M14 4h6v6h-6z", "M4 14h6v6H4z", "M14 14h6v6h-6z"] },
+  { href: "/products", label: "Products",
+    /* forty grades, shipped: a box */
+    icon: ["m12 3 8 4.5v9L12 21l-8-4.5v-9z", "m4 7.5 8 4.5 8-4.5", "M12 12v9"] },
+  { href: "/industries", label: "Industries",
+    /* the sectors we supply: a plant skyline */
+    icon: ["M3 21h18", "M4 21V10l5.5 3.5V10L15 13.5V6l5 3v12"] },
+  { href: "/applications", label: "Applications",
+    /* what the chemistry does in service: layers of end use */
+    icon: ["m12 3 9 4.6-9 4.6-9-4.6z", "m3 13 9 4.6 9-4.6"] },
+  { href: "/capabilities", label: "Capabilities",
+    /* what we can run and control: sliders */
+    icon: ["M4 8h16", "M4 16h16", "M9 5.5v5", "M15 13.5v5"] },
+  { href: "/rnd", label: "R&D",
+    /* the laboratory: a flask with its liquid line */
+    icon: ["M10 3v6.4L5 18.5A1.5 1.5 0 0 0 6.3 21h11.4a1.5 1.5 0 0 0 1.3-2.5L14 9.4V3",
+           "M9 3h6", "M7.8 15h8.4"] },
+  { href: "/innovation", label: "Innovation",
+    /* where the next product comes from: a bulb */
+    icon: ["M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z",
+           "M10 19h4", "M10.5 21h3"] },
+  { href: "/sustainability", label: "Sustainability",
+    /* a lower footprint: a leaf on its stem */
+    icon: ["M11.5 20.5A7.5 7.5 0 0 1 10 6.2C15.5 5 17.2 4.4 19.2 2c1 2 1.8 4.3 1.8 8 0 5.8-4.4 10.5-9.5 10.5z",
+           "M3 21c0-3.2 2-5.7 5.4-6.4 2.6-.5 5.2-2.1 6.6-3.6"] },
 ];
 
 /* A dropdown link is a whole href, never a bare fragment: most point at a
-   topic's own page under its family's folder, while `/` and `/about` jump to a
-   heading on the page itself. A bare `#slug` would resolve against whatever
-   route the panel was opened from — the home menu used to hold six of them, so
-   from `/about` "What we make" went to `/about#statement`, which is nothing. */
+   topic's own page under its family's folder, while `/` (the brand panel) and
+   `/about` jump to a heading on the page itself. A bare `#slug` would resolve
+   against whatever route the panel was opened from — the home menu used to hold
+   six of them, so from `/about` "What we make" went to `/about#statement`,
+   which is nothing. */
 export type NavMenu = { about: string; links: [href: string, label: string][] };
 
 export const NAV_MENU: Record<string, NavMenu> = {

@@ -6,7 +6,7 @@ import type { Dict } from "./types";
 const it: Dict = {
   // --- navigation and header ------------------------------------------------
   "Home": "Home",
-  "Our Story": "Chi siamo",
+  "About us": "Chi siamo",
   "Divisions": "Divisioni",
   "Products": "Prodotti",
   "Industries": "Settori",
@@ -19,6 +19,8 @@ const it: Dict = {
   "Product Finder": "Ricerca prodotti",
   "Skip to content": "Vai al contenuto",
   "Visit page": "Vai alla pagina",
+  "Sections": "Sezioni",
+  "On the home page": "Nella home page",
   "Explore": "Scopri",
   "Previous": "Precedente",
   "Next": "Successivo",
@@ -291,7 +293,6 @@ const it: Dict = {
   "Company": "Azienda",
   "Offering": "Offerta",
   "Get in touch": "Contatti",
-  "About us": "Chi siamo",
   "Product finder": "Ricerca prodotti",
   "All rights reserved.": "Tutti i diritti riservati.",
   "Manufacturer & exporter of speciality chemicals":

@@ -67,7 +67,7 @@ export default function ProductsPage() {
             <p>Share your requirement and we'll come back with technical data, packaging options and export documentation.</p>
           </div>
           <div className="btn-row">
-            <Link className="btn btn--red" href="/contact">Request TDS / SDS</Link>
+            <Link className="btn btn--gold" href="/contact">Request TDS / SDS</Link>
           </div>
         </div>
       </div>

@@ -35,6 +35,7 @@ lib/            nav.ts (links + dropdown data), topics.ts (the 64 topics),
   i18n/         locales.ts (the twelve countries), dict/<lang>.ts (eleven
                 dictionaries — there is no en.ts, English is the source)
 public/         hero.jpg and img/ — the photography
+  logo/         the brand mark and lock-up, light / dark / mono (see "The logo")
 ```
 
 | Route | Source RTF |
@@ -209,16 +210,71 @@ only the content routes use.
 
 | Reference | Borrowed |
 |---|---|
-| adityabirla.com | Full-bleed hero with the headline low-left, split into a light weight and a heavy weight either side of a hairline rule; uppercase wide-tracked nav floating over the image, reverting to a solid white bar on scroll; red section headings pinned to an 81px page inset; dark editorial tile grid; five-up media strip; the two-tone "A Force For Good" band |
+| adityabirla.com | Full-bleed hero with the headline low-left, split into a light weight and a heavy weight either side of a hairline rule; uppercase wide-tracked nav floating over the image, reverting to a solid white bar on scroll; accent-coloured section headings pinned to an 81px page inset; dark editorial tile grid; five-up media strip; the two-tone "A Force For Good" band |
 | lilly.com | The pill "capsule" treatment now used throughout the header; oversized statement typography set at 106px; the three-up task row with pill CTAs; the horizontal industry card scroller with 63.75px titles |
-| dupont.com | The product finder — faceted radio sidebar, search field with a clear button, "Displaying 1 - 8 of 40 Results", and the dense red-headed result list |
+| dupont.com | The product finder — faceted radio sidebar, search field with a clear button, "Displaying 1 - 8 of 40 Results", and the dense accent-headed result list |
 
 The type scale in `app/globals.css` is the literal set of sizes measured on those
 three pages (17 / 21.25 / 25.5 / 31.875 / 38.25 / 51 / 63.75 / 106.25px), made
-fluid with `clamp()`. The palette blends Lilly's near-black `#191919`, the warm
-neutrals extracted from the Aditya Birla page (`#8a7e71`, `#593731`, `#e3aa7a`)
-and a red averaged from all three brand reds (`#c8141e`), with DuPont's
-`#e4001c` kept for the finder block.
+fluid with `clamp()`. **The palette is no longer theirs** — it comes from the
+logo now; see "The colour" below. What the three sites still account for is the
+layout, the type scale and the structure, which is what those attributions in
+`globals.css` are about.
+
+### The colour
+
+The accent is the logo's gold. It used to be a red averaged from the three
+reference sites' brand reds (`#c8141e`, with DuPont's `#e4001c` in the finder
+block); the mark is gold, graphite and white, so the reds are gone and the four
+tokens below are what replaced them. Nothing else about the reference sites
+changed — their attributions in `globals.css` are about layout and structure.
+
+**Gold is a material, not a UI colour, and that is the whole problem.** Every
+gold in the artwork scores between 1.2:1 and 2.7:1 against white, so not one of
+them can carry text on paper. Red could do every job at once; gold cannot do any
+of them everywhere.
+
+What the mark itself does is the answer. Its gradient runs bright at the top and
+deep at the bottom, and its orbit ring is black on white and white on black — so
+**the accent runs deep on paper and bright on night**, and the four tokens are
+that one hue at the four jobs it actually has:
+
+| Token | Value | Its job | Measured |
+|---|---|---|---|
+| `--gold` | `#d4a94e` | the mark's body gold. A *fill*: solid grounds, wide ornamental rules. Type on it is `--ink` | 8.0:1 for ink on it — white on it is 2.2:1, so never white |
+| `--gold-lift` | `#e9cd85` | the highlight band. Gold as a *foreground*, dark grounds only | 11.9:1 on `--night` |
+| `--gold-deep` | `#a2763f` | affordances and small marks that carry meaning on paper without reading as body copy: focus rings, underlines, bullets, the check glyph | 4.0 on paper · 3.6 on sand · 4.6 on night — the one value clearing 3:1 on all three |
+| `--gold-text` | `#8a6330` | the only member that can be *text* on paper: headings, kickers, links, hovers | 5.4:1 on white · 4.7:1 on sand |
+
+`--gold-lift` is the old `--dust` under a name that says what it does; every one
+of its seventeen uses was already on a dark ground, which is why the rename was
+a rename and not a redesign. The two dead tokens from the old palette
+(`--terracotta`, `--stone` — a vibrant and a cool blue-grey, zero uses between
+them) went with the reds. `--warm` / `--warm-deep` are still the media
+stand-in's gradient and now run gold into graphite.
+
+Two things got measurably better on the way through, both because red was doing
+a job it was bad at:
+
+- **Section headings on `--bg-night`** were red at 3.15:1, which fails. They are
+  `--gold-lift` at 11.9:1.
+- **The primary button** was white on red. It is now ink on gold, and it
+  *brightens* on hover instead of darkening — a darker gold cannot hold ink type
+  (4.35:1), and metal catching the light is the right gesture for it anyway.
+
+The check was not by eye. Every element on seven representative routes whose
+computed colour is one of the four tokens was measured in the browser against
+its own resolved background, at its own font size and weight, against the
+threshold that size and weight actually requires. All pass. Re-run that before
+changing any of the four values — the numbers in the table are why they are
+those values and not prettier ones.
+
+Two places the palette lives outside `globals.css`: `viewport.themeColor` in
+`app/layout.tsx` paints the phone browser's chrome `--night` so the bar above
+the page matches the capsules in it (it must be the `viewport` export, not
+`metadata` — in `metadata` it builds but warns on all 119 routes and is
+dropped), and `--logo-ink` / `--logo-void` are the mark's own two page-borrowed
+colours, described under "The logo".
 
 ### Typefaces
 
@@ -240,12 +296,11 @@ fallback names behind the variable.
 
 **Inter is about 17% wider than the old macOS fallback**, which matters when you
 touch a hand-broken line — it is what turned the task-row heading's pyramid back
-into a balanced block (see below). It did not cost anything in the header: at
-940px the nav now holds one row where the fallback wrapped to two, and
-`--header-h` (128px, 158px under the 900px query) still matches what the header
-measures. One pre-existing mismatch, unchanged by the swap and present in both
-faces: below ~640px the nav wraps to a third row and the header measures 187px
-against the token's 158px, so anchor jumps on a phone land about 29px high.
+into a balanced block (see below). It did not cost anything in the header: the
+nav holds one row wherever the fallback wrapped to two, and `--header-h` matches
+what the header measures at every width — the three steps are listed under
+"Header" below, and the three-row phone mismatch that used to leave anchor jumps
+29px high is now carried by a step of its own.
 
 ### Three-up task row
 
@@ -290,7 +345,7 @@ with JavaScript off. The ten slides and their copy come from `/applications`,
 and each CTA deep-links to the matching section there.
 
 Its head is the one on the site that centres rather than pinning left, because
-the rail below it is centred on its middle slide: a red triangle and the
+the rail below it is centred on its middle slide: a gold triangle and the
 `APPLICATIONS` eyebrow, then the section's statement in ink with the serif
 italic accent `.tri__head` uses, then a sub-line, then the arrows — all on the
 same axis. Both lines are transcribed from the "Applications Overview" opening
@@ -349,7 +404,7 @@ Two things set it apart from the blocks either side:
   ground, hairline rules, nothing else. The picture is the *hover* state —
   each row carries its own `.bg-*` class and `.crow::before` opens that
   `--im-bg` behind the copy on a left-weighted scrim, which is why the type in
-  this block is written to turn white (`#fff` heading, 74% white body, `--dust`
+  this block is written to turn white (`#fff` heading, 74% white body, `--gold-lift`
   numeral). The hairline above the row and the one below it both fade to
   transparent with it (`.caps__list li:has(.crow:hover) + li .crow`), so no
   rule crosses the picture's rounded corners.
@@ -623,8 +678,10 @@ for a full-bleed hairline above and below the nav; both were removed, and the
   `aria-label` repeats the visible text rather than paraphrasing it, because
   below 640px the label is `display: none` and the icon would otherwise leave
   the link with no accessible name.
-- **Row 2** (`.hdr__nav`) — all ten links, `Home` through `Sustainability`,
-  inside a second capsule, centred.
+- **Row 2** (`.hdr__nav`) — the nine links, `About us` through `Sustainability`,
+  inside a second capsule, centred, words only. There is no Home tab: the logo is
+  the link home, which is what a logo is taken to be. The section glyphs were
+  briefly on these links and are not any more — see the logo's panel below.
 
 There are three capsules: the brand, the utility group and the nav. The latter
 two use the same shell (`.cap`) and the same item inside it (`.cap-btn`) — a
@@ -634,7 +691,7 @@ because it is a single link, not a group. `layout.md` asks for independent
 capsules per control; grouping them was a later call and is the deliberate
 deviation from that spec.
 
-Each of the ten nav links opens a dropdown (`.navmenu`) built by
+Each of the nine nav links opens a dropdown (`.navmenu`) built by
 `components/` from the `NAV_MENU` map: a short note on what that page is about,
 a "Visit page" link, and the page's own `<h3>` headings as jump links. Those
 headings carry `id` slugs added for this purpose — `NAV_MENU` and the slugs
@@ -644,12 +701,28 @@ href, never a bare `#slug`: a panel opens from any route, so a bare fragment
 would resolve against wherever you happened to be rather than the page it
 describes. The menus are built from data
 rather than markup so no two pages can drift apart, and they are pure
-enhancement: the ten links themselves are in the HTML and work without
-JavaScript. They are suppressed below 940px, where the nav wraps.
+enhancement: the nine links themselves are in the HTML and work without
+JavaScript. They are suppressed below 940px — the nav itself now wraps lower,
+at 860px, but a panel that wide is most of a tablet screen and would cover the
+page it describes.
 
-The logo opens one too. It is the same link as the Home tab, so it opens the
-same panel (`NAV_MENU['/']`) — but under its own key, or hovering the logo would
-light the Home tab up as well and put two panels on screen at once. The nav
+The logo opens one too, and it is **the large one** — the only menu here that is
+about the whole site rather than one page, so it runs the full width between the
+page edges (`calc(100vw - 2 * var(--edge))`) and carries three columns:
+
+1. what the company is — kicker, lede and a "Visit page" link to `/`;
+2. **Sections** — all nine of `NAV`, each with its glyph in a 34px tile that
+   fills red on hover. The glyphs are `d` strings on `NAV` in `lib/nav.ts`, not
+   markup, drawn on a 24×24 grid and stroked in `currentColor`; they are
+   `aria-hidden`, because the word beside each one already names the page. This
+   is where they belong: on the bar they were 14px of thin line beside a 12px
+   word, nine in a row reading as a strip of pictograms, and they cost the nav
+   ~200px — enough to push its wrap from 860px to 1008px;
+3. **On the home page** — `NAV_MENU['/']`, the home page's own headings, one
+   column.
+
+Nine sections go three-up down to 1360px and two-up below it, where the panel no
+longer has ~530px of middle column to give them. The nav
 panels centre under the nav capsule; the logo sits hard left, so `.navmenu--brand`
 drops from the left edge instead and is narrower. A logo is not normally a menu,
 so `.brand__caret` is there to say that it is; it rotates on open and, like the
@@ -687,7 +760,7 @@ white type on the picture, with the white `aria-current` pill the only thing
 locating the bar; and page content scrolls directly under the capsules with
 nothing hiding it.
 
-The current page is the one filled item (`aria-current="page"`). Below 940px the
+The current page is the one filled item (`aria-current="page"`). Below 860px the
 nav links wrap inside their capsule, which swaps the stadium radius for a 26px
 rounded rectangle; below 640px the utility capsule drops its labels and goes
 icon-only, which is why each item carries an `aria-label`.
@@ -695,10 +768,26 @@ icon-only, which is why each item carries an `aria-label`.
 `--header-h` in `app/globals.css` is the measured height of the whole header and
 feeds the hero's top padding — re-measure and update it if you add a row or
 change anything that alters a capsule's box: its padding, its border, or the
-glyph size inside it. It is currently **128px**, and **158px** under the 900px
-query where the nav wraps to two rows. It went 127 → 123 when the borders came
-off, then → 128 when the brand became a capsule and its padding made row 1 the
-taller of the two.
+glyph size inside it. It has three steps, each measured in the browser:
+
+| Width | Header | `--header-h` | Why |
+|---|---|---|---|
+| ≥861px | 137–138px | **139px** | one row; the range is the fluid label size |
+| 860–462px | 168px | **169px** | the nav has wrapped to two rows |
+| ≤461px | 198px | **199px** | a third row |
+
+It went 127 → 123 when the borders came off, → 128 when the brand became a
+capsule and its padding made row 1 the taller of the two, and → 139 when that
+capsule was enlarged: a 40px mark and a 24px wordmark, scoped to `.hdr__top` so
+the footer's lock-up keeps the old size. The third step is new — the token never
+carried a three-row value before, so every banner on a phone used to start 29px
+too high.
+
+One thing the token cannot know is the locale. The swap happens in the browser,
+so a longer set of labels can wrap the nav at a width where English does not, and
+in that band the token still reads the one-row value and a banner comes up about
+30px short. Setting the token from a `ResizeObserver` on `#hdr` would close it
+for good; nothing does that today.
 
 Two widths the token does not cover, and did not before either: the nav actually
 wraps at about 960px but the media query is at 900px, so between roughly 901 and
@@ -907,6 +996,125 @@ launch, convert to WebP or AVIF (typically 30–50% smaller at the same quality)
 and consider `srcset` for the large slides. Nothing here is optimised beyond
 sensible pixel dimensions and q=60.
 
+## The logo
+
+The mark is a gold-and-graphite planet with a Greek **α** across it and a black
+orbit ring, over the wordmark `COSMOX` / `INTERNATIONAL`. It is vector, and it
+was **traced from `updated logo.jpeg` in the repo root** — that JPEG is the only
+artwork that came with the brand, so it is the master and it stays.
+
+Nothing here was redrawn by eye. Every number below was fitted to the pixels,
+and the check on all of it is one measurement: **how far the emitted curve
+strays from the dense contour it came from.**
+
+| | Measured | How |
+|---|---|---|
+| Planet | c (631.02, 464.17) · r 255.31 | least squares over 1371 radial edge crossings; median residual **0.06px** |
+| Orbit ellipse | c (629.28, 463.74) · 348.05 × 113.26 · −24.92° | walking its own normal until its stroke sits centred on it; **0.32px** sd |
+| Orbit stroke | 24.2 wide, its gap 44.4 | both across the true normal, not down a scanline |
+| Glyph outlines | ≤ 0.85px max deviation | corner-pinned simplification, swept against the contour |
+
+Three of those took a second pass to get right, and each was a real defect:
+
+- **The orbit is not concentric with the planet.** It sits 1.74px to the
+  planet's left and 0.43px above. Forcing them to share a centre — the obvious
+  assumption, and the wrong one — leaves the ring 1.7px sd off its own stroke,
+  which is what made its near half and its far half disagree by 2.7px. Freeing
+  the centre brought that to 0.32px and made its gap come out exactly symmetric
+  (±22.2) instead of needing a fudged 1.7px offset. It still crosses the
+  planet's edge at exactly four points — 45.50°, 133.79°, 226.41°, 314.31° —
+  but that is a property of an ellipse and a circle, not of a shared centre.
+- **Corners have to be pinned before anything is simplified.** Douglas–Peucker
+  keeps the *mean* deviation low and wrecks the maximum, because all the error
+  lands in one place: it is free to move a vertex off a sharp apex, and the two
+  edges meeting there get rounded. Finding corners on the dense contour first
+  and only simplifying the runs between them took COSMOX's worst point from
+  **7.92px to 0.72px** and INTERNATIONAL's from 4.02px to 0.85px.
+- **The alpha had to be reconstructed under the ring, and it took three goes.**
+  Morphologically closing the visible white bridges the glyph across the ring —
+  but the ring's own white gap runs nearly parallel to the alpha's right stroke
+  for ~200px, and a closing wide enough to bridge the ring is wide enough to
+  weld the two together, so the glyph grew a spur 100px along the orbit. What
+  "the alpha continues under the ring" actually means is that it shows on
+  *both* sides of the ring there, so that is what is now tested, along the
+  ring's own normal — and only on the ring's **near** half. The far half runs
+  *behind* the planet, and at t = 270° that is straight through the top of the
+  bowl; asking "does the glyph show on both sides of the ring?" about a ring
+  that is not on top of anything gets no for an answer and takes a bite out of
+  the **c**. That bite was the one defect visible without an overlay, and the
+  only one the deviation metric could not catch: the path matched its contour
+  to 0.74px the whole time, because the *contour* was wrong. Area and centroid
+  against the source are the check that catches it — they now agree to 1.2% and
+  0.3px.
+
+The glyph and both wordmark lines are traced at the **0.5 iso-level of the
+antialiased image** rather than off a 1× binary mask. That is what keeps
+`INTERNATIONAL` straight: its strokes are ~6px wide in the source, so rounding
+each edge to the nearest whole pixel is an 8% error and every stem comes out
+visibly wavy. Tracing where the ink actually reaches half coverage puts the
+outline between the pixels. End to end the finished SVG sits within **1.17%**
+mean pixel difference of the JPEG, and its orbit tracks the artwork's to within
+0.34px of centreline and 0.08px of width.
+
+### It has to work on more than one background
+
+Two things in the logo are not really the logo's colours — they are the page's:
+
+| token | what it paints | light ground | on `--night` |
+|---|---|---|---|
+| `--logo-ink` | the orbit ring (and `INTERNATIONAL` in the lock-up) | `#0b0b0b` | `#fff` |
+| `--logo-void` | the gap that holds the ring off the planet | `--paper` | `--night` |
+
+A black ring on a near-black capsule is an invisible ring, and the gap that
+separates the ring from the planet is *whatever is behind the logo* — in the
+original artwork that gap is the white page. So both are CSS custom properties,
+declared on `:root` in `globals.css` as the light-background cut and flipped on
+`.brand`. The planet and the α do not change: gold reads on both grounds, and
+the α is white inside a dark planet either way. Put the mark on any other dark
+panel and flip the same two tokens there.
+
+`components/BrandMark.tsx` is the mark alone — the header capsule and the
+footer lock-up both take it from there, and it is the **only** copy in the app.
+It takes an `id` prefix (`<BrandMark id="hdr" />`, `<BrandMark id="foot" />`)
+because it renders twice per page and its gradient and clip ids would otherwise
+collide. The mark is 672 × 519 in its own units — wider than tall, since the
+ring reaches past the planet on both sides — so `.brand__mark` sets **height**
+and leaves width `auto`. At the header's 40px that is a 52px-wide box; the
+brand capsule went 203 → 215px and no header breakpoint moved (still 139 / 169
+at ≤860px / 199 at ≤461px, all re-measured).
+
+`app/icon.svg` is the favicon: the same mark, dark cut, on a rounded `--night`
+tile — it needs a ground of its own to survive whatever the browser puts behind
+a tab.
+
+### The files in `public/logo/`
+
+For anything outside the app — a deck, a datasheet, a supplier portal, print.
+All ten are the same traced geometry; only the ink and the gap change.
+
+| file | use it on |
+|---|---|
+| `cosmox-lockup-light.svg` · `cosmox-mark-light.svg` | white and light grounds |
+| `cosmox-lockup-dark.svg` · `cosmox-mark-dark.svg` | near-black and dark grounds |
+| `cosmox-lockup-auto.svg` · `cosmox-mark-auto.svg` | surfaces that follow the reader's light/dark setting (a GitHub README, a docs site) — **not** a page with a fixed background, since these key off the viewer's OS and not off what is behind them |
+| `cosmox-lockup-mono.svg` · `cosmox-mark-mono.svg` | one colour, black — single-colour print, engraving, a stamp |
+| `cosmox-lockup-mono-reverse.svg` · `cosmox-mark-mono-reverse.svg` | one colour, white — over a photograph or a solid brand colour |
+
+The mono cuts are not the colour logo with the gradients stripped. Flattening
+the planet loses the gold/graphite split that gives it its form, so in those the
+split, the α and the ring's gap are all **knock-outs**: the ground shows through
+them, whatever the ground is.
+
+### Two things that are still open
+
+- The artwork reads **COSMOX INTERNATIONAL**; the site's lock-up still reads
+  **Cosmox / Chemicals**, which is what all 117 routes of copy say. That is a
+  naming decision, not a logo one — see "Company name" under *Still to fill in*.
+  Only `BrandMark` changed here; the words beside it did not.
+- Re-tracing, if the master artwork is ever replaced: the scripts are not in the
+  repo. Geometry and colour stops are all recorded above and in the comments in
+  `BrandMark.tsx`, which is enough to redo it.
+
 ## Countries and languages
 
 The globe capsule in the header used to be a dead `<button>` that said "India".
@@ -1005,8 +1213,6 @@ Search the HTML for `TODO` to find each spot.
 - **Company name** — pages use "Cosmox Chemicals"; the footer legal line and
   contact page use "Cosmox International Pvt. Ltd." per the source. Confirm
   which is the trading name.
-- **Logo** — the header mark is a placeholder SVG (hexagon + molecule). Replace
-  `components/BrandMark.tsx`; the header and footer both take it from there.
 - **Photography** — the biggest gap. The landing page is built around a
   full-bleed hero image and is currently running a CSS gradient stand-in. See
   "Dropping in a hero photograph" above. Plant, lab and product shots would also

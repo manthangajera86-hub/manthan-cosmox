@@ -49,7 +49,7 @@ export default function IndustriesPage() {
             <p>Our technical team can benchmark performance against your current material and recommend a grade.</p>
           </div>
           <div className="btn-row">
-            <Link className="btn btn--red" href="/contact">Speak to a specialist</Link>
+            <Link className="btn btn--gold" href="/contact">Speak to a specialist</Link>
             <Link className="btn btn--outline" href="/applications">See applications</Link>
           </div>
         </div>

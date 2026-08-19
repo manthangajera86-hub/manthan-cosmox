@@ -8,7 +8,7 @@ import type { Dict } from "./types";
 const hi: Dict = {
   // --- navigation and header ------------------------------------------------
   "Home": "होम",
-  "Our Story": "हमारी कहानी",
+  "About us": "हमारे बारे में",
   "Divisions": "प्रभाग",
   "Products": "उत्पाद",
   "Industries": "उद्योग",
@@ -21,6 +21,8 @@ const hi: Dict = {
   "Product Finder": "उत्पाद खोज",
   "Skip to content": "सामग्री पर जाएँ",
   "Visit page": "पेज देखें",
+  "Sections": "अनुभाग",
+  "On the home page": "होम पेज पर",
   "Explore": "देखें",
   "Previous": "पिछला",
   "Next": "अगला",
@@ -293,7 +295,6 @@ const hi: Dict = {
   "Company": "कंपनी",
   "Offering": "हमारी पेशकश",
   "Get in touch": "संपर्क करें",
-  "About us": "हमारे बारे में",
   "Product finder": "उत्पाद खोज",
   "All rights reserved.": "सर्वाधिकार सुरक्षित।",
   "Manufacturer & exporter of speciality chemicals":
