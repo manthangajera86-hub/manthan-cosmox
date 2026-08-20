@@ -55,7 +55,7 @@ export default function ContactForm() {
           <textarea id="f-message" name="message" required />
         </div>
       </div>
-      <div className="btn-row" style={{ marginTop: "1.4rem" }}>
+      <div className="btn-row">
         <button className="btn btn--gold" type="submit">
           Send enquiry
         </button>

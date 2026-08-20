@@ -35,14 +35,14 @@ export default function CapabilitiesPage() {
 
     <section className="pad bg-night">
       <div className="wrap feature">
-        <div>
+        <div className="rise">
           <span className="eyebrow">Integrated advantage</span>
           <h2>Every product, process and partnership</h2>
           <p className="lede">World-class capabilities that empower industries worldwide with precision chemical solutions, operational efficiency and sustainable growth.</p>
           <div className="btn-row"><Link className="btn btn--ghost" href="/contact">Discuss your requirement</Link></div>
         </div>
-        <div>
-          <ul className="list">
+        <div className="rise">
+          <ul className="list list--check">
             <li>Advanced, scalable manufacturing for diverse chemical products</li>
             <li>R&amp;D-driven innovation and application-specific solutions</li>
             <li>Rigorous quality assurance and global compliance</li>

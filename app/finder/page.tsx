@@ -39,7 +39,7 @@ export default function FinderPage() {
 
     <section className="pad-sm">
       <div className="wrap">
-        <div className="cta cta--media">
+        <div className="cta cta--media cta--night rise">
           <div>
             <h2>Not finding the grade you need?</h2>
             <p>Custom formulations and specification work — tell us the property you are trying to hit and we will come back with options.</p>

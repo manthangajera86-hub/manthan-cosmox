@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Rail from "@/components/Rail";
+import HeroCycle from "@/components/HeroCycle";
 import { BUSINESS_ASPECTS, BUSINESS_LINES } from "@/lib/business";
 import { FAMILY } from "@/lib/topics";
 
@@ -14,27 +15,39 @@ export default function HomePage() {
          exists; everything else keeps working.
          ==================================================================== */}
     <section className="hero">
-      <div className="hero__media">
-      </div>
-      <div className="hero__scrim"></div>
-
-      <div className="hero__inner">
-        <div>
-          <p className="hero__eyebrow">Surat · Gujarat · India</p>
-          <h1 className="hero__title">Cosmox Chemicals <b>Speciality</b></h1>
-          <p className="hero__lede">
-            Metal soaps, halogen-free flame retardants and high-purity intermediates —
-            manufactured to specification and exported worldwide.
-          </p>
-          <div className="hero__actions">
-            <Link className="btn btn--gold" href="/finder">
-              Find a product
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-            </Link>
-            <Link className="btn btn--ghost" href="/contact">Talk to a chemist</Link>
-          </div>
-        </div>
-      </div>
+      {/* The heavy word of the headline cycles, and the photograph behind it
+          changes with it — see components/HeroCycle.tsx for what that costs
+          and what it refuses to do. The words are the hero's own lede read
+          back: it names metal soaps, halogen-free flame retardants and
+          high-purity intermediates, and those are the three that follow the
+          "Speciality" the headline already carried. `null` is the hero's own
+          photograph, so index 0 is exactly the hero as it was — which is also
+          what prerenders. */}
+      <HeroCycle
+        lead="Cosmox Chemicals"
+        words={[
+          { word: "Speciality", bg: null },
+          { word: "Metal Soaps", bg: "bg-div-01-lithium" },
+          { word: "Flame Retardants", bg: "bg-div-02-flame" },
+          { word: "Intermediates", bg: "bg-div-03-pharma" },
+        ]}
+        above={<p className="hero__eyebrow">Surat · Gujarat · India</p>}
+        below={
+          <>
+            <p className="hero__lede">
+              Metal soaps, halogen-free flame retardants and high-purity intermediates —
+              manufactured to specification and exported worldwide.
+            </p>
+            <div className="hero__actions">
+              <Link className="btn btn--gold" href="/finder">
+                Find a product
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+              </Link>
+              <Link className="btn btn--ghost" href="/contact">Talk to a chemist</Link>
+            </div>
+          </>
+        }
+      />
 
       <dl className="hero__stats">
         <div><dt>10</dt><dd>Business divisions</dd></div>
@@ -328,7 +341,14 @@ export default function HomePage() {
     </section>
 
     {/* ========================================================================
-         Industries — Lilly's horizontal card scroller
+         Industries — Lilly's horizontal card scroller, advancing itself.
+         It loops rather than running to a stop: seven cards and three in view
+         is four steps before the rail is against its end, and an autoplay that
+         parks there has spent the section's whole attention getting stuck. The
+         repeated set makes it endless, and `align="start"` is what keeps the
+         first card on the page inset — the applications strip below centres
+         its slides, this one starts them, and the loop's resting position has
+         to say which.
          ==================================================================== */}
     <section className="pad" id="industries">
       <Rail
@@ -336,6 +356,9 @@ export default function HomePage() {
         itemSelector=".icard"
         gap={20}
         label="industries"
+        loop
+        align="start"
+        autoplay={4000}
         headClassName="scroller-head"
         ctrlClassName="scroller-nav"
         heading={<h2>Get a closer look at an industry.</h2>}
@@ -516,18 +539,37 @@ export default function HomePage() {
          `lib/topics.ts`, which is what `/capabilities` lists.
          ==================================================================== */}
     <section className="pad" id="capabilities-strip">
-      <div className="bleed caps__grid">
-        <div className="caps__intro">
-          <p className="eyebrow">Capabilities</p>
-          <h2 className="caps__title">Capabilities designed for <em>precision</em>, efficiency, scalability and sustainability.</h2>
-          <p className="caps__lede">
+      {/* The band the section opens on — the products band's own block, with
+          the section's copy on the photograph rather than in a column beside
+          the rows. It is a plain `.pband` for that reason: it now carries a
+          kicker, a headline, a lede and a button, so it holds its own height
+          exactly the way the products band does, including on a phone where
+          `.pband`'s minimum drops to nothing because the copy has taken over.
+          It lives inside this section rather than taking one of its own, the
+          way the products band and the finder panel do, so there is no page
+          padding to cancel between the picture and the rows it heads. The
+          photograph is the one `/capabilities` banners with. */}
+      <div className="pband pband--caps bg-media-capabilities">
+        <div className="pband__media" aria-hidden="true"></div>
+        <div className="pband__scrim" aria-hidden="true"></div>
+        <div className="pband__inner rise">
+          <p className="pband__kicker">Capabilities</p>
+          <h2 className="pband__title">Capabilities designed for <em>precision</em>, efficiency, scalability and sustainability.</h2>
+          <p className="pband__lede">
             Advanced manufacturing, specialised R&amp;D, quality assurance, technical
             support and global logistics — operational excellence combined with
             continuous innovation, for industries worldwide.
           </p>
-          <Link className="btn btn--ink" href="/capabilities">All capabilities</Link>
+          <div className="pband__actions">
+            <Link className="btn btn--gold" href="/capabilities">
+              All capabilities
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+            </Link>
+          </div>
         </div>
+      </div>
 
+      <div className="bleed">
         <ol className="caps__list rise">
           <li>
             <Link className="crow bg-proof-manufacturing" href="/capabilities/advanced-manufacturing">

@@ -29,9 +29,18 @@ export default function IndustriesPage() {
     </section>
 
     <section className="pad-xs">
-      <div className="wrap feature feature--center">
-        <p className="lede">Every product undergoes rigorous quality control and is backed by our dedicated R&amp;D and technical teams, ensuring clients receive application-specific guidance and optimised chemical solutions. By combining advanced manufacturing technologies, application-focused research and global export capabilities, Cosmox Chemicals empowers industries to achieve efficiency, safety and sustainable growth.</p>
-        <div className="figure figure--wide bg-media-industries" aria-hidden="true"></div>
+      <div className="wrap">
+        {/* the page's opening panel: the copy and the photograph are two cells
+            of one box, so the picture is exactly as tall as the paragraph
+            beside it and the panel is full whatever the copy runs to */}
+        <div className="pintro rise">
+          <div className="pintro__copy">
+            <p className="pintro__lede">Every product undergoes rigorous quality control and is backed by our dedicated R&amp;D and technical teams, ensuring clients receive application-specific guidance and optimised chemical solutions. By combining advanced manufacturing technologies, application-focused research and global export capabilities, Cosmox Chemicals empowers industries to achieve efficiency, safety and sustainable growth.</p>
+          </div>
+          <div className="pintro__media bg-media-industries">
+            <span className="pintro__tag"><T>Industries</T></span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -43,7 +52,7 @@ export default function IndustriesPage() {
 
     <section className="pad-sm">
       <div className="wrap">
-        <div className="cta">
+        <div className="cta cta--night rise">
           <div>
             <h2>Working in one of these sectors?</h2>
             <p>Our technical team can benchmark performance against your current material and recommend a grade.</p>
