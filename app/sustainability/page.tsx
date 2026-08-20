@@ -28,9 +28,18 @@ export default function SustainabilityPage() {
     </section>
 
     <section className="pad-xs">
-      <div className="wrap feature feature--center">
-        <p className="lede">As a manufacturer and exporter of chemical solutions, we are committed to transforming the industry through responsible practices, innovation and environmental stewardship — ensuring products, processes and partnerships contribute to a sustainable, safe and prosperous future for industries, communities and the planet.</p>
-        <div className="figure figure--wide bg-app-09-energy" aria-hidden="true"></div>
+      <div className="wrap">
+        {/* the page's opening panel: the copy and the photograph are two cells
+            of one box, so the picture is exactly as tall as the paragraph
+            beside it and the panel is full whatever the copy runs to */}
+        <div className="pintro rise">
+          <div className="pintro__copy">
+            <p className="pintro__lede">As a manufacturer and exporter of chemical solutions, we are committed to transforming the industry through responsible practices, innovation and environmental stewardship — ensuring products, processes and partnerships contribute to a sustainable, safe and prosperous future for industries, communities and the planet.</p>
+          </div>
+          <div className="pintro__media bg-app-09-energy">
+            <span className="pintro__tag"><T>Sustainability</T></span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -41,7 +50,7 @@ export default function SustainabilityPage() {
     </section>
 
     <section className="pad bg-night">
-      <div className="wrap wrap--narrow" style={{ textAlign: "center" }}>
+      <div className="wrap wrap--narrow center rise">
         <span className="eyebrow">Our commitment</span>
         <h2>Building a sustainable future for the chemical industry</h2>
         <p className="lede">By integrating innovation, operational excellence and environmental responsibility, our sustainability programmes drive global impact, ensure long-term growth and position Cosmox Chemicals as a leader in responsible chemical manufacturing and export.</p>

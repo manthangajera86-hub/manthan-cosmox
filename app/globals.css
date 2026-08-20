@@ -834,16 +834,55 @@ p:last-child { margin-bottom: 0; }
   background: var(--night);
 }
 
+/* The wrapper `HeroCycle` renders around the pictures, the scrim and the copy.
+   Unpositioned on purpose: `.hero__media` and `.hero__scrim` are
+   `position: absolute; inset: 0` and have to keep resolving against `.hero`
+   itself — against this box they would cover the copy's own height and no
+   more. It takes the `flex: 1` that was `.hero__inner`'s job while that was a
+   direct child of the hero. */
+.hero__cycle-root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Photograph: petrochemical plant at night — PilMo Kang via Unsplash
    (unsplash.com/photos/508d35ee6220), Unsplash Licence, free for commercial
    use. Swap the file to change the hero; nothing else needs touching. The
    slow drift that used to sit on the generated artwork now runs on the
-   photograph itself. */
+   photograph itself.
+
+   There are four of these now, one per word of the cycling headline, stacked
+   and cross-faded. This first one is the hero's own picture and is the layer
+   that prerenders `is-on`, so with no JavaScript, before hydration, and under
+   prefers-reduced-motion the hero is exactly the hero it always was. Each
+   layer's drift is paused until its turn, so only the picture on screen is
+   animating and every photograph starts its own drift when it appears. */
 .hero__media {
   position: absolute;
   inset: 0;
   background: #17130f url("/hero.jpg") center / cover no-repeat;
+  opacity: 0;
+  transition: opacity 1.1s var(--ease);
   animation: kenburns 26s var(--ease) infinite alternate;
+  animation-play-state: paused;
+}
+.hero__media.is-on { opacity: 1; animation-play-state: running; }
+/* the other three take their photograph from a `.bg-*` class like everything
+   else on the site. `--im-bg` is a whole background shorthand value, so it
+   composes straight into this one; the `none` fallback is what keeps the
+   declaration valid on a layer that has not been primed with its class yet. */
+.hero__media--alt {
+  background: #17130f var(--im-bg, none);
+  /* The hold-back, and it is measured rather than judged. The hero photograph
+     is a plant at night: the strip the headline sits in has a mean luminance
+     of 27, which is white type at 17:1 and is the tone the header capsules and
+     the stats rule were tuned against. The three division pictures are daylit
+     interiors and came in at 89, 40 and 90 — legible (7:1 at worst, and this
+     is 51px type) but more than three times brighter, so the hero flashed pale
+     every time the word changed. This brings them into the same family as the
+     picture they are standing in for. Re-measure if a picture is swapped. */
+  filter: saturate(.9) brightness(.55);
 }
 @keyframes kenburns {
   from { transform: scale(1.04) translate3d(0, 0, 0); }
@@ -906,6 +945,25 @@ p:last-child { margin-bottom: 0; }
   letter-spacing: -.005em;
   white-space: nowrap;
 }
+
+/* The cycling words, all four in one grid cell. That is the whole trick: the
+   run is always as wide and as tall as the longest of them, so the lede, the
+   buttons and the stats under the headline do not move a pixel as the word
+   changes — a rotator that reflows its own page is worse than no rotator.
+   It sits *inside* the `<b>` rather than replacing it because `b::before`
+   draws the hairline rule, and a grid on the `<b>` would make that rule a
+   grid item and lay it straight over the words. */
+.hero__words {
+  display: inline-grid;
+  vertical-align: baseline;
+}
+.hero__word {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: translateY(.16em);
+  transition: opacity .55s var(--ease), transform .55s var(--ease-out);
+}
+.hero__word.is-on { opacity: 1; transform: none; }
 .hero__title b::before {
   content: "";
   display: inline-block;
@@ -1295,6 +1353,23 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .facets { border-top: 6px solid var(--sand-deep); padding-top: 1.1rem;
   border-radius: var(--r-md) var(--r-md) 0 0; }
 
+/* The sidebar follows the results down. Forty grades is four screens of list
+   beside a column that ran out after one, and the filters are the reason a
+   visitor is on this page — they should not have to scroll back up to change
+   one. `--header-h` is the same clearance every anchor jump uses. */
+@media (min-width: 900px) {
+  .facets {
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+    max-height: calc(100svh - var(--header-h) - 3rem);
+    overflow-y: auto;
+    /* Lenis hands the wheel to an inner scroller rather than stealing it for
+       the page (`allowNestedScroll`), and this keeps the overscroll from
+       carrying through when the list hits its end */
+    overscroll-behavior: contain;
+  }
+}
+
 .facets__head {
   display: flex;
   align-items: center;
@@ -1410,14 +1485,45 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .finder__count b { font-weight: 700; }
 
 .results { list-style: none; margin: 1.6rem 0 0; padding: 0; }
-.results li { padding: 1.4rem 0; border-bottom: 1px solid var(--line-soft); }
+/* A result is a whole row that answers the pointer, not a line of type with a
+   link in it: DuPont's dense list, given the hit area a card has. The negative
+   inline margin is what lets the hover ground run past the type without the
+   list moving off the column the search field sets. */
+.results li {
+  position: relative;
+  margin-inline: -1.1rem;
+  padding: 1.4rem 1.1rem;
+  border-radius: var(--r-sm);
+  border-bottom: 1px solid var(--line-soft);
+  transition: background .25s var(--ease), transform .3s var(--ease-out);
+}
+.results li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 10%; bottom: 10%;
+  width: 3px;
+  border-radius: var(--r-pill);
+  background: var(--gold);
+  opacity: 0;
+  transition: opacity .25s var(--ease);
+}
+/* the empty state is an `li` in the same list and is not a result: it has no
+   row-wide link to stretch, so it takes none of the row treatment */
+.results li:not(.results__empty):hover {
+  background: var(--paper);
+  transform: translateX(3px);
+}
+.results li:not(.results__empty):hover::before { opacity: 1; }
 .results h4 {
   font-size: var(--fs-base);
   font-weight: 400;
   letter-spacing: -.01em;
   margin-bottom: .35rem;
 }
+/* the whole row is the target: the anchor's own box is the type, and this
+   stretches its hit area over the record it names */
 .results h4 a { text-decoration: none; }
+.results h4 a::after { content: ""; position: absolute; inset: 0; }
 .results h4 a:hover { color: var(--gold-text); }
 .results p { margin: 0; color: var(--ink-soft); }
 .results .tag {
@@ -1428,7 +1534,8 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   text-transform: uppercase;
   color: var(--ink-mute);
 }
-.results__empty { padding: 2.5rem 0; color: var(--ink-mute); }
+.results li:hover .tag { color: var(--gold-text); }
+.results__empty { margin-inline: 0; padding: 2.5rem 0; color: var(--ink-mute); }
 
 .finder__more { margin-top: 2rem; }
 
@@ -1620,6 +1727,27 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   line-height: .98;
   letter-spacing: -.025em;
 }
+/* the serif italic the statement and the rail's heading both use. It came
+   with the capabilities headline when that moved onto the picture; the
+   products band's own title has no `em` in it. */
+.pband__title em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -.01em;
+}
+/* That headline is half again as long as the products band's, so it takes a
+   wider measure rather than running to five lines of 63px type. It also keeps
+   the light weight it had in the column it came from: the serif italic in the
+   middle of it was set to sit in a 400 line — the same pairing the statement
+   and the rail's heading use — and at the h2's own 700 the italic reads as a
+   different typeface dropped into a bold sentence rather than an emphasis
+   inside it. The products band's title has no `em` and stays heavy. */
+.pband--caps .pband__title {
+  max-width: 26ch;
+  font-weight: 400;
+}
+
 .pband__lede {
   max-width: 58ch;
   margin: 1.5rem 0 0;
@@ -1627,6 +1755,23 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   font-size: var(--fs-base);
   line-height: 1.5;
 }
+
+/* The same band carrying a picture and a kicker and nothing else — the plate
+   the capabilities section opens on. It keeps the products band's full bleed
+   and its scrim; what it does not need is the height sized for a title, a
+   lede, ten pills and a button, so it comes down a step. The margin under it
+   is what holds the heading off the photograph, since the band lives inside
+   the section rather than in one of its own. */
+/* The capabilities band is the products band with its section's own copy on
+   it, so it needs no geometry of its own — including on a phone, where
+   `.pband`'s minimum drops to nothing precisely because a title, a lede and a
+   button have taken over holding the height. (It briefly carried a kicker and
+   nothing else, and then it did need a floor of its own: with no copy those
+   Responsive rules collapsed it to a 118px letterbox strip. Copy on the
+   picture is what made that special case unnecessary.) All this adds is the
+   gap to the rows underneath — the products band has the finder panel butted
+   straight against it and wants none. */
+.pband--caps { margin-bottom: clamp(2.5rem, 5vw, 4.5rem); }
 
 /* the ten groups, in the capsule language the header uses — no border-less
    text links on a photograph, they disappear into it */
@@ -2193,38 +2338,11 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 /* The title column is fluid rather than fixed: at 30rem flat, everything
    between the stacking point and a desktop left the rows about 280px of
    measure, which is four words a line. */
-.caps__grid {
-  display: grid;
-  grid-template-columns: minmax(0, clamp(21rem, 34vw, 30rem)) minmax(0, 1fr);
-  gap: clamp(2rem, 5vw, 5rem);
-  align-items: start;
-}
-
-/* the column stays put while its six rows pass — `--header-h` because the
-   capsules float over the page and would otherwise cross the heading */
-.caps__intro { position: sticky; top: calc(var(--header-h) + 1.5rem); }
-.caps__title {
-  color: var(--ink);
-  font-size: var(--fs-lg);
-  font-weight: 400;
-  line-height: 1.04;
-  letter-spacing: -.02em;
-  text-wrap: balance;
-}
-/* the serif italic the statement and the rail's heading both use */
-.caps__title em {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -.01em;
-}
-.caps__lede {
-  max-width: 42ch;
-  margin: 1.1rem 0 2rem;
-  font-size: var(--fs-base);
-  line-height: 1.5;
-  color: var(--ink-soft);
-}
+/* `.caps__grid`, `.caps__intro`, `.caps__title` and `.caps__lede` were the
+   sticky title column that used to stand beside these rows. The section's copy
+   is on the photograph above them now, so the rows have the whole measure and
+   the column is gone — along with the `@media (max-width: 1080px)` block that
+   unstuck it. */
 
 .caps__list { list-style: none; margin: 0; padding: 0; }
 
@@ -2294,6 +2412,23 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   font-size: var(--fs-body);
   color: var(--ink-soft);
   transition: color .35s var(--ease);
+}
+
+/* The rows have the whole measure now that the section's copy is on the
+   photograph above them rather than in a column beside them — and a row that
+   is 1280px wide with its type stopping at 560 is a row with a hole in it.
+   Above 1100px the name and its sentence go side by side instead: the name
+   takes a column of its own and the sentence keeps a readable 56ch, so the
+   width the rows gained is width they use. Below that they stack, which is
+   the shape they always had. */
+@media (min-width: 1100px) {
+  .crow__text {
+    display: grid;
+    grid-template-columns: minmax(0, 24ch) minmax(0, 1fr);
+    gap: clamp(1.5rem, 3vw, 3.2rem);
+    align-items: start;
+  }
+  .crow p { margin-top: 0; }
 }
 .crow__go {
   display: grid;
@@ -2543,6 +2678,47 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .cta--media { grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
 .cta--media .btn-row { margin-top: 1.9rem; }
 
+/* The interior pages close on the night cut of the same panel. The landing
+   page keeps the sand one — it ends on a dark band already, and two night
+   panels in a row would read as one — so this is a modifier rather than a
+   change to the block. Every page below the landing page now ends on the same
+   note, which is what makes the CTA read as the site speaking rather than as
+   one more card on the page. */
+.cta--night {
+  background: var(--night);
+  color: rgba(255, 255, 255, .72);
+  box-shadow: var(--shadow-lg);
+}
+.cta--night h2 { color: #fff; }
+/* the rule down the edge goes to the lift gold: --gold is 2.4:1 on night and
+   reads as brown there, where the lift is the value the mark itself uses on
+   its own ground */
+.cta--night::before { background: var(--gold-lift); }
+/* the planet's own highlight, off the top corner of the panel */
+.cta--night::after {
+  content: "";
+  position: absolute;
+  right: -8%; top: -55%;
+  width: 46%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(233, 205, 133, .17), rgba(233, 205, 133, 0) 62%);
+  pointer-events: none;
+}
+.cta--night > * { position: relative; }
+
+/* the closing panel where it shares a band with the block above it rather
+   than getting a `pad-sm` section of its own — two of those in a row is a
+   screen of nothing between the last card on a page and its last panel */
+.cta--close { margin-top: clamp(2rem, 5vw, 4rem); }
+/* a picture on this ground needs no hold-back, for the same reason one on
+   `.bg-night` does not: the panel around it is already dark, and the filter
+   there just reads as murk. `/finder`'s closing panel is the one that has one. */
+.cta--night .figure { filter: none; }
+/* the outline button is drawn in --ink, which is invisible on this ground */
+.cta--night .btn--outline { color: #fff; border-color: rgba(255, 255, 255, .55); }
+.cta--night .btn--outline:hover { background: #fff; color: var(--ink); border-color: #fff; }
+
 .foot {
   background: var(--night);
   color: rgba(255, 255, 255, .6);
@@ -2618,8 +2794,32 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 }
 .page-hero__media {
   position: absolute;
-  inset: 0;
+  /* bled 2% past every edge so the drift below never uncovers a corner */
+  inset: -2%;
   background: var(--ph-bg, linear-gradient(120deg, #17130f, #3a2c22 55%, #6b4a33));
+  /* the one piece of motion on a banner: a 30s drift across the photograph,
+     alternating rather than looping so there is no jump at the seam. The home
+     hero does not take it — the landing page has its own motion, and this is
+     what gives the 116 routes below it a banner that is alive rather than a
+     still. It stands down under prefers-reduced-motion with everything else. */
+  animation: ph-drift 30s var(--ease) infinite alternate;
+  will-change: transform;
+}
+@keyframes ph-drift {
+  from { transform: scale(1.02); }
+  to   { transform: scale(1.09) translate3d(-1.4%, -1.2%, 0); }
+}
+
+/* the banner's own hairline, in the accent: the one mark that ties a
+   photograph running to all four window edges back to the page under it */
+.page-hero::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold-deep) 12%,
+              var(--gold) 38%, var(--gold-lift) 50%, var(--gold) 62%,
+              var(--gold-deep) 88%, transparent);
 }
 .page-hero__scrim {
   position: absolute;
@@ -2631,6 +2831,19 @@ section.band--full > .bleed { padding-inline: var(--edge); }
                     rgba(23, 19, 15, .5) 100%);
 }
 .page-hero__inner { position: relative; width: 100%; }
+
+/* The banner's four lines walk in on load, 60ms apart, bottom-weighted like
+   everything else in the band. `both` holds the first frame, so nothing flashes
+   at full opacity before its turn — and the reduced-motion block at the end of
+   the file collapses all four to nothing. */
+@keyframes ph-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+.page-hero .crumbs     { animation: ph-in .8s      var(--ease-out) both; }
+.page-hero__num        { animation: ph-in .8s .06s var(--ease-out) both; }
+.page-hero__title      { animation: ph-in .9s .12s var(--ease-out) both; }
+.page-hero__lede       { animation: ph-in .9s .2s  var(--ease-out) both; }
 
 /* the breadcrumb stands in for the hero's eyebrow, so it takes the same
    uppercase tracking and the same red dash */
@@ -2680,11 +2893,191 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .page-hero__title--solo b::before { content: none; }
 
 .page-hero__lede {
-  max-width: 56ch;
+  max-width: 62ch;
   margin: 1.8rem 0 0;
   color: rgba(255, 255, 255, .85);
   font-size: var(--fs-sm);
   line-height: 1.45;
+}
+
+/* ---------- page opener: the panel every interior page starts on --------- */
+/* Every route below the landing page used to open the same way — a paragraph
+   in one half of a `.feature` row and a 16/9 photograph in the other. Two or
+   three lines of copy beside a picture that sets its own height left the copy
+   column half empty on all thirteen of them, and a page that opens on a hole
+   reads as a page nobody finished. This is that row rebuilt as one panel: the
+   two columns are cells of the same box, so `stretch` makes the picture exactly
+   as tall as the copy however long the copy runs, and the panel is full
+   whatever it is given. The photograph is bled to the panel's own edges — the
+   `.detail--media` trick — so it reads as one wall of the panel rather than a
+   card sitting inside a card.
+
+   `--im-bg` is all it takes: any `.bg-*` class from the photography block can
+   go on `.pintro__media`, the same as on `.figure` and `.card__img`. */
+
+.pintro {
+  --pi-pad: clamp(1.5rem, 3.2vw, 3.1rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr);
+  align-items: stretch;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+/* on the sand ground the panel is the paper it sits on, so it takes sand's
+   own border rather than the lighter one that reads as a seam there */
+.bg-sand .pintro { border-color: var(--sand-deep); }
+
+.pintro__copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: var(--pi-pad);
+  min-width: 0;
+}
+.pintro__copy > * { margin: 0; }
+.pintro__copy .eyebrow { margin-bottom: 0; }
+.pintro__copy h2 { font-size: var(--fs-md); }
+
+/* the lede is set a step above body copy — at 17px a 40-word intro is a grey
+   band across a panel this size, and the whole point of the panel is that its
+   copy holds its own half of it */
+.pintro__lede {
+  font-size: var(--fs-base);
+  line-height: 1.45;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+/* one or two sentences — a topic's blurb, a grade's line — go up another step
+   and turn into the statement they actually are */
+.pintro--statement .pintro__lede {
+  font-size: var(--fs-sm);
+  line-height: 1.3;
+  letter-spacing: -.015em;
+  color: var(--ink);
+}
+
+/* the facts along the foot of the copy column: what a page is *about*, in the
+   register of the finder's result tags. It is what keeps a short intro from
+   leaving the bottom of its column empty. */
+.pintro__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 2rem;
+  margin-top: .5rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line-soft);
+}
+.pintro__fact { min-width: 0; }
+.pintro__fact dt,
+.pintro__fact > .pintro__k {
+  color: var(--gold-text);
+  font-size: var(--fs-fine);
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.pintro__fact dd,
+.pintro__fact > .pintro__v {
+  display: block;
+  margin: .25rem 0 0;
+  color: var(--ink);
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+.pintro__fact a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--line); }
+.pintro__fact a:hover { color: var(--gold-text); border-color: var(--gold-deep); }
+/* a fact whose value is a set rather than a word — the industries a grade is
+   filtered under — takes the row to itself */
+.pintro__fact--wide { flex-basis: 100%; }
+/* the way out of the panel, where one is offered — it is the only thing on its
+   row, and breaking "All business units" over three lines around an arrow is
+   worse than letting the row be as wide as the phrase */
+.pintro__meta .link-arrow { white-space: nowrap; }
+.pintro__fact--wide dd { margin-top: .55rem; }
+.pintro__fact .pills a { border-bottom: 0; }
+
+/* the picture. The filter sits on a layer of its own rather than on the box:
+   a filter makes a stacking context, and the tag below has to sit above the
+   photograph without being dimmed by the same hold-back. */
+.pintro__media {
+  position: relative;
+  min-height: clamp(240px, 26vw, 430px);
+  overflow: hidden;
+}
+.pintro__media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--im-bg, var(--sand-deep));
+  filter: saturate(.94) brightness(.98);
+  transition: transform 1.2s var(--ease-out);
+}
+/* a scrim in the corner the tag sits in, and nowhere else — the photograph
+   stays a photograph everywhere the type is not */
+.pintro__media::after {
+  content: "";
+  position: absolute;
+  inset: 40% 0 0;
+  background: linear-gradient(rgba(23, 19, 15, 0), rgba(23, 19, 15, .55));
+  opacity: 0;
+  transition: opacity .4s var(--ease);
+}
+.pintro__media:has(.pintro__tag)::after { opacity: 1; }
+.pintro:hover .pintro__media::before { transform: scale(1.04); }
+
+.pintro__tag {
+  position: absolute;
+  left: var(--pi-pad);
+  bottom: var(--pi-pad);
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .42rem .85rem;
+  border-radius: var(--r-pill);
+  /* gold is a fill and takes --ink type, never white */
+  background: var(--gold);
+  color: var(--ink);
+  font-size: var(--fs-fine);
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+/* the mirror image, for a page that wants the photograph first */
+.pintro--flip .pintro__media { order: -1; }
+
+/* Eighteen topics — the innovation, R&D and sustainability programmes — were
+   given no one-line description by the source copy, so there is nothing to put
+   in a copy column. The panel becomes the photograph on its own, at a band's
+   proportions rather than a picture's: a 16/9 across this measure stands
+   taller than the screen. */
+.pintro--band { grid-template-columns: minmax(0, 1fr); }
+.pintro--band .pintro__media {
+  min-height: 0;
+  aspect-ratio: 24 / 7;
+}
+@media (max-width: 700px) {
+  .pintro--band .pintro__media { aspect-ratio: 16 / 9; }
+}
+
+/* Below 880px the two columns stop being columns. The picture goes first —
+   a page that opens on a photograph is the same order the banner set — and
+   takes a band's proportions rather than the full height it had beside copy. */
+@media (max-width: 880px) {
+  .pintro { grid-template-columns: minmax(0, 1fr); }
+  .pintro__media {
+    order: -1;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+}
+@media (max-width: 520px) {
+  .pintro__media { aspect-ratio: 3 / 2; }
+  .pintro__meta { gap: .9rem 1.4rem; }
 }
 
 /* ---------- topic pages -------------------------------------------------- */
@@ -2712,10 +3105,14 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   letter-spacing: .2em;
 }
 
-/* the showcase grid — a picture, a number, the title and its one line */
+/* the showcase grid — a picture, a number, the title and its one line.
+   `grid-auto-rows: 1fr` is what makes a row of cards one row: without it a
+   three-word title and a three-line blurb stand at two different heights and
+   the band reads as a set of loose cards rather than a grid. */
 .topic-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  grid-auto-rows: 1fr;
   gap: clamp(1rem, 2.2vw, 1.6rem);
 }
 .tcard {
@@ -2724,21 +3121,49 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   text-decoration: none;
   color: inherit;
 }
+/* the picture leans in when the card is pointed at. The card already clips to
+   its radius (`.card` sets overflow) so the scale has nowhere to spill. */
+.tcard .card__img {
+  transition: transform .7s var(--ease-out), filter .5s var(--ease);
+}
+.tcard:hover .card__img,
+.tcard:focus-visible .card__img {
+  transform: scale(1.05);
+  filter: saturate(1) brightness(1.02);
+}
+/* the index takes the accent's rule with it — the same 46px dash the banner's
+   breadcrumb carries, at card scale */
 .tcard__num {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
   color: var(--gold-text);
   font-size: var(--fs-fine);
   font-weight: 800;
   letter-spacing: .18em;
 }
+.tcard__num::after {
+  content: "";
+  width: 22px; height: 1px;
+  background: var(--gold-deep);
+  transition: width .3s var(--ease);
+}
+.tcard:hover .tcard__num::after { width: 38px; }
 .tcard h3 { margin: .35rem 0 .5rem; font-size: var(--fs-sm); line-height: 1.2; }
 /* the line of copy takes the slack, so every Explore sits on the same baseline
    however long the description runs */
 .tcard p { flex: 1; margin: 0; font-size: var(--fs-body); color: var(--ink-soft); }
+/* `auto`, not a fixed gap: the blurb takes the slack where there is one
+   (`.tcard p` is `flex: 1`), but eighteen topics have no blurb at all, and
+   without this their Explore sat under the title with the rest of the card
+   empty below it. An auto margin puts every Explore on the row's own floor
+   either way. */
 .tcard__go {
   display: inline-flex;
   align-items: center;
   gap: .5rem;
-  margin-top: 1.2rem;
+  margin-top: auto;
+  padding-top: 1.2rem;
   padding-bottom: 4px;
   align-self: flex-start;
   border-bottom: 1px solid var(--gold-deep);
@@ -2753,19 +3178,89 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .tcard:hover .tcard__go,
 .tcard:focus-visible .tcard__go { color: var(--gold-text); gap: .8rem; }
 
+/* Ten topics in a three-column grid is 3 + 3 + 3 + 1, and that stranded card
+   is the hole the whole redesign is about. Bookending the set fixes it
+   arithmetically: the first and last cards take two columns each, so ten cards
+   occupy twelve cells and the grid closes on four full rows. A family of six
+   already divides by three and is left alone — `:has(> :nth-child(10))` is the
+   test, and no family has eleven.
+
+   A card two columns wide is a different card, not a stretched one: the
+   photograph moves to the side and runs the full height of the record, which
+   is the `.detail--media` shape again. */
+@media (min-width: 1080px) {
+  .topic-grid:has(> :nth-child(10)) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* The card stays the flex column it is; the photograph comes out of the
+     flow and takes the left 44% of it, full height, and the card's own
+     padding is what holds the copy clear of it. Laying the four children into
+     grid rows instead put the blurb in a `1fr` row and left a hole between it
+     and the Explore, which is the hole this whole grid rule exists to close. */
+  .topic-grid:has(> :nth-child(10)) > :first-child,
+  .topic-grid:has(> :nth-child(10)) > :last-child {
+    grid-column: span 2;
+    position: relative;
+    justify-content: center;
+    padding-left: calc(44% + var(--c-pad));
+  }
+  .topic-grid:has(> :nth-child(10)) > :first-child .card__img,
+  .topic-grid:has(> :nth-child(10)) > :last-child .card__img {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 44%;
+    margin: 0;
+    aspect-ratio: auto;
+  }
+  /* the blurb takes the slack in an ordinary card so every Explore lands on
+     the same baseline; in a wide one the copy is centred as a block instead */
+  .topic-grid:has(> :nth-child(10)) > :first-child p,
+  .topic-grid:has(> :nth-child(10)) > :last-child p { flex: 0 1 auto; }
+  /* the auto margin above would eat the free space and undo that centring */
+  .topic-grid:has(> :nth-child(10)) > :first-child .tcard__go,
+  .topic-grid:has(> :nth-child(10)) > :last-child .tcard__go { margin-top: 0; }
+  .topic-grid:has(> :nth-child(10)) > :first-child h3,
+  .topic-grid:has(> :nth-child(10)) > :last-child h3 { font-size: var(--fs-md); }
+}
+
+/* the reveal walks across a row rather than lighting all three at once —
+   `Reveal` puts `is-in` on each card, and the delay is what staggers them */
+.topic-grid .rise:nth-child(3n + 2) { transition-delay: .07s; }
+.topic-grid .rise:nth-child(3n + 3) { transition-delay: .14s; }
+
 /* the columns of a topic page: the same gold rubric a record's body uses, at
    page scale rather than inside a card (the h4 rule is shared, below) */
 .topic-body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: clamp(1rem, 2.2vw, 1.6rem);
-  align-items: start;
+  /* stretch, not start: two panels of a page's copy side by side are two
+     halves of one band, and a short one hanging above a long one is the same
+     unfinished-looking hole the openers had */
+  align-items: stretch;
 }
 .topic-body > div {
+  position: relative;
+  overflow: hidden;
   background: var(--paper);
   border: 1px solid var(--sand-deep);
   border-radius: var(--r-md);
-  padding: clamp(1.4rem, 2.4vw, 2rem);
+  padding: clamp(1.6rem, 2.6vw, 2.2rem) clamp(1.4rem, 2.4vw, 2rem)
+           clamp(1.4rem, 2.4vw, 2rem);
+  transition: transform .4s var(--ease-out), box-shadow .4s var(--ease-out),
+              border-color .3s var(--ease);
+}
+/* the gold rule across the head of the panel — the mark that says this is one
+   of a set, and the same 4px the `.detail` records carry down their side */
+.topic-body > div::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold) 45%, var(--gold-lift));
+}
+.topic-body > div:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--gold-deep);
 }
 /* four parts break 3 + 1 across this measure and stand one card on its own —
    the same two rows of two the records use */
@@ -2776,25 +3271,57 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 /* the grades under a product group, and the facts on a grade's own page */
 .grade-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
 .grade-list a {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(200px, 300px) minmax(0, 1fr);
+  grid-template-columns: minmax(200px, 300px) minmax(0, 1fr) auto;
   gap: .4rem clamp(1rem, 2.5vw, 2rem);
-  align-items: baseline;
-  padding: 1rem clamp(1rem, 2vw, 1.4rem);
+  align-items: center;
+  padding: 1.05rem clamp(1rem, 2vw, 1.4rem);
+  padding-left: calc(clamp(1rem, 2vw, 1.4rem) + 6px);
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--r-md);
   background: var(--paper);
   text-decoration: none;
-  transition: border-color .25s var(--ease), transform .3s var(--ease-out);
+  transition: border-color .25s var(--ease), transform .3s var(--ease-out),
+              box-shadow .3s var(--ease-out);
+}
+/* the accent runs down the row's own edge and grows into it, rather than
+   appearing all at once — the same gesture the `.detail` rule makes, animated
+   because a row this plain needs one thing that answers the pointer */
+.grade-list a::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--gold);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform .35s var(--ease-out);
 }
 .grade-list a:hover,
-.grade-list a:focus-visible { border-color: var(--gold-deep); transform: translateX(3px); }
+.grade-list a:focus-visible {
+  border-color: var(--gold-deep);
+  transform: translateX(3px);
+  box-shadow: var(--shadow-sm);
+}
+.grade-list a:hover::before,
+.grade-list a:focus-visible::before { transform: none; }
 .grade-list__name { font-size: var(--fs-body); font-weight: 700; color: var(--ink); }
 .grade-list__teaser { font-size: var(--fs-body); color: var(--ink-soft); }
+.grade-list__go {
+  display: flex;
+  justify-self: end;
+  color: var(--gold-deep);
+  transition: transform .3s var(--ease);
+}
+.grade-list__go svg { width: 18px; height: 18px; }
 .grade-list a:hover .grade-list__name { color: var(--gold-text); }
+.grade-list a:hover .grade-list__go { transform: translateX(4px); }
 
 @media (max-width: 640px) {
-  .grade-list a { grid-template-columns: 1fr; }
+  .grade-list a { grid-template-columns: minmax(0, 1fr) auto; }
+  .grade-list__teaser { grid-column: 1 / -1; }
 }
 
 .grade-fact { margin: 0 0 .3rem; font-size: var(--fs-body); }
@@ -2802,17 +3329,56 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .grade-fact a:hover { color: var(--gold-text); border-color: var(--gold-deep); }
 .grade-fact--mute { color: var(--ink-mute); }
 
-/* previous / next / all, along the foot of a topic page */
+/* Previous / next / all, along the foot of a topic page. It used to be three
+   lines of type on a hairline, which is what left a page's last screen empty
+   under it. The two links are cards now, each carrying its topic's own
+   photograph — the same picture the family's grid shows it under, so the walk
+   is recognisable as the grid rather than as a pair of footnotes — and "all"
+   sits between them on its own row. */
 .topic-walk {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: clamp(1rem, 2.5vw, 2rem);
-  align-items: center;
-  padding-top: 1.6rem;
-  border-top: 1px solid var(--line);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(.8rem, 2vw, 1.4rem);
+  align-items: stretch;
 }
-.topic-walk__link { text-decoration: none; color: inherit; }
+.topic-walk__link {
+  display: grid;
+  grid-template-columns: clamp(76px, 9vw, 116px) minmax(0, 1fr);
+  gap: clamp(.9rem, 1.8vw, 1.4rem);
+  align-items: center;
+  padding: clamp(.8rem, 1.6vw, 1.1rem);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: border-color .25s var(--ease), transform .35s var(--ease-out),
+              box-shadow .35s var(--ease-out);
+}
+.bg-sand .topic-walk__link { border-color: var(--sand-deep); }
+.topic-walk__link:hover,
+.topic-walk__link:focus-visible {
+  border-color: var(--gold-deep);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+/* the next card is the mirror of the previous one: its picture goes to the
+   right and its type runs back towards it */
+.topic-walk__link--next { grid-template-columns: minmax(0, 1fr) clamp(76px, 9vw, 116px); }
+.topic-walk__link--next .topic-walk__thumb { order: 1; }
 .topic-walk__link--next { text-align: right; }
+
+.topic-walk__thumb {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: var(--r-xs);
+  background: var(--im-bg, var(--sand-deep));
+  filter: saturate(.94) brightness(.98);
+  transition: transform .7s var(--ease-out);
+}
+.topic-walk__link:hover .topic-walk__thumb { transform: scale(1.05); }
+
 .topic-walk__dir {
   display: block;
   color: var(--gold-text);
@@ -2823,26 +3389,44 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 }
 .topic-walk__title {
   display: block;
-  margin-top: .3rem;
+  margin-top: .35rem;
   font-size: var(--fs-body);
-  font-weight: 600;
+  font-weight: 700;
+  line-height: 1.25;
   color: var(--ink);
 }
 .topic-walk__link:hover .topic-walk__title { color: var(--gold-text); }
+
+/* "all applications" is the row under the two cards, centred, on the hairline
+   that used to carry the whole walk */
 .topic-walk__all {
+  grid-column: 1 / -1;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  margin-top: .4rem;
+  padding: .55rem 1.3rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
   font-size: var(--fs-fine);
   font-weight: 700;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--ink);
   text-decoration: none;
   white-space: nowrap;
+  transition: border-color .25s var(--ease), color .25s var(--ease),
+              background .25s var(--ease);
 }
-.topic-walk__all:hover { color: var(--gold-text); }
+.topic-walk__all:hover { border-color: var(--gold-deep); color: var(--gold-text); background: var(--sand); }
 
 @media (max-width: 720px) {
-  .topic-walk { grid-template-columns: 1fr 1fr; }
-  .topic-walk__all { grid-column: 1 / -1; order: 1; text-align: center; }
+  .topic-walk { grid-template-columns: minmax(0, 1fr); }
+  /* on one column the mirrored card would put its picture on the right of a
+     row that is now the full width — both cards read left-to-right instead */
+  .topic-walk__link--next { grid-template-columns: clamp(76px, 9vw, 116px) minmax(0, 1fr); text-align: left; }
+  .topic-walk__link--next .topic-walk__thumb { order: 0; }
 }
 
 /* ---------- section furniture ------------------------------------------- */
@@ -2866,6 +3450,11 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .section-head { max-width: 720px; margin-bottom: clamp(2rem, 4vw, 3rem); }
 .section-head h2 { margin-bottom: .55rem; }
 .section-head.center { margin-inline: auto; text-align: center; }
+/* the two utilities that replaced the handful of inline `style` attributes the
+   interior pages had picked up — a stray `style={{…}}` is how a hand-tuned
+   system starts drifting, and these are the only two shapes they carried */
+.center { text-align: center; }
+.mt-lg { margin-top: 2.2rem; }
 
 .grid   { display: grid; gap: clamp(1rem, 2.2vw, 1.6rem); }
 .grid-2 { grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
@@ -2947,12 +3536,14 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   margin: calc(var(--c-pad) * -1) calc(var(--c-pad) * -1) var(--c-pad);
   background: var(--im-bg, var(--sand-deep));
   filter: saturate(.94) brightness(.98);
+  transition: transform .7s var(--ease-out), filter .5s var(--ease);
 }
 .card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-md);
-  border-color: var(--sand-deep);
+  border-color: var(--gold-deep);
 }
+.card:hover .card__img { transform: scale(1.04); filter: saturate(1) brightness(1.02); }
 .bg-sand .card { border-color: var(--sand-deep); }
 .card h3 { margin-bottom: .55rem; }
 .card p { font-size: var(--fs-body); }
@@ -3026,6 +3617,14 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   letter-spacing: .16em;
   text-transform: uppercase;
 }
+/* on a page-scale panel the rubric gets a hairline under it: the panels are
+   big enough that a line of 13px caps on its own does not read as a heading */
+.topic-body h4 {
+  padding-bottom: .8rem;
+  margin-bottom: 1.1rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+.topic-body .list li { margin-bottom: .75rem; }
 
 /* ---------- the record with a photograph --------------------------------- */
 /* These pages are ten of these blocks in a row and nothing else, which reads
@@ -3085,6 +3684,58 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   }
 }
 
+/* ---------- roster: a set of pages as a set of doors --------------------- */
+/* The ten divisions on /about were two bulleted columns of twenty lines — the
+   one place on the site where the units are named and the one place they were
+   not links. Each is a row now, carrying its own number so the list agrees
+   with the numbering everywhere else, and going where its name says it goes.
+   It lives on the night band, which is where /about names them. */
+
+.roster {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(430px, 100%), 1fr));
+  gap: .6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.roster a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: .3rem 1.1rem;
+  align-items: baseline;
+  height: 100%;
+  padding: 1.05rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: var(--r-sm);
+  text-decoration: none;
+  transition: border-color .25s var(--ease), background .25s var(--ease),
+              transform .35s var(--ease-out);
+}
+.roster a:hover,
+.roster a:focus-visible {
+  border-color: var(--gold-lift);
+  background: rgba(255, 255, 255, .04);
+  transform: translateX(4px);
+}
+.roster__num {
+  grid-row: 1 / span 2;
+  color: var(--gold-lift);
+  font-size: var(--fs-fine);
+  font-weight: 800;
+  letter-spacing: .16em;
+}
+.roster__name {
+  color: #fff;
+  font-size: var(--fs-body);
+  font-weight: 700;
+  line-height: 1.25;
+}
+.roster__what {
+  color: rgba(255, 255, 255, .68);
+  font-size: var(--fs-body);
+}
+
 /* ---------- lists -------------------------------------------------------- */
 
 .list { list-style: none; margin: 0; padding: 0; }
@@ -3137,22 +3788,100 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .pills li:hover { border-color: var(--gold-deep); color: var(--gold-text); }
 .pills a { display: block; padding: .42rem .9rem; text-decoration: none; }
 
+/* the same pill, given the weight of a control rather than a tag: on a grade
+   page each one is the finder with that facet already chosen, and it is the
+   only thing on its band */
+.pills--lg { gap: .6rem; }
+.pills--lg li {
+  font-size: var(--fs-body);
+  background: var(--paper);
+  transition: border-color .25s var(--ease), color .25s var(--ease),
+              transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
+}
+.pills--lg li:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.pills--lg a { padding: .7rem 1.3rem; }
+
+/* the core values on /about: five name-and-line pairs that used to be plain
+   dt/dd, which read as a definition list rather than as the set of five things
+   it is. Each takes the accent's dot and they are ruled off from one another. */
 .value-grid { margin: 0; }
-.value-grid dt { color: var(--ink); font-weight: 700; }
-.value-grid dd { margin: .15rem 0 1.15rem; font-size: var(--fs-body); }
+.value-grid dt {
+  position: relative;
+  padding: 1rem 0 0 1.4rem;
+  border-top: 1px solid var(--line-soft);
+  color: var(--ink);
+  font-weight: 700;
+}
+.value-grid dt:first-of-type { padding-top: 0; border-top: 0; }
+.value-grid dt::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 1.55em;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+.value-grid dt:first-of-type::before { top: .55em; }
+.value-grid dd { margin: .2rem 0 1.15rem 1.4rem; font-size: var(--fs-body); }
 .value-grid dd:last-child { margin-bottom: 0; }
 
 /* ---------- contact ------------------------------------------------------ */
 
 .contact-card {
+  position: relative;
+  overflow: hidden;
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
-  padding: clamp(1.4rem, 2.4vw, 2rem);
+  padding: clamp(1.6rem, 2.6vw, 2.2rem) clamp(1.4rem, 2.4vw, 2rem)
+           clamp(1.4rem, 2.4vw, 2rem);
   box-shadow: var(--shadow-sm);
+  transition: border-color .3s var(--ease), transform .4s var(--ease-out),
+              box-shadow .4s var(--ease-out);
+}
+/* the same gold rule the topic panels take, so a contact card and a topic
+   card are recognisably the same object */
+.contact-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold) 45%, var(--gold-lift));
+}
+.contact-card--desk:hover {
+  border-color: var(--gold-deep);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
 }
 .contact-card h3 { margin-bottom: .8rem; }
-.contact-card address { font-style: normal; font-size: var(--fs-body); line-height: 1.7; }
+/* the standing copy in a desk card, set one step down from the heading it
+   sits under — it used to be an inline `style` on every one of the three */
+.contact-card__note { font-size: var(--fs-body); }
+
+/* The enquiry band: the form used to be a 860px card floating in the middle
+   of a full-width sand panel with nothing either side of it. The heading, the
+   supporting line and the numbers to call instead move into a column of their
+   own beside it, so the band is a band rather than a card on a background. */
+.enquiry {
+  display: grid;
+  grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+  gap: clamp(1.4rem, 3vw, 3rem);
+  align-items: start;
+}
+.enquiry__copy { position: sticky; top: calc(var(--header-h) + 1.5rem); }
+.enquiry__copy h2 { margin-bottom: .7rem; font-size: var(--fs-lg); }
+.enquiry__copy .lede { margin-bottom: 1.6rem; }
+.enquiry .contact-card { box-shadow: var(--shadow-md); }
+
+@media (max-width: 900px) {
+  .enquiry { grid-template-columns: minmax(0, 1fr); }
+  .enquiry__copy { position: static; }
+}
+/* the address is a postal address, not an aside — `address` is italic by
+   default, and it is set beside the office in the opening panel now as well as
+   inside a card */
+.contact-card address,
+.contact-line address { font-style: normal; font-size: var(--fs-body); line-height: 1.7; }
 .contact-line {
   display: flex;
   gap: .7rem;
@@ -3168,10 +3897,14 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 /* gaps the source copy left blank — see README, "Still to fill in" */
 .tbd { color: var(--ink-mute); font-style: italic; }
 
+/* Two tracks, not three. At 240px this fitted three fields across the panel
+   and left the fourth — the phone number — standing alone on a row of its own;
+   the four short fields pair up two-by-two instead, which is the shape they
+   actually have. */
 .form-grid {
   display: grid;
   gap: 1.1rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
 }
 .field { display: flex; flex-direction: column; gap: .4rem; }
 .field.full { grid-column: 1 / -1; }
@@ -3236,12 +3969,6 @@ section.band--full > .bleed { padding-inline: var(--edge); }
    of the site. These just keep the capsules from crowding as it does. */
 @media (max-width: 1080px) {
   .nav-list .cap-btn { padding-inline: .55rem; }
-  /* the capabilities index stacks: below this the rows are down to about
-     280px of measure beside the title column, and a heading that now sits
-     above its list has nothing to hold its place for */
-  .caps__grid { grid-template-columns: minmax(0, 1fr); }
-  .caps__intro { position: static; }
-  .caps__title { max-width: 24ch; }
 }
 
 /* Below 860px the nine links wrap inside their capsule; a stadium radius on a
@@ -3362,6 +4089,10 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .001ms !important;
+    /* the delay has to go too, not just the duration: the banner's four lines
+       walk in 60ms apart with `both`, so a delay left standing holds each of
+       them at its first frame — opacity 0 — for as long as the delay lasts */
+    animation-delay: .001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .001ms !important;
     scroll-behavior: auto !important;

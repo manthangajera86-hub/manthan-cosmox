@@ -302,6 +302,58 @@ what the header measures at every width — the three steps are listed under
 "Header" below, and the three-row phone mismatch that used to leave anchor jumps
 29px high is now carried by a step of its own.
 
+### Hero: the cycling word
+
+The headline is "COSMOX CHEMICALS ｜ SPECIALITY" — Aditya Birla's two-weight
+split, light run and heavy run either side of a hairline rule. The heavy run
+cycles, and the photograph behind it changes with it:
+
+| word | picture |
+|---|---|
+| Speciality | `hero.jpg` — the hero's own, and the one that prerenders |
+| Metal Soaps | `bg-div-01-lithium` |
+| Flame Retardants | `bg-div-02-flame` |
+| Intermediates | `bg-div-03-pharma` |
+
+**The words are not new copy.** The hero's own lede names three things — "metal
+soaps, halogen-free flame retardants and high-purity intermediates" — and those
+are the three, after the "Speciality" the headline already carried. Each takes
+the division photograph the rest of the page shows it under, so the hero says in
+a picture what `#divisions` says in a tile. `components/HeroCycle.tsx` holds the
+list; changing the set is changing that array in `app/page.tsx`.
+
+Four things it has to get right, and each of them is why a line of it looks the
+way it does:
+
+- **"Speciality" is what prerenders.** Index 0 is the server's and the cycle
+  starts in an effect. This is the site's `h1`: the first frame a visitor and a
+  crawler see is the headline the page has always had, and with JavaScript off
+  it is the only one they see.
+- **Nothing reflows.** All four words are stacked in one grid cell
+  (`.hero__words` is `inline-grid`, every `.hero__word` at `grid-area: 1 / 1`),
+  so the heavy run is always as wide as the longest of them. Measured across a
+  full cycle at 1440px: the run holds 590px and the lede and buttons under it do
+  not move a pixel. The stack sits *inside* the `<b>` rather than replacing it
+  because `b::before` draws the hairline rule, and a grid on the `<b>` itself
+  would make that rule a grid item and lay it over the words.
+- **The pictures load as they are needed.** A layer only carries its `.bg-*`
+  class once it is the one on screen or the one after it, so the server's markup
+  asks for exactly one image and the hero's first paint costs what it always
+  cost. Each picture then has a whole word's turn to arrive.
+- **The brightness is measured, not judged.** The hero photograph is a plant at
+  night: the strip the headline sits in reads a mean luminance of 27, white type
+  at 17:1, and that is the tone the header capsules and the stats rule were
+  tuned against. The three division pictures are daylit interiors and came in at
+  89, 40 and 90 — legible (7:1 at worst, and this is 51px type) but more than
+  three times brighter, so the hero flashed pale every time the word changed.
+  `.hero__media--alt` carries `saturate(.9) brightness(.55)`, which brings them
+  to 53 / 26 / 53. **Re-measure if you swap a picture.**
+
+It stands down under `prefers-reduced-motion` — the cycle is never started, so
+the hero stays on "Speciality" and its own photograph — and it holds while the
+tab is in the background or the hero is scrolled past, the same conditions the
+rails hold on. One word every 3.6s (`DWELL` in the component).
+
 ### Three-up task row
 
 The "Find a grade / Request a sample / Develop with us" row follows the
@@ -355,12 +407,20 @@ block is shrink-to-fit and the sub-line's 62ch measure would decide where the
 statement above it wraps. The centre slide is `min(64vw - --inset, 980px)`, so
 the neighbours show as slivers rather than halves.
 
-`components/Rail.tsx` adds three things on top of that native scrolling, each
-behind its own prop so the industries scroller (which takes none of them) is
-unaffected:
+`components/Rail.tsx` adds four things on top of that native scrolling, each
+behind its own prop. Both rails on the page now take `loop` and `autoplay`; only
+the applications strip takes `spotlight` and `focusable`:
 
 - **`loop`** repeats the set and wraps the scroll position, so the rail never
   reaches an end.
+- **`align`** is what the loop's resting position means, and it has to match the
+  rail's own `scroll-snap-align`. `centre` (the default) puts the second set's
+  first slide in the middle of the rail, which is what the applications strip
+  wants; `start` puts it where the first set's first card sits at `scrollLeft`
+  0 — the rail's own left padding — which is what the industry scroller wants,
+  so its first card still lines up with the heading above it on `--edge`.
+  Measured at 390 / 768 / 1440 / 1920: the card rests on 22 / 43 / 81 / 81px,
+  which is `--edge` at each of them.
 - **`spotlight`** puts `is-centre` on whichever slide is nearest the middle of
   the rail, re-read once per animation frame while scrolling. The class is the
   only thing the component decides; the stylesheet does the rest, holding the
@@ -374,7 +434,19 @@ unaffected:
   off screen, and while the tab is in the background — and it never starts at
   all under `prefers-reduced-motion`. The wait is measured from the last
   movement rather than a fixed interval, so pressing an arrow resets the cadence
-  instead of being followed a moment later by a step nobody asked for.
+  instead of being followed a moment later by a step nobody asked for. The
+  applications strip runs at 2.8s, the industry scroller at 4s — a card rail
+  with a title to read wants longer than a slide that is mostly picture. The two
+  never move at once: each holds while its own section is off screen.
+
+**An autoplaying rail has to loop.** The industry scroller is seven cards with
+about three in view, which is four steps before it is hard against its end; an
+autoplay that runs to a stop has spent the section's whole attention getting
+stuck there. `loop` is what makes it endless — and it is also the one visible
+change to the section at rest, because the repeated set now shows a sliver of
+the previous card in the left gutter where there used to be clean paper. That
+sliver is honest (there *is* something to the left now), and from the first step
+onwards the rail would show one anyway.
 
 One trap worth knowing if you touch `move()`: it measures a step from
 `offsetLeft`/`offsetWidth`, not `getBoundingClientRect()`. Under `spotlight` the
@@ -389,9 +461,49 @@ legible, so keep it when photographs arrive.
 ### Capabilities index
 
 `#capabilities-strip` follows the applications rail and runs to the "A Force
-For Good" band. It is DuPont's index shape: a title column on the left beside
-six numbered rows on the right (`.caps__grid` / `.crow`), one row per
-capability, each linking to `/capabilities/<slug>`. The heading and its line
+For Good" band. It opens on a **full-bleed picture band carrying the section's
+own copy** — `.pband--caps`, which is the products band's block with the
+kicker, the headline, the lede and the button on the photograph. The photograph
+is `media-capabilities.jpg`, the one `/capabilities` itself banners with, and
+the band lives inside the section rather than taking one of its own, the way the
+products band and the finder panel do, so there is no page padding to cancel
+between the picture and the rows it heads.
+
+That copy used to be `.caps__intro`, a sticky title column standing beside the
+rows — DuPont's index shape. It **moved** rather than being repeated: a headline
+on the picture and the same headline in a column under it would only say it
+twice. Three consequences worth knowing:
+
+- `.caps__grid`, `.caps__intro`, `.caps__title` and `.caps__lede` are gone,
+  along with the `@media (max-width: 1080px)` block that unstuck the column.
+  **The sticky heading went with them** — it no longer follows the six rows
+  down, because it is now above them on the picture.
+- The band needs no geometry of its own beyond the gap to the rows. It briefly
+  carried a kicker and nothing else, and then it did: with no copy, the two
+  Responsive rules that lower `.pband`'s minimum as the window narrows and zero
+  it on a phone collapsed it to a **118px letterbox strip** at 390px, and it
+  needed a doubled-class floor to survive them. Copy on the picture is what made
+  that special case unnecessary — the band now holds its own height for exactly
+  the reason the products band does. Measured: 720px at 1440, 499px at 390.
+- The headline keeps the **light weight** it had in the column (`font-weight:
+  400`, against the products band title's inherited 700) and takes a 26ch
+  measure rather than 20ch. It is half again as long as the products band's, and
+  the serif italic in the middle of it was set to sit in a 400 line — at 700 the
+  italic reads as a different typeface dropped into a bold sentence rather than
+  an emphasis inside it.
+
+White type on the photograph, measured with the type hidden and the strip
+sampled: the headline's ground is mean luminance 59 (white at 11.2:1, worst
+pixel 3.07:1 against a 3:1 threshold for type this size) and the lede's is 45
+(13.8:1, worst pixel 7.8:1). The scrim carries it; unlike the hero's cycling
+layers, no brightness hold-back was needed.
+
+Below the band, the six numbered rows (`.caps__list` / `.crow`) now run the
+whole measure, one row per capability, each linking to `/capabilities/<slug>`.
+Above 1100px `.crow__text` splits into two columns — the capability's name in a
+24ch column, its sentence keeping a readable 56ch beside it — because a row
+1280px wide with its type stopping at 560 is a row with a hole in it. Below that
+they stack, which is the shape they always had. The heading and its line
 are the "Capabilities Overview" opening of `7 capabilities.rtf`; each row's
 sentence is the lead of that numbered section in the same file. The six rows,
 their numbers and their pictures match `lib/topics.ts`, which is what
@@ -811,10 +923,13 @@ them was most of what those pages were. Now:
   transcribed copy. The copy was **moved**, not retyped: each page's body is the
   JSX sliced out of the record it used to be.
 - `components/TopicPage.tsx` — the frame around it: the family's banner carrying
-  the topic's own title and number, the topic's picture beside its one-line
-  description, the body, then the walk to the topics either side of it (the last
-  wraps to the first) and a CTA. The only wording on a topic page that is not
-  transcribed is that CTA, which is deliberately identical on all 64.
+  the topic's own title and number, the opening panel (`.pintro`) holding the
+  one-line description against the topic's own photograph, the body, then the
+  walk to the topics either side of it (the last wraps to the first) and a CTA.
+  The walk is two cards carrying those topics' own pictures — the same ones the
+  family's grid shows them under — and the CTA shares their band rather than
+  taking a `pad-sm` section of its own. The only wording on a topic page that is
+  not transcribed is that CTA, which is deliberately identical on all 64.
 - `components/TopicGrid.tsx` — the showcase the family's index now opens onto:
   picture, number, title, the one line, and *Explore*.
 - `lib/topics.ts` — the register. Slug, number, title, blurb and picture for all
@@ -833,8 +948,9 @@ links to an in-page record any more.
 
 Eighteen of the 64 — every innovation, R&D and sustainability topic — had no
 description in the source copy. Their cards show the picture and the title
-alone, and their pages run the picture as a band rather than beside a paragraph
-that does not exist. Nothing was invented to fill the gap.
+alone, and their pages take `.pintro--band`: the photograph alone at a band's
+proportions, rather than a panel with an empty half where a paragraph would go.
+Nothing was invented to fill the gap.
 
 ### Grade pages
 
@@ -851,6 +967,15 @@ the page out; the numbers a buyer needs come on the TDS/SDS, which is what the
 CTA asks for. What the page does add is the routes onwards: up to its group, out
 to `/finder?industry=…` for each industry it serves, and across to the other
 grades in the same group.
+
+That is a thin record for a whole page, and the page used to read like one: a
+line of copy beside a picture, then three short cards adrift in a band sized for
+ten. It is arranged rather than listed now. Everything the record holds — the
+group, the division, the industries as pills — sits on the hairline along the
+foot of the opening panel, which is where a datasheet puts it and where a reader
+is already looking; the rest of the group is the full-width `.grade-list` below,
+the same list the group's own page carries. The band that held two pills is
+gone.
 
 Two things now read `lib/products.ts` that did not before. The **finder's
 results link straight to the grade pages** rather than all pointing at
@@ -877,13 +1002,90 @@ Below the banner there is no default section padding, so every `<section>`
 carries its own class as on the home page — `pad`, `pad-sm` or `pad-xs`,
 optionally with `bg-sand` or `bg-night`.
 
-The content components — `.section-head`, `.feature`, `.figure`, `.card`,
-`.card__img`, `.card__num`, `.detail` / `.detail__img` / `.detail__head` /
-`.detail__body`, `.list` / `.list--check`, `.pills`, `.value-grid`,
-`.contact-card`, `.contact-line`, `.form-grid` /
-`.field` — live under "Interior pages" in `app/globals.css`. Same names, warm palette, red accent, and
-the measured type scale. Nothing on `/` uses them; `/finder` uses only
-`.page-hero`, `.figure` and `.cta`.
+The content components — `.pintro` and its parts, `.section-head`, `.feature`,
+`.figure`, `.card`, `.card__img`, `.card__num`, `.topic-grid` / `.tcard`,
+`.topic-body`, `.grade-list`, `.topic-walk`, `.roster`, `.detail` /
+`.detail__img` / `.detail__head` / `.detail__body`, `.list` / `.list--check`,
+`.pills`, `.value-grid`, `.contact-card`, `.contact-line`, `.enquiry`,
+`.form-grid` / `.field` — live under "Interior pages" in `app/globals.css`. Same
+names, warm palette, gold accent, and the measured type scale. **Nothing on `/`
+uses any of them**, which is what makes the whole block safe to work in: the
+landing page shares only `.cta`, `.btn`, `.eyebrow`, `.sec-head`, `.link-arrow`,
+`.rise`, the `pad*` / `bg-*` section furniture and the photography classes, so a
+change to an interior component cannot reach it. `/finder` uses `.page-hero`,
+`.cta` and its own DuPont block.
+
+### The opening panel
+
+Every interior route below the landing page used to open the same way: a
+paragraph in one half of a `.feature` row and a 16/9 photograph in the other.
+Two or three lines of copy beside a picture that sets its own height left the
+copy column half empty on all thirteen of them, and a page that opens on a hole
+reads as a page nobody finished. `.pintro` is that row rebuilt as **one panel**:
+
+- the two columns are cells of the same box, so `align-items: stretch` makes the
+  picture exactly as tall as the copy however long the copy runs — the panel is
+  full by construction rather than by luck;
+- the photograph is bled to the panel's own edges (the `.detail--media` trick),
+  so it reads as one wall of the panel and not as a card inside a card. It takes
+  any `.bg-*` class, like `.figure` and `.card__img`, and leans in 4% when the
+  panel is pointed at;
+- `.pintro__lede` sets the copy a step up the scale (`--fs-base`), and
+  `.pintro--statement` a step above that for the one- and two-sentence openers a
+  topic or a grade has;
+- `.pintro__meta` is the hairline along the foot of the copy column. That is
+  where the ten category pills went on `/products`, the five key advantages on
+  `/divisions`, and a grade's group, division and industries — all of them
+  previously a second column that agreed with the first about nothing;
+- `.pintro__tag` is the gold capsule on the photograph. Gold is a fill, so it
+  takes `--ink` type, never white;
+- `.pintro--flip` mirrors it, `.pintro--band` is the picture on its own for the
+  eighteen topics with no description. Below 880px the panel is one column with
+  the photograph first, at 16/9.
+
+### What the interior pass changed
+
+The thirteen unique pages and the two shared frames were reworked in one pass,
+against two complaints: they were plainer than the landing page they lead off,
+and their layouts kept leaving holes.
+
+- **Banners move.** `.page-hero__media` is bled 2% past every edge and drifts
+  across 30s, alternating so there is no seam, and the four lines of the banner
+  walk in 60ms apart. A gold hairline along the foot of the band ties a
+  photograph running to all four window edges back to the page under it. The
+  home hero takes none of this — it has motion of its own.
+- **Ten cards now fit.** Ten topics in a three-column grid is 3 + 3 + 3 + 1, and
+  that stranded card was the worst hole on the site. The first and last cards
+  take two columns each, so ten cards occupy twelve cells and the grid closes on
+  four full rows; a card two columns wide is a different card, with the
+  photograph down its side. Families of six already divide by three and are left
+  alone — `:has(> :nth-child(10))` is the test. `grid-auto-rows: 1fr` makes a row
+  of cards one row.
+- **The closing panel is the night cut.** `.cta--night` on every interior page,
+  so they all end on the same note; `/` keeps the sand one, because it ends on a
+  dark band already. `.cta--close` is the same panel sharing a band with the
+  block above it, which is what removed the screen of nothing that sat between
+  the last card and the last panel on a topic page.
+- **Interior pages reveal on scroll.** They carried no `.rise` at all — every
+  block arrived flat while the landing page's rose. The shared frames and the
+  index pages set it now, and the topic grid staggers a row 70ms at a time.
+- **The ten divisions on `/about` are links.** They were twenty lines of bullets
+  in two columns — the one place on the site that names all ten units and the
+  one place they were not doors. `.roster` is the set as rows, each carrying the
+  number it has everywhere else, which is also why the order changed: the source
+  copy lists them 03, 02, 01, 04… and a numbered list out of order reads as a
+  mistake. The wording after each name is the source copy's, unchanged.
+- **The contact form has a column beside it.** It used to be an 860px card
+  centred in a full-width band with nothing either side; `.enquiry` gives its
+  heading, its standing line and the numbers to call a column of their own, and
+  `.form-grid` went from three tracks to two so the four short fields pair up
+  instead of stranding the phone number on a row of its own.
+- **The finder's facets follow the results.** Forty grades is four screens of
+  list beside a column that ran out after one. A result row is a whole hit area
+  now, not a line of type with a link in it.
+- Six inline `style={{…}}` attributes on the interior pages became `.center`,
+  `.mt-lg`, `.contact-card__note` and `.pills--lg`. A stray inline style is how a
+  hand-tuned system starts drifting.
 
 ### Pictures on the content pages
 
@@ -893,12 +1095,16 @@ a photograph next to the words, and all three take a picture the same way: put
 any `.bg-*` class from the photography block on the element, and it shows
 (they all read `--im-bg`, which every one of those classes now sets).
 
+- **`.pintro__media`** — the photograph in a page's opening panel, bled to the
+  panel's edges and as tall as the copy beside it. This is what every page now
+  opens on; see "The opening panel" above.
 - **`.figure`** — the picture a `.feature` row is built around, `4 / 3` by
-  default with `--wide` (16/9) and `--tall` (3/4). Each page's opening row is
-  copy in one column and a figure in the other; `.feature--center` centres the
-  short column against the tall one, and `.feature--flip` puts the picture
-  first above 900px. Copy is always written first in the markup so the heading
-  leads on a phone and for a screen reader.
+  default with `--wide` (16/9) and `--tall` (3/4). It used to carry the opening
+  row of every page, which is where the holes were; what is left of `.feature`
+  is the rows further down a page where both columns genuinely have content.
+  `.feature--center` centres the short column against the tall one, and
+  `.feature--flip` puts the picture first above 900px. Copy is always written
+  first in the markup so the heading leads on a phone and for a screen reader.
 - **`.card__img`** — a 16/9 band across the head of a `.card`, pulled out by
   the card's own padding to meet the border. `/about`'s four cards use it, in
   `.grid-pair` rather than `.grid-2`: the 320px track in `.grid-2` fits three
@@ -921,9 +1127,10 @@ broke 3 + 1 and left a hole.
 
 Two things to know when editing them:
 
-- The red eyebrow only clears 3:1 against `--night`, which is fine for a 38px
-  heading and not for 13px tracked caps, so `.bg-night .eyebrow` takes the
-  dust instead. Keep that if you add dark sections.
+- `--gold-text` only clears 3.4:1 against `--night`, which is fine for a 38px
+  heading and not for 13px tracked caps, so `.bg-night .eyebrow` takes
+  `--gold-lift` instead (11.9:1). Keep that if you add dark sections — including
+  inside `.cta--night`, whose edge rule is `--gold-lift` for the same reason.
 - The contact form's "not connected to a backend yet" handler moved from
   the old `main.js` into `components/ContactForm.tsx`. Wiring a real backend
   means deleting the `onSubmit` handler there.

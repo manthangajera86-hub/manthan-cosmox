@@ -11,6 +11,14 @@
    the panel vacant at either end. The jump only happens once scrolling has
    settled, so it never lands mid-animation.
 
+   `align` is what the loop's resting position means, and it has to match the
+   rail's own `scroll-snap-align` or the rail opens half a card out. The
+   applications strip centres its slides (`centre`, the default); the industry
+   scroller starts them at the page inset (`start`), so its home is the offset
+   that puts the second set's first card exactly where the first set's first
+   card sits at scrollLeft 0 — which is the rail's own left padding, whatever
+   `--edge` currently works out to.
+
    With `spotlight`, whichever slide is nearest the middle carries `is-centre`
    and the stylesheet sits the rest back — the class is all this component
    decides, the size difference is entirely CSS.
@@ -36,6 +44,8 @@ type Props = {
   focusable?: boolean;
   /** repeat the slides and wrap the scroll position, so the rail never ends */
   loop?: boolean;
+  /** where a slide comes to rest — must match the rail's `scroll-snap-align` */
+  align?: "centre" | "start";
   /** mark the slide nearest the middle with `is-centre` */
   spotlight?: boolean;
   /** ms between self-advancing steps; omit to leave the rail still */
@@ -55,6 +65,7 @@ export default function Rail({
   label,
   focusable,
   loop,
+  align = "centre",
   spotlight,
   autoplay,
   heading,
@@ -77,9 +88,12 @@ export default function Rail({
      moment later by a step the visitor did not ask for */
   const last = useRef(0);
 
-  /* `period` is one set of slides in pixels; `home` is the offset that centres
-     the first slide of the second set — the position the rail opens at and the
-     middle of the window the wrap keeps it inside. */
+  /* `period` is one set of slides in pixels; `home` is where the second set's
+     first slide comes to rest — the position the rail opens at and the middle
+     of the window the wrap keeps it inside. Centring it is right for a rail
+     whose slides snap `center`; a rail that snaps `start` wants that slide at
+     the rail's own left padding instead, which is exactly where its first
+     slide sits at scrollLeft 0. */
   const metrics = useCallback(() => {
     const el = rail.current;
     if (!el) return null;
@@ -89,9 +103,11 @@ export default function Rail({
     const first = items[half];
     return {
       period: (items[1].offsetLeft - items[0].offsetLeft) * half,
-      home: first.offsetLeft - (el.clientWidth - first.offsetWidth) / 2,
+      home: align === "start"
+        ? first.offsetLeft - items[0].offsetLeft
+        : first.offsetLeft - (el.clientWidth - first.offsetWidth) / 2,
     };
-  }, [itemSelector]);
+  }, [align, itemSelector]);
 
   /* pull the position back to the set nearest home; the picture doesn't move */
   const wrap = useCallback(() => {

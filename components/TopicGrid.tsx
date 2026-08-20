@@ -14,7 +14,7 @@ export default function TopicGrid({ family }: { family: string }) {
   return (
     <div className="topic-grid">
       {fam.topics.map((topic) => (
-        <Link key={topic.slug} className="card tcard" href={`${fam.href}/${topic.slug}`}>
+        <Link key={topic.slug} className="card tcard rise" href={`${fam.href}/${topic.slug}`}>
           <div className={`card__img ${topic.img}`} aria-hidden="true"></div>
           <span className="tcard__num">{topic.num}</span>
           <h3><T>{topic.title}</T></h3>
