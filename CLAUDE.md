@@ -6,8 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A marketing site for Cosmox Chemicals, built from RTF copy that sits in the repo root. Next.js 16
 (App Router), React 19, TypeScript. One hand-written global stylesheet — **no Tailwind, no CSS
-modules, no UI library** — and no test suite. **Not a git repository**, so there is no undo: check
-before deleting or overwriting.
+modules, no UI library** — and no test suite. It **is** a git repository now: `main` is the trunk,
+work lands on branches (`lenis-scroll-tuning` at the time of writing), and `git diff` / `git restore`
+are the undo an earlier version of this file said did not exist. A large uncommitted working tree is
+the normal state here, so read `git status` before assuming a file is safe to discard.
 
 It was a hand-written static site until it was converted; `README.md` is thorough and current — read
 it before making design decisions. It documents the RTF-to-route mapping, the finder's query-string
@@ -18,14 +20,21 @@ blank because the source copy lacked them.
 
 ```bash
 npm run dev        # http://localhost:3000
-npm run build      # all 117 routes prerender to static HTML — this is the check that must pass
+npm run build      # every route prerenders to static HTML — this is the check that must pass
 npm start          # serve the production build
 npx tsc --noEmit   # types only
+npx next typegen   # regenerate route types without a full build
 ```
 
-There is no test suite and no linter configured. `npm run build` is the gate: it type-checks and
-prerenders every route, so a broken import, a bad prop, or a server/client boundary mistake fails
-there.
+There is no test suite and no linter. **`npm run lint` is dead** — the script still says `next lint`,
+which Next 16 removed, so it exits with the CLI's usage text rather than linting anything; there is no
+ESLint config in the repo either. Delete the script or point it at `eslint` if a linter is ever
+wanted, but do not read its output as a pass.
+
+`npm run build` is the gate: it type-checks and prerenders every route, so a broken import, a bad
+prop, or a server/client boundary mistake fails there. A green run ends with a route table of **118
+rows** — the 116 `page.tsx` files, plus `/icon.svg` and `/_not-found`. If that count drops, a page
+folder went missing; if it climbs, check the new route was intended.
 
 To verify a change renders, drive Chrome over the DevTools Protocol rather than fighting
 `--screenshot`: headless Chrome clamps the window to 500px wide, and a `--screenshot` of a URL with a
@@ -43,7 +52,20 @@ any header or grid change — the nav is tuned to a specific pixel budget.
 radius scale, `--inset`/`--edge-in`, shadows), then the landing-page blocks, then a section marked
 "Interior pages" holding the content components the ten copy routes use. Component files carry no
 styles of their own — they emit the class names this stylesheet defines. Keep it that way; a stray
-`style={{…}}` or a second stylesheet is how a hand-tuned system starts drifting.
+`style={{…}}` or a second stylesheet is how a hand-tuned system starts drifting. There are no inline
+styles left on the interior pages; `.center`, `.mt-lg`, `.contact-card__note` and `.pills--lg` are
+what replaced the last six. **Two survive elsewhere** and are the whole remaining set —
+`marginTop: "2rem"` on the divisions link in `app/page.tsx` and `maxWidth: "34ch"` on the blurb in
+`components/Footer.tsx`. Both want a utility class rather than another one added beside them;
+`grep -rn "style={{" app components` is the audit.
+
+**The two halves of the stylesheet do not share components.** Nothing on `/` uses `.pintro`,
+`.section-head`, `.feature`, `.figure`, `.card`, `.topic-*`, `.grade-*`, `.roster`, `.list`,
+`.pills`, `.value-grid`, `.contact-*`, `.enquiry`, `.form-*`, `.results` or `.facets`; the landing
+page shares only `.cta`, `.btn`, `.eyebrow`, `.sec-head`, `.link-arrow`, `.rise`, the `pad*`/`bg-*`
+section furniture and the `.bg-…` photography classes. That is what makes the interior block safe to
+work in — and why an interior-only treatment goes on a **modifier** (`.cta--night`) rather than on
+the block, which would reach the landing page.
 
 **The accent is the logo's gold, and it is four tokens, not one.** The palette used to be a red
 averaged from the three reference sites; it comes from the mark now. Gold is a material rather than
@@ -68,7 +90,8 @@ radius. Panels in the body of a page (the colour bands) are inset by `--inset` s
 show, and `--edge-in` is what keeps type inside a panel aligned with type outside it. Change one,
 check the other. **The photographs are the exception**: `.hero`, `.page-hero`, the landing page's
 products stack (`.pband` plus the `.fcta` finder panel directly under it, both inside `#products` so
-nothing separates them) and the divisions band (`.band--full` on `#divisions`, whose `.tiles` grid
+nothing separates them), the capabilities band (`.pband--caps` at the head of `#capabilities-strip`,
+inside that section for the same reason) and the divisions band (`.band--full` on `#divisions`, whose `.tiles` grid
 sits outside `.bleed` at `gap: 0` with square tiles, so the nine pictures are one wall) are true full
 bleeds, `margin: 0` and no radius, so the picture reaches the window edges instead of reading as a
 card of one. In the tile wall the outer columns carry `--edge` as their own padding, so the type
@@ -76,24 +99,35 @@ still lines up with the headings even though the pictures do not. Because they h
 everything inside them is positioned with `--edge`, not `--edge-in` — using `--edge-in` there would
 pull the headline `--inset` left of every heading below it. Their heights read as depth in the site:
 `100svh` on the home hero, `min(86svh, 760px)` on a family banner, `min(72svh, 620px)` on a topic or
-grade banner (`.page-hero--topic`), `clamp(460px, 54vw, 720px)` on the products band.
+grade banner (`.page-hero--topic`), `clamp(460px, 54vw, 720px)` on the products band and on the
+capabilities band, which is a plain `.pband` — it carries the section's own kicker, headline, lede
+and button on the photograph, so it holds its height the way the products band does, including on a
+phone where `.pband`'s minimum drops to nothing because the copy has taken over. `.pband--caps` adds
+only the gap to the rows beneath it, a 26ch measure and `font-weight: 400` on the headline (the serif
+italic in it was set to sit in a 400 line). Its copy is not a second copy: `.caps__intro`, the sticky
+title column that used to stand beside the rows, **moved** onto the picture and its rules are gone —
+so is the sticky heading. Below it `.crow__text` goes two-column above 1100px, since the rows now
+have the whole measure. **A band carrying only a kicker needs a height floor of its own**: without
+copy the Responsive rules collapse `.pband` to a 118px strip on a phone.
 
 ### Server by default
 
 Every `app/*/page.tsx` is a server component and ships as HTML — that matters, because the page copy
-*is* the product. Ten client components exist, each for one reason:
+*is* the product. Eleven client components exist, each for one reason (`grep -rl "use client"
+components` is the check — the count in this sentence has gone stale before):
 
 | Component | Why it's a client component |
 |---|---|
 | `Header` | the dropdowns (and a scroll state, `IntersectionObserver` on `.hero, .page-hero`, that no CSS reads any more — see Header below) |
 | `Finder` | filtering, pagination, query-string seeding |
-| `Rail` | the arrow buttons and their disabled state; on the applications rail also the autoplay clock and the `is-centre` spotlight |
+| `Rail` | the arrow buttons and their disabled state; the autoplay clock on both rails, and the `is-centre` spotlight on the applications one |
 | `ContactForm` | the "no backend yet" submit notice |
-| `Reveal` | the `.rise` scroll observer |
+| `Reveal` | the `.rise` scroll observer — the interior pages set `.rise` too, so it runs on every route |
 | `SmoothScroll` | Lenis |
 | `LocaleProvider` | holds the chosen country, loads its dictionary, writes `<html lang>` — see Translation |
 | `T` | swaps one English string for its translation; takes a string, so a **server** component may render it |
 | `HeroTitle` | the two-tone banner headline, which collapses to one bold run when translated |
+| `HeroCycle` | the landing hero's cycling last word and the photograph behind it — a clock, and the layer that is primed next |
 | `RegionMenu` | the country panel: click-to-open, click-away, Escape |
 
 The landing page's business-operations tabs are still the precedent for *not* adding one: three radio
@@ -125,7 +159,7 @@ holds one per language; each is its own lazy chunk, so an English visitor downlo
 There is no `en.ts` — English is the identity translation.
 
 **The swap happens in the browser, and English is what builds.** A locale cookie read in a server
-component would make all 117 routes dynamic, and an `app/[locale]/` segment would multiply them by
+component would make every route dynamic, and an `app/[locale]/` segment would multiply them by
 twelve; the copy *is* the product, so English stays what prerenders and what search engines see.
 `LocaleProvider` reads the stored choice in an *effect*, never during render — read it during render
 and the markup would not match what was prerendered. The cost is one frame of English on load for a
@@ -170,9 +204,24 @@ editing both.
 Eight families — applications, industries, divisions, products, capabilities, innovation, rnd,
 sustainability — and **each of their 64 topics has its own page** at `app/<family>/<slug>/page.tsx`.
 That page holds only the transcribed copy for that topic; the frame around it is
-`components/TopicPage.tsx` (banner, the topic's picture beside its description, the body, the
-previous/next walk). The family's index page opens on `components/TopicGrid.tsx`, a showcase of
-picture + number + title + one line, each linking through.
+`components/TopicPage.tsx` (banner, the opening panel, the body, the previous/next walk, the closing
+panel). The family's index page opens on `components/TopicGrid.tsx`, a showcase of picture + number +
+title + one line, each linking through.
+
+**Every interior page opens on `.pintro`.** It is one panel whose two cells are the copy and the
+photograph, stretched to a common height, with the picture bled to the panel's edges. It replaced the
+`.feature feature--center` row every page used to open on, where two or three lines of copy beside a
+picture that set its own height left half the row empty. Anything that would have been a second
+column of odds and ends — `/products`' ten category pills, `/divisions`' five key advantages, a
+grade's group and industries — goes in `.pintro__meta`, the hairline along the foot of the copy
+column. `--statement` sets the lede a step larger for one- or two-sentence openers, `--flip` mirrors
+it, `--band` is the picture alone for the eighteen topics the source copy gave no description.
+
+Two arithmetic rules keep the grids full, both of them `:has()` tests, and both worth knowing before
+you add a topic: `.topic-grid:has(> :nth-child(10))` bookends a ten-topic family — first and last
+cards span two columns, so ten cards fill twelve cells and four rows close exactly — and
+`.topic-body:has(> :nth-child(4))` breaks a four-part body into two rows of two. **An eleventh topic
+in a family would defeat the first of those**, and the grid would go back to stranding a card.
 
 `lib/topics.ts` is the register: slug, number, title, blurb and picture for all 64, grouped by
 family. The showcase grid, the nav dropdowns and the previous/next walk all read it, so they cannot
@@ -185,8 +234,10 @@ Below the ten product groups sit the **40 grades**, each with a page of its own 
 industries, one line — because the numbers a buyer needs come on the TDS/SDS. The finder's results
 link straight to them, and each group page lists its own.
 
-Everything is still prerendered: 117 static routes — 13, plus 64 topics, plus 40 grades — plus
-`app/icon.svg`, which the build lists as a route of its own.
+Everything is still prerendered. The 116 `page.tsx` files are **12 + 64 + 40**: twelve top-level
+pages (`/`, `/about`, `/finder`, `/contact` and the eight family indexes), the 64 topics, and the 40
+grades. The build's table shows 118 rows, because `app/icon.svg` and `/_not-found` each list as a
+route of their own.
 
 ### Header
 
@@ -244,6 +295,13 @@ coast when an internal link is clicked. The rest of what Lenis needs in CSS is t
 `globals.css` beside `.has-lenis` rather than imported from `node_modules` — one stylesheet is
 the rule, and `html.lenis { height: auto }` is the load-bearing rule of the set.
 
+**The interior banners drift.** `.page-hero__media` is bled 2% past every edge and runs a 30s
+`ph-drift` across the photograph, alternating so there is no seam at the loop, and the banner's four
+lines walk in on `ph-in` 60ms apart with `both` as the fill. The reduced-motion block at the end of
+the file kills `animation-delay` as well as the duration — with `both` a delay left standing holds
+each line at its first frame, which is opacity 0. The home hero takes none of this: the landing page
+has motion of its own.
+
 `.rise` reveals on
 scroll, and the division tiles hang their own motion off it: `.tile::before` is a 3-D plane that
 starts almost edge-on at `rotateY(89.5deg)` — about 4px of picture, read as one vertical line down
@@ -256,8 +314,22 @@ decorative layer — put it on copy and text vanishes behind the reader.
 Its `perspective()` lives in the transform (a parent `perspective` would make `.tile` a stacking
 context, and the picture sits at `z-index: -1`), and the closed state runs `brightness(1.45)` because
 a 4px sliver of a dark photograph over `--night` is otherwise invisible.
-The applications rail advances itself every 2.8s, holding whenever the pointer or focus is on
-it or its arrows, the section is off screen, or the tab is in the background. All of it stands down
+**The landing hero's last word cycles**, and the photograph changes with it (`HeroCycle`). Three
+things are load-bearing: index 0 is what prerenders, so `<h1>` still ships as "Cosmox Chemicals
+Speciality" and stays that with JavaScript off; the four words are stacked in one grid cell so the
+heavy run is always as wide as the longest and nothing under the headline moves; and a layer only
+carries its `.bg-*` class once it is next, so the hero's first paint still asks for one image. The
+alt layers take `saturate(.9) brightness(.55)` because the division pictures are daylit and the hero
+photograph is a plant at night — measured means of 89/40/90 against 27, brought to 53/26/53. The
+words come from the hero's own lede and nothing is invented; re-measure the brightness if a picture
+is swapped.
+
+**Both rails advance themselves** — the applications rail every 2.8s, the industry scroller every
+4s — holding whenever the pointer or focus is on one or its arrows, its section is off screen, or the
+tab is in the background, so the two never move at once. An autoplaying rail has to take `loop` as
+well, or it runs to its end and parks there; `loop` in turn needs `align` to match the rail's own
+`scroll-snap-align` (`centre` for the applications strip, `start` for the scroller, whose first card
+has to keep resting on `--edge` under the heading) or the rail opens half a card out. All of it stands down
 under `prefers-reduced-motion` — including the autoplay, which never starts — and `Reveal` marks every
 element `is-in` up front if the observer is missing: content must never be left hidden by a failed
 observer. The rail's `is-centre` spotlight is not motion and stays on either way.
