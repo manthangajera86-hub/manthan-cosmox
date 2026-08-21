@@ -1,32 +1,41 @@
 "use client";
 
 /* DuPont's solution finder, driven by the real range in lib/products.ts.
-   Four facets, each one axis of the site: what a grade is used for
-   (Applications), who buys it (Industries), and the two names for where it
-   comes from (Product group, Division). Industry and application values here
-   must match the `ind` and `app` keys on each product.
+   Five facets, each one axis of the site: what a grade is used for
+   (Applications), who buys it (Industries), the two names for where it comes
+   from (Product group, Division), and the grade itself (Product name).
+   Industry and application values here must match the `ind` and `app` keys on
+   each product.
 
    Product group and Division are the same ten things — the unit, and what that
    unit makes — so they move together: picking either sets the other from the
    maps in lib/products.ts. Left independent they would be a trap, since every
    mismatched pair of the two is an empty result with nothing to explain it.
+   Product name is the third face of that same filter, one level finer: a grade
+   belongs to exactly one group, so picking a name sets the group and the
+   division under it, and changing the group drops a name that no longer sits
+   in it. That is what keeps a 112-row facet from producing an empty result.
 
-   Routing: /finder?q=&industry=&application=&group=&division= seeds the form,
-   so anything can link into a pre-filtered result set. Unknown values are
-   ignored rather than throwing, because they are compared against the option
-   values instead of being turned into a selector; `group` wins over `division`
-   when a link carries both and they disagree. */
+   Routing: /finder?q=&industry=&application=&group=&division=&product= seeds
+   the form, so anything can link into a pre-filtered result set. Unknown values
+   are ignored rather than throwing, because they are compared against the
+   option values instead of being turned into a selector; `product` wins over
+   `group`, which wins over `division`, when a link carries more than one of the
+   three and they disagree. */
 
 import Link from "next/link";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import {
   APPLICATIONS,
   DIVISION_OF_GROUP,
+  GRADES_BY_GROUP,
   GROUPS,
   GROUP_OF_DIVISION,
   INDUSTRIES,
   PRODUCTS,
   gradeHref,
+  gradeKey,
+  groupOfGrade,
 } from "@/lib/products";
 import { useT } from "./LocaleProvider";
 
@@ -53,6 +62,10 @@ const DIVISIONS: [string, string][] = [
 const known = (pairs: [string, string][], value: string | null) =>
   value && pairs.some(([v]) => v === value) ? value : "";
 
+/* The product facet renders grouped, but a query-string value is checked
+   against the flat range — the headings are furniture, not options. */
+const GRADES: [string, string][] = GRADES_BY_GROUP.flatMap(([, , grades]) => grades);
+
 /* "Displaying 1 - 8 of 40 Results" puts its numbers in a different place in
    most other languages, so the whole sentence is one dictionary entry with
    `{slots}` in it, and the bold numbers are dropped into the slots after
@@ -72,12 +85,19 @@ export default function Finder() {
   const [application, setApplication] = useState("");
   const [group, setGroup] = useState("");
   const [division, setDivision] = useState("");
+  const [product, setProduct] = useState("");
   const [shown, setShown] = useState(PAGE);
+  /* The product facet is the only one that starts closed, at every width: it is
+     the whole range, and 112 rows open by default would bury the four facets
+     above it. The initial state is what prerenders, so it is closed in the
+     static HTML too — the mount effect below only opens it when a link has
+     already picked a grade. */
   const [openFacet, setOpenFacet] = useState({
     industry: true,
     application: true,
     group: true,
     division: true,
+    product: false,
   });
   const input = useRef<HTMLInputElement>(null);
 
@@ -92,11 +112,15 @@ export default function Finder() {
     setIndustry(seededIndustry);
     setApplication(seededApplication);
 
-    /* One filter, so one value seeds both halves of it. */
+    /* One filter in three skins, so one value seeds all of them — a named
+       grade carries its own group, which is why it is read first. */
+    const seededProduct = known(GRADES, params.get("product"));
     const seeded =
+      groupOfGrade(seededProduct) ||
       known(GROUPS, params.get("group")) ||
       GROUP_OF_DIVISION[known(DIVISIONS, params.get("division"))] ||
       "";
+    setProduct(seededProduct);
     setGroup(seeded);
     setDivision(seeded ? DIVISION_OF_GROUP[seeded] ?? "" : "");
 
@@ -108,16 +132,21 @@ export default function Finder() {
        the query string has already set, which has to show what it did.
 
        It runs here rather than in the initial state because the prerendered
-       HTML has all four open and the two must match; landing it in the same
-       effect as the seeding puts it well before the reader has scrolled past
-       the banner. */
+       HTML has the first four open and the two must match; landing it in the
+       same effect as the seeding puts it well before the reader has scrolled
+       past the banner. The product facet is the mirror image: closed in that
+       HTML at every width, so it only ever opens here, and for the same
+       reason — a link that picked a grade has to show which one. */
     if (window.matchMedia("(max-width: 900px)").matches) {
       setOpenFacet({
         industry: !!seededIndustry,
         application: !!seededApplication,
         group: !!seeded,
         division: !!seeded,
+        product: !!seededProduct,
       });
+    } else if (seededProduct) {
+      setOpenFacet((s) => ({ ...s, product: true }));
     }
   }, []);
 
@@ -128,10 +157,11 @@ export default function Finder() {
       if (application && !p.app.includes(application)) return false;
       if (group && p.cs !== group) return false;
       if (division && p.d !== division) return false;
+      if (product && gradeKey(p) !== product) return false;
       if (q && !(p.n + " " + p.c + " " + p.t).toLowerCase().includes(q)) return false;
       return true;
     });
-  }, [query, industry, application, group, division]);
+  }, [query, industry, application, group, division, product]);
 
   const page = hits.slice(0, shown);
 
@@ -140,17 +170,30 @@ export default function Finder() {
     setShown(PAGE);
   };
 
-  /* The two faces of the same filter. Either radio sets both values, so the
-     pair is never in a state the range cannot satisfy. */
+  /* The three faces of the same filter. Every radio sets the other two, so the
+     set is never in a state the range cannot satisfy. Group and division are
+     the same ten things, and a named grade sits inside exactly one of them —
+     which is why moving the coarse pair drops a name that has been left
+     behind by it, "All products" included. */
   const pickGroup = (value: string) => {
     setGroup(value);
     setDivision(value ? DIVISION_OF_GROUP[value] ?? "" : "");
+    setProduct("");
     setShown(PAGE);
   };
 
   const pickDivision = (value: string) => {
     setDivision(value);
     setGroup(value ? GROUP_OF_DIVISION[value] ?? "" : "");
+    setProduct("");
+    setShown(PAGE);
+  };
+
+  const pickProduct = (value: string) => {
+    setProduct(value);
+    const owner = groupOfGrade(value);
+    setGroup(owner);
+    setDivision(owner ? DIVISION_OF_GROUP[owner] ?? "" : "");
     setShown(PAGE);
   };
 
@@ -160,6 +203,7 @@ export default function Finder() {
     setApplication("");
     setGroup("");
     setDivision("");
+    setProduct("");
     setShown(PAGE);
   };
 
@@ -269,6 +313,51 @@ export default function Finder() {
                 />{" "}
                 {value && `${value} · `}{t(label)}
               </label>
+            ))}
+          </div>
+        </div>
+
+        {/* The range by name. It is the only facet whose options run past ten,
+            so it scrolls inside itself (`.facet--wall`) and keeps its group
+            headings as it goes — a bare alphabet of 112 chemical names tells a
+            buyer nothing about which unit makes one. Only the headings go
+            through `t`: a grade name is the same in every market, the same rule
+            the products dropdown follows. */}
+        <div className="facet facet--wall" data-open={String(openFacet.product)}>
+          <button
+            className="facet__btn"
+            type="button"
+            onClick={() => setOpenFacet((s) => ({ ...s, product: !s.product }))}
+          >
+            {t("Product name")} <span aria-hidden="true">{openFacet.product ? "−" : "+"}</span>
+          </button>
+          <div className="facet__body">
+            <label>
+              <input
+                type="radio"
+                name="product"
+                value=""
+                checked={product === ""}
+                onChange={() => pickProduct("")}
+              />{" "}
+              {t("All product names")}
+            </label>
+            {GRADES_BY_GROUP.map(([slug, label, grades]) => (
+              <div className="facet__group" key={slug}>
+                <h4>{t(label)}</h4>
+                {grades.map(([value, name]) => (
+                  <label key={value}>
+                    <input
+                      type="radio"
+                      name="product"
+                      value={value}
+                      checked={product === value}
+                      onChange={() => pickProduct(value)}
+                    />{" "}
+                    {name}
+                  </label>
+                ))}
+              </div>
             ))}
           </div>
         </div>

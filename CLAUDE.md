@@ -234,10 +234,13 @@ Three things to keep in mind when editing:
 link — the brand capsule is the way home, and it opens `NAV_MENU['/']`. A `NAV_MENU` link is a
 whole href: seven of the eight topic families list their topic pages, while `/` and `/about` still
 jump to `id` attributes on their own headings. **`/products` is the exception and has no `links`
-at all** — see Header. `lib/products.ts` holds all 112 grades **and** the four facets the finder
+at all** — see Header. `lib/products.ts` holds all 112 grades **and** the five facets the finder
 renders, so a facet value and the tag it filters on are never coupled by hand across two files:
 `INDUSTRIES` and `APPLICATIONS` are literal lists matching each grade's `ind` and `app`, and
-`GROUPS` is read off the range itself. Division and product group are the same ten things, so
+`GROUPS` and `GRADES_BY_GROUP` — the product-name facet, every grade under the group that makes
+it — are read off the range itself. A grade's facet value is `<cs>/<s>`, the pair that identifies
+it (`s` alone names two rows: Polybenzimidazole is in 04 and 10), and picking one sets the group
+and division under it, so the three never disagree. Division and product group are the same ten things, so
 `GROUP_OF_DIVISION` / `DIVISION_OF_GROUP` live there too and the finder keeps that pair in step —
 independent, every mismatched combination of the two would be an unexplained empty result. Each
 grade carries `s` (its own slug) and `cs` (its product group's), which together are its page:

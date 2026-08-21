@@ -326,6 +326,8 @@ const it: Dict = {
   "Start a conversation": "Avvia una conversazione",
   "Division": "Divisione",
   "Product group": "Gruppo di prodotto",
+  "Product name": "Nome del prodotto",
+  "All product names": "Tutti i nomi di prodotto",
   "Filtered under": "Classificato in",
   "Also in this group": "Anche in questo gruppo",
   "Request technical data": "Richiedi i dati tecnici",

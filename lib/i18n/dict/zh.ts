@@ -325,6 +325,8 @@ const zh: Dict = {
   "Start a conversation": "开始洽谈",
   "Division": "事业部",
   "Product group": "产品组",
+  "Product name": "产品名称",
+  "All product names": "所有产品名称",
   "Filtered under": "所属筛选类别",
   "Also in this group": "本组其他产品",
   "Request technical data": "索取技术资料",

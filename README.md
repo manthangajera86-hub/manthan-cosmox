@@ -31,7 +31,7 @@ components/     Header, Footer, BrandMark, Rail, Finder, ContactForm,
                 Reveal, SmoothScroll, TopicPage, TopicGrid, GradePage,
                 LocaleProvider, T, HeroTitle, RegionMenu
 lib/            nav.ts (links + dropdown data), topics.ts (the 64 topics),
-                products.ts (the 112 grades + the industry facet)
+                products.ts (the 112 grades + the industry and grade facets)
   i18n/         locales.ts (the seventy countries), detect.ts, dict/<lang>.ts (eleven
                 dictionaries — there is no en.ts, English is the source)
 public/         hero.jpg and img/ — the photography
@@ -674,18 +674,30 @@ Both sets of keys have to match the radio `value`s in `/finder`, which is why
 filters on are one list. Filters, free-text search and the "Show more results"
 pagination all work, and a result title links to that grade's own page.
 
-**Four facets, one per axis of the site.** Industries and Applications are what
-a grade is for; Product group and Division are two names for where it comes
-from. That last pair is the same ten things — the business unit, and what that
-unit makes — so `d` and `cs` are one-to-one across the whole range, and the two
-facets **move together**: picking either sets the other from `GROUP_OF_DIVISION`
-/ `DIVISION_OF_GROUP`. Left independent they would be a trap, since every
-mismatched pair of the two is an empty result with nothing on screen to explain
-it. They are rendered adjacent so that the pairing reads as one control in two
-skins rather than as a glitch.
+**Five facets, one per axis of the site.** Industries and Applications are what
+a grade is for; Product group, Division and Product name are three names for
+where it comes from. The first pair of those is the same ten things — the
+business unit, and what that unit makes — so `d` and `cs` are one-to-one across
+the whole range, and the two facets **move together**: picking either sets the
+other from `GROUP_OF_DIVISION` / `DIVISION_OF_GROUP`. Left independent they
+would be a trap, since every mismatched pair of the two is an empty result with
+nothing on screen to explain it. They are rendered adjacent so that the pairing
+reads as one control in two skins rather than as a glitch.
+
+**Product name is that same filter one level finer** — the range itself, every
+grade a radio of its own. A grade belongs to exactly one group, so picking a
+name sets the group and the division under it, and moving the coarse pair
+(including to "All products") drops a name that no longer sits inside it. That
+is the whole reason a 112-option facet cannot produce an empty result. Its value
+is the group slug and the grade slug together, `<cs>/<s>` — `s` alone would name
+two rows, since Polybenzimidazole sits in both 04 and 10 — which is also the
+path `gradeHref` builds, so `/finder?product=<cs>/<s>` and `/products/<cs>/<s>`
+name the same grade.
 
 `GROUPS` is read off `PRODUCTS` itself — the unique `cs`/`c` pairs, in range
-order — so it cannot offer a group no grade belongs to. `APPLICATIONS` is a
+order — so it cannot offer a group no grade belongs to, and `GRADES_BY_GROUP`
+is read off it the same way, so adding a grade to the array puts it in the
+sidebar with nothing else to edit. `APPLICATIONS` is a
 literal list whose values are the slugs under `app/applications/` and whose
 labels are those topics' own titles, which is what makes the whole sidebar
 translate with no new dictionary entries. It is not read from `lib/topics.ts`
@@ -702,9 +714,19 @@ before launch.
 scrolls inside itself and costs nothing. Below 900px the sidebar stacks *above*
 the results instead, so there they start closed — except any facet the query
 string has already set, which has to show what it did. That runs in the same
-mount effect as the seeding, because the prerendered HTML has all four open and
-the two have to match; it lands before the reader has scrolled past the
+mount effect as the seeding, because the prerendered HTML has those four open
+and the two have to match; it lands before the reader has scrolled past the
 banner.
+
+The product-name facet is the mirror image of that rule: it is the whole range,
+so it starts **closed at every width** — that is what prerenders — and opens
+only when a link has already picked a grade. Open, its body scrolls inside
+itself (`.facet--wall`, 21rem, `overscroll-behavior: contain`), the same
+treatment the products dropdown's wall takes and for the same reason. The ten
+group headings inside it are sticky and painted on `--sand`, the ground the
+finder sits on: a chemical name half-way down a 112-row scroller is otherwise
+unplaceable. Only those headings go through `t` — a grade name is the same in
+every market.
 
 **Routing.** `/finder` seeds itself from the query string, so anything can
 link into a pre-filtered result set:
@@ -716,11 +738,13 @@ link into a pre-filtered result set:
 /finder?application=flame-retardancy
 /finder?group=paints-coatings-pigments
 /finder?division=02
+/finder?product=flame-retardant-inorganic-salts/zinc-borate
 ```
 
-An unrecognised parameter value is ignored rather than throwing. `group` and
-`division` are the two halves of one filter, so either seeds both; `group` wins
-if a link carries both and they disagree. Nothing on
+An unrecognised parameter value is ignored rather than throwing. `group`,
+`division` and `product` are three faces of one filter, so any of them seeds the
+others; `product` wins over `group`, which wins over `division`, if a link
+carries more than one of the three and they disagree. Nothing on
 the home page uses these parameters any more — the old GET form and industry
 chips were replaced by the image panel, and their `.quick-search` / `.chips`
 styles were deleted — but the routing is still the way to link into a

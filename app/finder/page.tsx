@@ -6,7 +6,7 @@ import HeroTitle from "@/components/HeroTitle";
 
 export const metadata: Metadata = {
   title: { absolute: "Search for a product — Cosmox Chemicals" },
-  description: "Search the Cosmox Chemicals range — 112 grades across ten divisions, filtered by industry, application, product group and division, with technical data available for every product.",
+  description: "Search the Cosmox Chemicals range — 112 grades across ten divisions, filtered by industry, application, product group, division or product name, with technical data available for every product.",
 };
 
 export default function FinderPage() {

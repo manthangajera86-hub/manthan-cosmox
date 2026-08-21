@@ -326,6 +326,8 @@ const vi: Dict = {
   "Start a conversation": "Bắt đầu trao đổi",
   "Division": "Bộ phận",
   "Product group": "Nhóm sản phẩm",
+  "Product name": "Tên sản phẩm",
+  "All product names": "Tất cả tên sản phẩm",
   "Filtered under": "Được phân loại theo",
   "Also in this group": "Sản phẩm khác trong nhóm",
   "Request technical data": "Yêu cầu dữ liệu kỹ thuật",
