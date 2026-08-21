@@ -326,6 +326,8 @@ const nl: Dict = {
   "Start a conversation": "Begin een gesprek",
   "Division": "Divisie",
   "Product group": "Productgroep",
+  "Product name": "Productnaam",
+  "All product names": "Alle productnamen",
   "Filtered under": "Gefilterd onder",
   "Also in this group": "Ook in deze groep",
   "Request technical data": "Technische gegevens aanvragen",

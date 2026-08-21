@@ -326,6 +326,8 @@ const id: Dict = {
   "Start a conversation": "Mulai percakapan",
   "Division": "Divisi",
   "Product group": "Kelompok produk",
+  "Product name": "Nama produk",
+  "All product names": "Semua nama produk",
   "Filtered under": "Terklasifikasi dalam",
   "Also in this group": "Juga dalam kelompok ini",
   "Request technical data": "Minta data teknis",

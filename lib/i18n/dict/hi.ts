@@ -328,6 +328,8 @@ const hi: Dict = {
   "Start a conversation": "बातचीत शुरू करें",
   "Division": "प्रभाग",
   "Product group": "उत्पाद समूह",
+  "Product name": "उत्पाद का नाम",
+  "All product names": "सभी उत्पाद नाम",
   "Filtered under": "इस श्रेणी में",
   "Also in this group": "इसी समूह में अन्य",
   "Request technical data": "तकनीकी डेटा माँगें",

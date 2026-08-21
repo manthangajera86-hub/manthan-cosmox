@@ -347,6 +347,31 @@ export const GROUP_OF_DIVISION: Record<string, string> =
 export const DIVISION_OF_GROUP: Record<string, string> =
   Object.fromEntries(PRODUCTS.map((p) => [p.cs, p.d]));
 
+/* The product facet: the range itself, one row per grade under the group that
+   makes it, read off PRODUCTS for the same reason GROUPS is — the facet cannot
+   offer a grade the range does not hold, and adding a grade to the list above
+   puts it in the sidebar with nothing else to edit.
+
+   A grade's value is its group slug and its own slug together, which is the
+   pair that identifies it: `s` alone would name two rows, since one chemistry
+   can sit in two divisions (Polybenzimidazole is in both 04 and 10). It is also
+   what `gradeHref` builds a path out of, so `/finder?product=<cs>/<s>` and
+   `/products/<cs>/<s>` name the same grade. */
+export const gradeKey = (p: Product) => `${p.cs}/${p.s}`;
+
+/** The group half of a grade key — what the group and division facets follow. */
+export const groupOfGrade = (key: string) => key.split("/")[0] ?? "";
+
+export const GRADES_BY_GROUP: [
+  group: string,
+  label: string,
+  grades: [value: string, name: string][],
+][] = GROUPS.slice(1).map(([cs, c]) => [
+  cs,
+  c,
+  gradesIn(cs).map((p): [string, string] => [gradeKey(p), p.n]),
+]);
+
 /* ---------------------------------------------------------------------------
    The Products dropdown.
 

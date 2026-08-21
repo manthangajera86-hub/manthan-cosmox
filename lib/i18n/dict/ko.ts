@@ -326,6 +326,8 @@ const ko: Dict = {
   "Start a conversation": "문의 시작하기",
   "Division": "사업부",
   "Product group": "제품 그룹",
+  "Product name": "제품명",
+  "All product names": "모든 제품명",
   "Filtered under": "분류",
   "Also in this group": "같은 그룹의 다른 제품",
   "Request technical data": "기술 자료 요청",

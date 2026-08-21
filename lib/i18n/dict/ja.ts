@@ -326,6 +326,8 @@ const ja: Dict = {
   "Start a conversation": "問い合わせる",
   "Division": "事業部",
   "Product group": "製品グループ",
+  "Product name": "製品名",
+  "All product names": "すべての製品名",
   "Filtered under": "該当カテゴリー",
   "Also in this group": "同じグループの製品",
   "Request technical data": "技術資料を請求する",

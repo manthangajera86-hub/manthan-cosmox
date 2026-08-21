@@ -326,6 +326,8 @@ const es: Dict = {
   "Start a conversation": "Iniciar una conversación",
   "Division": "División",
   "Product group": "Grupo de producto",
+  "Product name": "Nombre del producto",
+  "All product names": "Todos los nombres de producto",
   "Filtered under": "Clasificado en",
   "Also in this group": "También en este grupo",
   "Request technical data": "Solicitar datos técnicos",
