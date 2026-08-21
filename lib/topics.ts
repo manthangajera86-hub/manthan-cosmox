@@ -185,3 +185,21 @@ export function findTopic(familyKey: string, slug: string) {
     next: topics[(i + 1) % topics.length],
   };
 }
+
+/* The frames a family's index banner cycles through: its own topics, in the
+   order the grid further down the page shows them.
+
+   This exists so the *page* does the mapping on the server and the client
+   component is handed four short strings per frame. `BannerCycle` importing
+   `FAMILY` itself would pull all 64 blurbs into the browser bundle for the
+   sake of ten titles. */
+export function bannerFrames(familyKey: string) {
+  const family = FAMILY[familyKey];
+  if (!family) return [];
+  return family.topics.map((t) => ({
+    num: t.num,
+    title: t.title,
+    img: t.img,
+    href: `${family.href}/${t.slug}`,
+  }));
+}

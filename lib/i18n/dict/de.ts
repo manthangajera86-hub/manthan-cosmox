@@ -20,12 +20,16 @@ const de: Dict = {
   "Contact": "Kontakt",
   "Product Finder": "Produktfinder",
   "Skip to content": "Zum Inhalt springen",
+  "{n} grades": "{n} Qualitäten",
+  "Search the whole range": "Das ganze Programm durchsuchen",
   "Visit page": "Seite ansehen",
   "Sections": "Bereiche",
   "On the home page": "Auf der Startseite",
   "Explore": "Entdecken",
   "Previous": "Zurück",
   "Next": "Weiter",
+  "Previous picture": "Vorheriges Bild",
+  "Next picture": "Nächstes Bild",
   "Business units": "Geschäftsbereiche",
   "Business Units": "Geschäftsbereiche",
   "Research & Development": "Forschung & Entwicklung",
@@ -37,29 +41,114 @@ const de: Dict = {
     "Wählen Sie, von wo aus Sie einkaufen. Wir produzieren in Surat und exportieren weltweit — die Sprache wechselt mit dem Land.",
   "Navigation and product titles are translated. Detailed page copy remains in English.":
     "Navigation und Produktbezeichnungen sind übersetzt. Ausführliche Seiteninhalte bleiben auf Englisch.",
+  "Detected": "Erkannt",
+  "Search countries": "Länder suchen",
+  "Search {n} countries": "{n} Länder durchsuchen",
+  "Set from your device's time zone. Change it here at any time.":
+    "Anhand der Zeitzone Ihres Geräts gewählt. Hier jederzeit änderbar.",
+  "Set from your browser's language. Change it here at any time.":
+    "Anhand der Sprache Ihres Browsers gewählt. Hier jederzeit änderbar.",
+  "No country matches “{q}”. We export worldwide — write to us and we will route your enquiry.":
+    "Kein Land passt zu „{q}“. Wir exportieren weltweit — schreiben Sie uns, wir leiten Ihre Anfrage weiter.",
+
+  // the six regions the panel groups the countries into
   "Asia Pacific": "Asien-Pazifik",
   "Europe": "Europa",
+  "Americas": "Amerika",
+  "Middle East": "Naher Osten",
+  "Africa": "Afrika",
+  "Central Asia & Caucasus": "Zentralasien & Kaukasus",
+
+  /* All seventy countries in `lib/i18n/locales.ts`, in the order the panel
+     lists them. A country whose name is the same in this language is still
+     written out, so a name added to the register shows up here as a gap
+     rather than silently reading as translated. */
+  // Asia Pacific
   "India": "Indien",
   "China": "China",
   "Japan": "Japan",
   "South Korea": "Südkorea",
+  "Taiwan": "Taiwan",
   "Vietnam": "Vietnam",
   "Indonesia": "Indonesien",
+  "Malaysia": "Malaysia",
+  "Singapore": "Singapur",
+  "Thailand": "Thailand",
+  "Philippines": "Philippinen",
+  "Pakistan": "Pakistan",
+  "Bangladesh": "Bangladesch",
+  "Nepal": "Nepal",
+  "Sri Lanka": "Sri Lanka",
+  "Myanmar": "Myanmar",
+  "Cambodia": "Kambodscha",
+  "Australia": "Australien",
+  "New Zealand": "Neuseeland",
+  // Europe
+  "United Kingdom": "Vereinigtes Königreich",
+  "Ireland": "Irland",
   "Germany": "Deutschland",
   "France": "Frankreich",
-  "Spain": "Spanien",
   "Italy": "Italien",
+  "Spain": "Spanien",
+  "Portugal": "Portugal",
   "Netherlands": "Niederlande",
+  "Belgium": "Belgien",
+  "Switzerland": "Schweiz",
+  "Austria": "Österreich",
+  "Sweden": "Schweden",
+  "Norway": "Norwegen",
+  "Denmark": "Dänemark",
+  "Finland": "Finnland",
+  "Poland": "Polen",
+  "Czech Republic": "Tschechien",
+  "Hungary": "Ungarn",
+  "Romania": "Rumänien",
+  "Greece": "Griechenland",
+  "Russia": "Russland",
+  "Ukraine": "Ukraine",
+  "Turkey": "Türkei",
+  // Americas
+  "United States": "Vereinigte Staaten",
+  "Canada": "Kanada",
+  "Mexico": "Mexiko",
+  "Brazil": "Brasilien",
+  "Argentina": "Argentinien",
+  "Chile": "Chile",
+  "Colombia": "Kolumbien",
+  "Peru": "Peru",
+  // Middle East
+  "United Arab Emirates": "Vereinigte Arabische Emirate",
+  "Saudi Arabia": "Saudi-Arabien",
+  "Qatar": "Katar",
+  "Kuwait": "Kuwait",
+  "Oman": "Oman",
+  "Bahrain": "Bahrain",
+  "Israel": "Israel",
+  // Africa
+  "Egypt": "Ägypten",
+  "Morocco": "Marokko",
+  "Algeria": "Algerien",
+  "Nigeria": "Nigeria",
+  "Ghana": "Ghana",
+  "Kenya": "Kenia",
+  "Tanzania": "Tansania",
+  "Ethiopia": "Äthiopien",
+  "South Africa": "Südafrika",
+  // Central Asia & Caucasus
+  "Kazakhstan": "Kasachstan",
+  "Uzbekistan": "Usbekistan",
+  "Azerbaijan": "Aserbaidschan",
+  "Georgia": "Georgien",
 
   // --- nav dropdown introductions -------------------------------------------
-  "Speciality chemistry manufactured and exported from Surat — ten divisions, forty grades, one integrated plant.":
-    "Spezialchemie, hergestellt und exportiert aus Surat — zehn Geschäftsbereiche, vierzig Qualitäten, ein integriertes Werk.",
+  "Speciality chemistry manufactured and exported from Surat — ten divisions, 112 grades, one integrated plant.":
+    "Spezialchemie, hergestellt und exportiert aus Surat — zehn Geschäftsbereiche, 112 Qualitäten, ein integriertes Werk.",
   "Who we are: the mandate to manufacture and export chemistry that makes industry safer, cleaner and more efficient.":
     "Wer wir sind: der Auftrag, Chemie herzustellen und zu exportieren, die die Industrie sicherer, sauberer und effizienter macht.",
   "Ten specialised divisions under one roof, structured so scale never costs you technical attention.":
     "Zehn spezialisierte Geschäftsbereiche unter einem Dach — so aufgestellt, dass Größe nie zu Lasten der technischen Betreuung geht.",
-  "The full range — forty grades built for high performance, consistency and regulatory confidence.":
-    "Das gesamte Programm — vierzig Qualitäten für hohe Leistung, Konstanz und regulatorische Sicherheit.",
+  "The full range — 112 grades built for high performance, consistency and regulatory confidence.":
+    "Das gesamte Programm — 112 Qualitäten für hohe Leistung, Konstanz und regulatorische Sicherheit.",
   "The sectors we formulate for, and what each one asks of a speciality chemical supplier.":
     "Die Branchen, für die wir formulieren, und was jede von einem Spezialchemie-Lieferanten verlangt.",
   "What our chemistry actually does in service — the end uses each grade was developed for.":

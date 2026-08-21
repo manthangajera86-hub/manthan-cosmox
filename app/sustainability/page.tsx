@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import T from "@/components/T";
+import BannerCycle from "@/components/BannerCycle";
+import { bannerFrames } from "@/lib/topics";
 import TopicGrid from "@/components/TopicGrid";
 
 export const metadata: Metadata = {
@@ -13,19 +15,18 @@ export default function SustainabilityPage() {
     <>
 
 
-    <section className="page-hero bg-page-sustainability">
-      <div className="page-hero__media" aria-hidden="true"></div>
-      <div className="page-hero__scrim" aria-hidden="true"></div>
-      <div className="page-hero__inner">
-        <nav className="crumbs" aria-label="Breadcrumb">
-          <Link href="/"><T>Home</T></Link>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page"><T>Sustainability</T></span>
-        </nav>
-        <h1 className="page-hero__title page-hero__title--solo"><b><T>Sustainability</T></b></h1>
-        <p className="page-hero__lede">A strategic pillar and a core value — integrated across the entire value chain, from raw material sourcing through manufacturing, R&amp;D, packaging, logistics and global distribution.</p>
-      </div>
-    </section>
+    {/* The banner cycles this family’s own topics — the picture and the
+        line naming it — rather than standing on one still. See
+        components/BannerCycle.tsx; the frames are lib/topics.ts’ order. */}
+    <BannerCycle frames={bannerFrames("sustainability")}>
+      <nav className="crumbs" aria-label="Breadcrumb">
+        <Link href="/"><T>Home</T></Link>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page"><T>Sustainability</T></span>
+      </nav>
+      <h1 className="page-hero__title page-hero__title--solo"><b><T>Sustainability</T></b></h1>
+      <p className="page-hero__lede">A strategic pillar and a core value — integrated across the entire value chain, from raw material sourcing through manufacturing, R&amp;D, packaging, logistics and global distribution.</p>
+    </BannerCycle>
 
     <section className="pad-xs">
       <div className="wrap">

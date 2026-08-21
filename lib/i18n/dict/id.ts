@@ -18,12 +18,16 @@ const id: Dict = {
   "Contact": "Kontak",
   "Product Finder": "Pencari produk",
   "Skip to content": "Lompat ke konten",
+  "{n} grades": "{n} grade",
+  "Search the whole range": "Cari seluruh rangkaian",
   "Visit page": "Buka halaman",
   "Sections": "Bagian",
   "On the home page": "Di halaman beranda",
   "Explore": "Selengkapnya",
   "Previous": "Sebelumnya",
   "Next": "Berikutnya",
+  "Previous picture": "Gambar sebelumnya",
+  "Next picture": "Gambar berikutnya",
   "Business units": "Unit bisnis",
   "Business Units": "Unit bisnis",
   "Research & Development": "Penelitian & pengembangan",
@@ -35,29 +39,114 @@ const id: Dict = {
     "Pilih negara tempat Anda membeli. Kami memproduksi di Surat dan mengekspor ke seluruh dunia — bahasa situs mengikuti negara yang dipilih.",
   "Navigation and product titles are translated. Detailed page copy remains in English.":
     "Navigasi dan nama produk telah diterjemahkan. Teks rinci pada halaman tetap dalam bahasa Inggris.",
+  "Detected": "Otomatis",
+  "Search countries": "Cari negara",
+  "Search {n} countries": "Cari {n} negara",
+  "Set from your device's time zone. Change it here at any time.":
+    "Dipilih dari zona waktu perangkat Anda. Ubah di sini kapan saja.",
+  "Set from your browser's language. Change it here at any time.":
+    "Dipilih dari bahasa peramban Anda. Ubah di sini kapan saja.",
+  "No country matches “{q}”. We export worldwide — write to us and we will route your enquiry.":
+    "Tidak ada negara yang cocok dengan “{q}”. Kami mengekspor ke seluruh dunia — hubungi kami dan permintaan Anda akan kami teruskan.",
+
+  // the six regions the panel groups the countries into
   "Asia Pacific": "Asia Pasifik",
   "Europe": "Eropa",
+  "Americas": "Amerika",
+  "Middle East": "Timur Tengah",
+  "Africa": "Afrika",
+  "Central Asia & Caucasus": "Asia Tengah & Kaukasus",
+
+  /* All seventy countries in `lib/i18n/locales.ts`, in the order the panel
+     lists them. A country whose name is the same in this language is still
+     written out, so a name added to the register shows up here as a gap
+     rather than silently reading as translated. */
+  // Asia Pacific
   "India": "India",
   "China": "Tiongkok",
   "Japan": "Jepang",
   "South Korea": "Korea Selatan",
+  "Taiwan": "Taiwan",
   "Vietnam": "Vietnam",
   "Indonesia": "Indonesia",
+  "Malaysia": "Malaysia",
+  "Singapore": "Singapura",
+  "Thailand": "Thailand",
+  "Philippines": "Filipina",
+  "Pakistan": "Pakistan",
+  "Bangladesh": "Bangladesh",
+  "Nepal": "Nepal",
+  "Sri Lanka": "Sri Lanka",
+  "Myanmar": "Myanmar",
+  "Cambodia": "Kamboja",
+  "Australia": "Australia",
+  "New Zealand": "Selandia Baru",
+  // Europe
+  "United Kingdom": "Britania Raya",
+  "Ireland": "Irlandia",
   "Germany": "Jerman",
   "France": "Prancis",
-  "Spain": "Spanyol",
   "Italy": "Italia",
+  "Spain": "Spanyol",
+  "Portugal": "Portugal",
   "Netherlands": "Belanda",
+  "Belgium": "Belgia",
+  "Switzerland": "Swiss",
+  "Austria": "Austria",
+  "Sweden": "Swedia",
+  "Norway": "Norwegia",
+  "Denmark": "Denmark",
+  "Finland": "Finlandia",
+  "Poland": "Polandia",
+  "Czech Republic": "Republik Ceko",
+  "Hungary": "Hungaria",
+  "Romania": "Rumania",
+  "Greece": "Yunani",
+  "Russia": "Rusia",
+  "Ukraine": "Ukraina",
+  "Turkey": "Turki",
+  // Americas
+  "United States": "Amerika Serikat",
+  "Canada": "Kanada",
+  "Mexico": "Meksiko",
+  "Brazil": "Brasil",
+  "Argentina": "Argentina",
+  "Chile": "Cile",
+  "Colombia": "Kolombia",
+  "Peru": "Peru",
+  // Middle East
+  "United Arab Emirates": "Uni Emirat Arab",
+  "Saudi Arabia": "Arab Saudi",
+  "Qatar": "Qatar",
+  "Kuwait": "Kuwait",
+  "Oman": "Oman",
+  "Bahrain": "Bahrain",
+  "Israel": "Israel",
+  // Africa
+  "Egypt": "Mesir",
+  "Morocco": "Maroko",
+  "Algeria": "Aljazair",
+  "Nigeria": "Nigeria",
+  "Ghana": "Ghana",
+  "Kenya": "Kenya",
+  "Tanzania": "Tanzania",
+  "Ethiopia": "Etiopia",
+  "South Africa": "Afrika Selatan",
+  // Central Asia & Caucasus
+  "Kazakhstan": "Kazakhstan",
+  "Uzbekistan": "Uzbekistan",
+  "Azerbaijan": "Azerbaijan",
+  "Georgia": "Georgia",
 
   // --- nav dropdown introductions -------------------------------------------
-  "Speciality chemistry manufactured and exported from Surat — ten divisions, forty grades, one integrated plant.":
-    "Kimia khusus yang diproduksi dan diekspor dari Surat — sepuluh divisi, empat puluh grade, satu pabrik terpadu.",
+  "Speciality chemistry manufactured and exported from Surat — ten divisions, 112 grades, one integrated plant.":
+    "Kimia khusus yang diproduksi dan diekspor dari Surat — sepuluh divisi, 112 grade, satu pabrik terpadu.",
   "Who we are: the mandate to manufacture and export chemistry that makes industry safer, cleaner and more efficient.":
     "Siapa kami: mandat untuk memproduksi dan mengekspor bahan kimia yang membuat industri lebih aman, lebih bersih, dan lebih efisien.",
   "Ten specialised divisions under one roof, structured so scale never costs you technical attention.":
     "Sepuluh divisi khusus di bawah satu atap, ditata agar skala tidak pernah mengurangi perhatian teknis.",
-  "The full range — forty grades built for high performance, consistency and regulatory confidence.":
-    "Rangkaian lengkap — empat puluh grade untuk kinerja tinggi, konsistensi, dan kepastian regulasi.",
+  "The full range — 112 grades built for high performance, consistency and regulatory confidence.":
+    "Rangkaian lengkap — 112 grade untuk kinerja tinggi, konsistensi, dan kepastian regulasi.",
   "The sectors we formulate for, and what each one asks of a speciality chemical supplier.":
     "Sektor yang kami formulasikan, dan apa yang dituntut masing-masing dari pemasok kimia khusus.",
   "What our chemistry actually does in service — the end uses each grade was developed for.":

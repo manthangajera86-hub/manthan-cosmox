@@ -6,7 +6,7 @@ import HeroTitle from "@/components/HeroTitle";
 
 export const metadata: Metadata = {
   title: { absolute: "Search for a product — Cosmox Chemicals" },
-  description: "Search the Cosmox Chemicals range — 40 grades across ten divisions, filtered by industry and chemistry, with technical data available for every product.",
+  description: "Search the Cosmox Chemicals range — 112 grades across ten divisions, filtered by industry and chemistry, with technical data available for every product.",
 };
 
 export default function FinderPage() {
@@ -25,7 +25,7 @@ export default function FinderPage() {
           <span aria-current="page"><T>Search</T></span>
         </nav>
         <h1 className="page-hero__title"><HeroTitle light="Search for a" bold="Product" /></h1>
-        <p className="page-hero__lede">Forty grades across ten divisions. Filter by the
+        <p className="page-hero__lede">112 grades across ten divisions. Filter by the
         industry you are formulating for, or search by product and chemistry name.
         Every grade ships with technical and safety documentation.</p>
       </div>

@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <TopicPage family="products" slug="nutraceutical-cosmetic-food-chemicals">
-      <div><h4>Products</h4><ul className="list"><li>Ascorbic Acid and derivatives</li><li>Niacinamide and other vitamin intermediates</li><li>Hyaluronic Acid derivatives</li><li>PABA</li></ul></div>
       <div><h4>Applications</h4><ul className="list"><li>Nutraceuticals and functional foods</li><li>Cosmetic formulations</li><li>Pharmaceutical actives</li></ul></div>
     </TopicPage>
   );

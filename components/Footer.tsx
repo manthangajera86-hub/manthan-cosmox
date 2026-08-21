@@ -57,7 +57,11 @@ export default function Footer() {
             </p>
             <p>
               <a href="tel:+919265943799">+91 92659 43799</a> &middot;{" "}
-              <a href="tel:+918758194050">+91 87581 94050</a>
+              <a href="tel:+918758194050">+91 87581 94050</a> &middot;{" "}
+              <a href="tel:+919265018813">+91 92650 18813</a>
+            </p>
+            <p>
+              <a href="mailto:info@cosmoxchemicals.com">info@cosmoxchemicals.com</a>
             </p>
           </div>
         </div>

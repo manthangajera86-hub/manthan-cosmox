@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <TopicPage family="products" slug="water-treatment-industrial-additives">
-      <div><h4>Products</h4><ul className="list"><li>Phosphonates and polyphosphates</li><li>Anti-scalants</li><li>Corrosion inhibitors</li><li>Industrial additives</li></ul></div>
       <div><h4>Applications</h4><ul className="list"><li>Industrial water treatment systems</li><li>Surface treatment and process efficiency</li></ul></div>
     </TopicPage>
   );

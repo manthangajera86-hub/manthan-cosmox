@@ -18,12 +18,16 @@ const ja: Dict = {
   "Contact": "お問い合わせ",
   "Product Finder": "製品検索",
   "Skip to content": "本文へスキップ",
+  "{n} grades": "{n}グレード",
+  "Search the whole range": "全製品を検索",
   "Visit page": "ページを見る",
   "Sections": "セクション",
   "On the home page": "ホームページの内容",
   "Explore": "詳しく見る",
   "Previous": "前へ",
   "Next": "次へ",
+  "Previous picture": "前の画像",
+  "Next picture": "次の画像",
   "Business units": "事業ユニット",
   "Business Units": "事業ユニット",
   "Research & Development": "研究開発",
@@ -35,29 +39,114 @@ const ja: Dict = {
     "ご購入いただく国・地域をお選びください。当社はスーラトで製造し、世界各国へ輸出しています。国の選択に合わせてサイトの言語が切り替わります。",
   "Navigation and product titles are translated. Detailed page copy remains in English.":
     "ナビゲーションと製品名は翻訳されています。ページ本文の詳細は英語のままです。",
+  "Detected": "自動判定",
+  "Search countries": "国を検索",
+  "Search {n} countries": "{n} か国を検索",
+  "Set from your device's time zone. Change it here at any time.":
+    "お使いの端末のタイムゾーンから選択しました。こちらでいつでも変更できます。",
+  "Set from your browser's language. Change it here at any time.":
+    "お使いのブラウザーの言語から選択しました。こちらでいつでも変更できます。",
+  "No country matches “{q}”. We export worldwide — write to us and we will route your enquiry.":
+    "「{q}」に一致する国はありません。当社は世界各国へ輸出しています。お問い合わせいただければ担当部門へお繋ぎします。",
+
+  // the six regions the panel groups the countries into
   "Asia Pacific": "アジア太平洋",
   "Europe": "ヨーロッパ",
+  "Americas": "南北アメリカ",
+  "Middle East": "中東",
+  "Africa": "アフリカ",
+  "Central Asia & Caucasus": "中央アジア・コーカサス",
+
+  /* All seventy countries in `lib/i18n/locales.ts`, in the order the panel
+     lists them. A country whose name is the same in this language is still
+     written out, so a name added to the register shows up here as a gap
+     rather than silently reading as translated. */
+  // Asia Pacific
   "India": "インド",
   "China": "中国",
   "Japan": "日本",
   "South Korea": "韓国",
+  "Taiwan": "台湾",
   "Vietnam": "ベトナム",
   "Indonesia": "インドネシア",
+  "Malaysia": "マレーシア",
+  "Singapore": "シンガポール",
+  "Thailand": "タイ",
+  "Philippines": "フィリピン",
+  "Pakistan": "パキスタン",
+  "Bangladesh": "バングラデシュ",
+  "Nepal": "ネパール",
+  "Sri Lanka": "スリランカ",
+  "Myanmar": "ミャンマー",
+  "Cambodia": "カンボジア",
+  "Australia": "オーストラリア",
+  "New Zealand": "ニュージーランド",
+  // Europe
+  "United Kingdom": "イギリス",
+  "Ireland": "アイルランド",
   "Germany": "ドイツ",
   "France": "フランス",
-  "Spain": "スペイン",
   "Italy": "イタリア",
+  "Spain": "スペイン",
+  "Portugal": "ポルトガル",
   "Netherlands": "オランダ",
+  "Belgium": "ベルギー",
+  "Switzerland": "スイス",
+  "Austria": "オーストリア",
+  "Sweden": "スウェーデン",
+  "Norway": "ノルウェー",
+  "Denmark": "デンマーク",
+  "Finland": "フィンランド",
+  "Poland": "ポーランド",
+  "Czech Republic": "チェコ",
+  "Hungary": "ハンガリー",
+  "Romania": "ルーマニア",
+  "Greece": "ギリシャ",
+  "Russia": "ロシア",
+  "Ukraine": "ウクライナ",
+  "Turkey": "トルコ",
+  // Americas
+  "United States": "アメリカ合衆国",
+  "Canada": "カナダ",
+  "Mexico": "メキシコ",
+  "Brazil": "ブラジル",
+  "Argentina": "アルゼンチン",
+  "Chile": "チリ",
+  "Colombia": "コロンビア",
+  "Peru": "ペルー",
+  // Middle East
+  "United Arab Emirates": "アラブ首長国連邦",
+  "Saudi Arabia": "サウジアラビア",
+  "Qatar": "カタール",
+  "Kuwait": "クウェート",
+  "Oman": "オマーン",
+  "Bahrain": "バーレーン",
+  "Israel": "イスラエル",
+  // Africa
+  "Egypt": "エジプト",
+  "Morocco": "モロッコ",
+  "Algeria": "アルジェリア",
+  "Nigeria": "ナイジェリア",
+  "Ghana": "ガーナ",
+  "Kenya": "ケニア",
+  "Tanzania": "タンザニア",
+  "Ethiopia": "エチオピア",
+  "South Africa": "南アフリカ",
+  // Central Asia & Caucasus
+  "Kazakhstan": "カザフスタン",
+  "Uzbekistan": "ウズベキスタン",
+  "Azerbaijan": "アゼルバイジャン",
+  "Georgia": "ジョージア",
 
   // --- nav dropdown introductions -------------------------------------------
-  "Speciality chemistry manufactured and exported from Surat — ten divisions, forty grades, one integrated plant.":
-    "スーラトで製造・輸出するスペシャリティケミカル。10の事業部、40のグレード、1つの統合プラント。",
+  "Speciality chemistry manufactured and exported from Surat — ten divisions, 112 grades, one integrated plant.":
+    "スーラトで製造・輸出するスペシャリティケミカル。10の事業部、112のグレード、1つの統合プラント。",
   "Who we are: the mandate to manufacture and export chemistry that makes industry safer, cleaner and more efficient.":
     "私たちについて。産業をより安全に、よりクリーンに、より効率的にする化学品を製造・輸出するという使命。",
   "Ten specialised divisions under one roof, structured so scale never costs you technical attention.":
     "10の専門事業部を一つ屋根の下に。規模が技術対応の質を損なわない体制を築いています。",
-  "The full range — forty grades built for high performance, consistency and regulatory confidence.":
-    "全製品ラインナップ。高性能・品質の安定・法規制対応の安心を実現する40グレード。",
+  "The full range — 112 grades built for high performance, consistency and regulatory confidence.":
+    "全製品ラインナップ。高性能・品質の安定・法規制対応の安心を実現する112グレード。",
   "The sectors we formulate for, and what each one asks of a speciality chemical supplier.":
     "当社が処方を手がける産業分野と、各分野がスペシャリティケミカル供給者に求めるもの。",
   "What our chemistry actually does in service — the end uses each grade was developed for.":

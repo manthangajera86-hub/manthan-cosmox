@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import T from "@/components/T";
+import BannerCycle from "@/components/BannerCycle";
+import { bannerFrames } from "@/lib/topics";
 import HeroTitle from "@/components/HeroTitle";
 import TopicGrid from "@/components/TopicGrid";
 
@@ -14,19 +16,18 @@ export default function DivisionsPage() {
     <>
 
 
-    <section className="page-hero bg-page-divisions">
-      <div className="page-hero__media" aria-hidden="true"></div>
-      <div className="page-hero__scrim" aria-hidden="true"></div>
-      <div className="page-hero__inner">
-        <nav className="crumbs" aria-label="Breadcrumb">
-          <Link href="/"><T>Home</T></Link>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page"><T>Business units</T></span>
-        </nav>
-        <h1 className="page-hero__title"><HeroTitle light="Business" bold="Units" /></h1>
-        <p className="page-hero__lede">Ten advanced chemical divisions, each a centre of excellence with dedicated expertise, advanced manufacturing capability and tailored support for diverse industrial applications.</p>
-      </div>
-    </section>
+    {/* The banner cycles this family’s own topics — the picture and the
+        line naming it — rather than standing on one still. See
+        components/BannerCycle.tsx; the frames are lib/topics.ts’ order. */}
+    <BannerCycle frames={bannerFrames("divisions")}>
+      <nav className="crumbs" aria-label="Breadcrumb">
+        <Link href="/"><T>Home</T></Link>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page"><T>Business units</T></span>
+      </nav>
+      <h1 className="page-hero__title"><HeroTitle light="Business" bold="Units" /></h1>
+      <p className="page-hero__lede">Ten advanced chemical divisions, each a centre of excellence with dedicated expertise, advanced manufacturing capability and tailored support for diverse industrial applications.</p>
+    </BannerCycle>
 
     <section className="pad-xs">
       <div className="wrap">

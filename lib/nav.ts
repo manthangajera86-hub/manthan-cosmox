@@ -28,7 +28,7 @@ export const NAV: NavLink[] = [
     /* ten units under one roof: a grid of separate squares */
     icon: ["M4 4h6v6H4z", "M14 4h6v6h-6z", "M4 14h6v6H4z", "M14 14h6v6h-6z"] },
   { href: "/products", label: "Products",
-    /* forty grades, shipped: a box */
+    /* the range, shipped: a box */
     icon: ["m12 3 8 4.5v9L12 21l-8-4.5v-9z", "m4 7.5 8 4.5 8-4.5", "M12 12v9"] },
   { href: "/industries", label: "Industries",
     /* the sectors we supply: a plant skyline */
@@ -59,11 +59,17 @@ export const NAV: NavLink[] = [
    against whatever route the panel was opened from — the home menu used to hold
    six of them, so from `/about` "What we make" went to `/about#statement`,
    which is nothing. */
-export type NavMenu = { about: string; links: [href: string, label: string][] };
+/* `links` is optional, and `/products` is the one entry without it: its panel
+   is a different thing from the others — the ten groups with their division
+   number and how many grades each holds, built from `lib/topics.ts` and
+   `lib/products.ts` on the server (see `productMenu()`), so the names cannot
+   drift from the register the way a second copy typed out here could. Every
+   other family still lists its topics as hrefs. */
+export type NavMenu = { about: string; links?: [href: string, label: string][] };
 
 export const NAV_MENU: Record<string, NavMenu> = {
   '/': {
-    about: "Speciality chemistry manufactured and exported from Surat — ten divisions, forty grades, one integrated plant.",
+    about: "Speciality chemistry manufactured and exported from Surat — ten divisions, 112 grades, one integrated plant.",
     links: [
     ['/#statement', "What we make"],
     ['/#products', "Our products"],
@@ -100,19 +106,8 @@ export const NAV_MENU: Record<string, NavMenu> = {
     ]
   },
   '/products': {
-    about: "The full range — forty grades built for high performance, consistency and regulatory confidence.",
-    links: [
-    ['/products/lithium-metal-additives', "Lithium & Metal Additives"],
-    ['/products/flame-retardant-inorganic-salts', "Flame-Retardant & Inorganic Salts"],
-    ['/products/organic-pharmaceutical-intermediates', "Organic & Pharmaceutical Intermediates"],
-    ['/products/polymers-resins-high-performance-materials', "Polymers, Resins & High-Performance Materials"],
-    ['/products/surfactants-detergents-bio-based-chemicals', "Surfactants, Detergents & Bio-Based Chemicals"],
-    ['/products/electrochemical-battery-electronic-chemicals', "Electrochemical, Battery & Electronic Chemicals"],
-    ['/products/paints-coatings-pigments', "Paints, Coatings & Pigments"],
-    ['/products/nutraceutical-cosmetic-food-chemicals', "Nutraceutical, Cosmetic & Food Chemicals"],
-    ['/products/water-treatment-industrial-additives', "Water Treatment & Industrial Additives"],
-    ['/products/functional-high-performance-materials', "Functional & High-Performance Materials"],
-    ]
+    /* no `links`: the products panel is built from the register — see NavMenu */
+    about: "The full range — 112 grades built for high performance, consistency and regulatory confidence.",
   },
   '/industries': {
     about: "The sectors we formulate for, and what each one asks of a speciality chemical supplier.",

@@ -32,8 +32,8 @@ ESLint config in the repo either. Delete the script or point it at `eslint` if a
 wanted, but do not read its output as a pass.
 
 `npm run build` is the gate: it type-checks and prerenders every route, so a broken import, a bad
-prop, or a server/client boundary mistake fails there. A green run ends with a route table of **118
-rows** — the 116 `page.tsx` files, plus `/icon.svg` and `/_not-found`. If that count drops, a page
+prop, or a server/client boundary mistake fails there. A green run ends with a route table of **190
+rows** — the 188 `page.tsx` files, plus `/icon.svg` and `/_not-found`. If that count drops, a page
 folder went missing; if it climbs, check the new route was intended.
 
 To verify a change renders, drive Chrome over the DevTools Protocol rather than fighting
@@ -113,7 +113,7 @@ copy the Responsive rules collapse `.pband` to a 118px strip on a phone.
 ### Server by default
 
 Every `app/*/page.tsx` is a server component and ships as HTML — that matters, because the page copy
-*is* the product. Eleven client components exist, each for one reason (`grep -rl "use client"
+*is* the product. Twelve client components exist, each for one reason (`grep -rl "use client"
 components` is the check — the count in this sentence has gone stale before):
 
 | Component | Why it's a client component |
@@ -128,7 +128,8 @@ components` is the check — the count in this sentence has gone stale before):
 | `T` | swaps one English string for its translation; takes a string, so a **server** component may render it |
 | `HeroTitle` | the two-tone banner headline, which collapses to one bold run when translated |
 | `HeroCycle` | the landing hero's cycling last word and the photograph behind it — a clock, and the layer that is primed next |
-| `RegionMenu` | the country panel: click-to-open, click-away, Escape |
+| `BannerCycle` | the same idea on the eight family index banners: the family's topic photographs, and the caption that names the one on screen |
+| `RegionMenu` | the country panel: click-to-open, click-away, Escape, and the search filter over seventy countries |
 
 The landing page's business-operations tabs are still the precedent for *not* adding one: three radio
 buttons and `:has()` switch the table in CSS, so all three views ship in the static HTML and the
@@ -145,10 +146,45 @@ Two traps that have already bitten here:
 
 ### Translation
 
-The globe capsule in the header opens `RegionMenu`: **twelve countries in two regions**, each
+The globe capsule in the header opens `RegionMenu`: **seventy countries in six regions**, each
 carrying a language. `lib/i18n/locales.ts` is the register (`id`, `lang`, ISO `code`, country,
 language written in itself, region) — India appears twice, once for English and once for हिन्दी,
-which is why `id` is the key and not the country.
+which is why `id` is the key and not the country. The seventy come from `new countries.rtf` in the
+repo root.
+
+**A country's `language` is the language this site can show it in, not the country's own first
+language.** Eleven dictionaries means Español covers five Latin American markets, Deutsch covers
+Austria and Switzerland, Nederlands covers Belgium, and Français covers Morocco and Algeria — while
+Brazil, Poland and Saudi Arabia are listed as **English**, which is the truth of how those desks
+buy. Offering "Português" and then rendering an English page is the dishonest version. Taiwan is
+English because the one Chinese dictionary is Simplified.
+
+**The site works out the country itself** — `lib/i18n/detect.ts`. It reads the device's IANA time
+zone (`Intl.DateTimeFormat().resolvedOptions().timeZone`) against a table of 253 zones covering all
+seventy countries; `navigator.languages` only breaks ties (हिन्दी over English inside India) or
+stands in when the zone is unknown. No permission prompt, no IP lookup, no third party, nothing that
+would make the static build dynamic — the two rejected alternatives and why are in "Detecting the
+country" in `README.md`. Four rules hold it up. Both spellings of a renamed zone (`Europe/Kiev` /
+`Europe/Kyiv`) are in the table **and** the reported name is re-canonicalised by the engine, because
+engines disagree on which direction they canonicalise in. A bare `en` browser language returns
+*nothing* rather than naming an arbitrary one of the forty-odd English-speaking countries. **A guess
+is never written to `localStorage`** — that key means "this visitor chose this", so a stored choice
+always wins and a guess re-runs next visit. And the panel says which it was, a `DETECTED` badge on
+the row plus a line in the intro, because a visitor who did not switch the site to German is owed an
+explanation of what did. **Adding a country means an entry in the register *and* its zones here**,
+or it can only ever be chosen, never detected.
+
+Seventy rows earned the panel three things. A sticky **search field** — focused when the panel
+opens, but only under `(pointer: fine)`, since focusing a text input on a phone raises the keyboard
+over the list it was meant to help you read — matching English name, translated name, language and
+ISO code, accent-folded, with Enter taking the first match. Country and language on **one line**
+instead of stacked: the second line was the difference between a 1,577px list and one that fits
+three columns. And `columns: 240px` on `.regionmenu__regions` — a column *width*, so the count falls
+from three to two to one on its own and no breakpoint has to be kept in step with the panel's width;
+240px is the measured floor set by "United Arab Emirates" beside "English". **`.regionmenu__region`
+must be `display: flow-root`, never `inline-block`**: the usual trick for honouring `break-inside:
+avoid` makes the block an atomic inline, which is opaque to Chrome's column balancer — it gave up
+and packed six regions into two columns half again as tall.
 
 **Dictionaries are keyed by the English string itself**, not by an invented key name:
 `t("Products")` returns "Produkte", or hands back "Products" when the locale has no entry. Three
@@ -187,8 +223,9 @@ Three things to keep in mind when editing:
 
 `lib/nav.ts` holds the nine nav links and `NAV_MENU`, the dropdown content. There is no Home
 link — the brand capsule is the way home, and it opens `NAV_MENU['/']`. A `NAV_MENU` link is a
-whole href: the eight topic families list their topic pages, while `/` and `/about` still jump to
-`id` attributes on their own headings. `lib/products.ts` holds all 40 grades **and** the industry facet the finder
+whole href: seven of the eight topic families list their topic pages, while `/` and `/about` still
+jump to `id` attributes on their own headings. **`/products` is the exception and has no `links`
+at all** — see Header. `lib/products.ts` holds all 112 grades **and** the industry facet the finder
 renders — the two used to be coupled by hand across two files. Each grade carries `s` (its own slug)
 and `cs` (its product group's), which together are its page: `/products/<group>/<grade>`.
 
@@ -197,7 +234,10 @@ which the landing page's `#business-operations` table reads three ways. It holds
 each division's number, title and slug are looked up from `lib/topics.ts`, so a division is never
 named twice. **The same lists are also written out in full on each `app/divisions/<slug>/page.tsx`**,
 transcribed from the same RTF; until those pages are pointed at this file, editing a list means
-editing both.
+editing both. The products lists are the real range now — 23 chemicals for the intermediates
+division, some of them 100-character IUPAC names — so the landing table's cell takes names until it
+has filled a 96-character measure and counts the rest (`line()` in `app/page.tsx`); the division's
+own page carries the list in full.
 
 ### Topic pages
 
@@ -224,35 +264,61 @@ cards span two columns, so ten cards fill twelve cells and four rows close exact
 in a family would defeat the first of those**, and the grid would go back to stranding a card.
 
 `lib/topics.ts` is the register: slug, number, title, blurb and picture for all 64, grouped by
-family. The showcase grid, the nav dropdowns and the previous/next walk all read it, so they cannot
-disagree. **Adding a topic means a folder under `app/<family>/` and an entry in `lib/topics.ts`** —
+family. The showcase grid, the nav dropdowns, the previous/next walk and the index banners'
+`bannerFrames()` all read it, so they cannot disagree. **Adding a topic means a folder under `app/<family>/` and an entry in `lib/topics.ts`** —
 and the folder name must equal the slug, or the page 404s through `findTopic`.
 
-Below the ten product groups sit the **40 grades**, each with a page of its own at
+Below the ten product groups sit the **112 grades**, each with a page of its own at
 `/products/<group>/<grade>`, framed by `components/GradePage.tsx` and generated from
-`lib/products.ts`. A grade page claims only what that record holds — name, group, division,
-industries, one line — because the numbers a buyer needs come on the TDS/SDS. The finder's results
-link straight to them, and each group page lists its own.
+`lib/products.ts`. The names are transcribed from `new products.rtf`, whose ten sections are
+numbered in a different order to this site's divisions and are mapped by name, not by number; the
+one-line teasers are written rather than transcribed, and are the only copy on a grade page that is.
+A grade page claims only what that record holds — name, group, division, industries, one line —
+because the numbers a buyer needs come on the TDS/SDS. The finder's results link straight to them,
+and **the grade list is the group page's products column**: the hand-written one that used to stand
+beside Applications and Capabilities was the same list without the links, which is a duplicate at
+four grades and a wall at twenty-three.
 
-Everything is still prerendered. The 116 `page.tsx` files are **12 + 64 + 40**: twelve top-level
-pages (`/`, `/about`, `/finder`, `/contact` and the eight family indexes), the 64 topics, and the 40
-grades. The build's table shows 118 rows, because `app/icon.svg` and `/_not-found` each list as a
+Everything is still prerendered. The 188 `page.tsx` files are **12 + 64 + 112**: twelve top-level
+pages (`/`, `/about`, `/finder`, `/contact` and the eight family indexes), the 64 topics, and the
+112 grades. The build's table shows 190 rows, because `app/icon.svg` and `/_not-found` each list as a
 route of their own.
 
 ### Header
 
 **Three capsules and nothing else.** `.hdr` itself paints nothing — no bar, no shadow, in any scroll
 position — so the brand, the utility group and the nav capsule float over whatever the page is
-showing. All three are opaque `--night` with white type, with no border and no backdrop blur, and
-they do not change on scroll: one capsule, one colour, everywhere. Two consequences to keep in mind
-before touching this. The brand is a capsule *because* the bar went away — it is the one element with
-no ground of its own, and the page has near-black bands (`.bg-night`, `.force`) as well as white
-sections, so no single text colour worked. And page content now scrolls directly under the capsules
-with nothing hiding it.
+showing. All three are opaque, with no border and no backdrop blur, and none of them change on
+scroll. Two consequences to keep in mind before touching this. The brand is a capsule *because* the
+bar went away — it is the one element with no ground of its own, and the page has near-black bands
+(`.bg-night`, `.force`) as well as white sections, so no single text colour worked. And page content
+now scrolls directly under the capsules with nothing hiding it.
+
+**The brand capsule is the one that is not `--night`.** The utility group and the nav capsule are
+near-black with white type; the brand is `--paper` with `--ink` type, a `--gold-text` "CHEMICALS"
+rule and `--shadow-md`. That is a legibility fact about the mark, not a preference: the planet is
+graphite, which is **1.38:1 on `--night`** — on the dark capsule it dissolved into its own ground and
+only the gold crescent and the ring read — and **13.4:1 on paper**, where it reads as the solid disc
+the artwork draws. So the header keeps `--logo-ink`/`--logo-void` at their `:root` light cut and only
+the footer's `.brand` flips them. The shadow is load-bearing: the header floats over `--paper`
+sections as well as sand, night bands and photographs, and a white capsule on a white section has no
+edge without it. None of this touches the capsule's box, so `--header-h` is unchanged.
 
 `Header` still sets `.is-solid` from its `IntersectionObserver` and **no CSS reads it any more**. It
 is kept as the hook to re-hang a scrolled treatment on; if the bar is never coming back, that state
 and the observer can come out of `components/Header.tsx` together.
+
+**The products dropdown is not a list of names, and that is deliberate.** Divisions and Products
+name the same ten things, so two columns of links made the second panel a copy of the first. The
+products panel (`.navmenu--products`, `.prodmenu`) is an index of the range: each group with its
+division number and its grade count, and the finder on a gold pill under them. Three things hold it
+up. `NAV_MENU['/products']` carries no `links` — `productMenu()` in `lib/products.ts` builds the rows
+from `lib/topics.ts` and the range, so the panel cannot disagree with the register. It is called in
+`app/layout.tsx` and passed to `Header` as props, because `Header` is a client component and
+importing the 112 records into it would ship the whole range to the browser on every route —
+`Header` imports the *type* only, which compiles away. And the count is the dictionary entry
+`"{n} grades"` with the number in a slot, never a number concatenated onto a translated noun:
+Korean counts "6개 등급".
 
 The utility capsule's third button is the country menu (`RegionMenu`, see Translation). It shares the
 one `open` slot with the nav dropdowns, so only one panel is ever down and moving the pointer onto a
@@ -297,10 +363,22 @@ the rule, and `html.lenis { height: auto }` is the load-bearing rule of the set.
 
 **The interior banners drift.** `.page-hero__media` is bled 2% past every edge and runs a 30s
 `ph-drift` across the photograph, alternating so there is no seam at the loop, and the banner's four
-lines walk in on `ph-in` 60ms apart with `both` as the fill. The reduced-motion block at the end of
+lines walk in on `ph-in` 60ms apart with `both` as the fill — five on the eight family index pages,
+where the caption is the last of them. The reduced-motion block at the end of
 the file kills `animation-delay` as well as the duration — with `both` a delay left standing holds
 each line at its first frame, which is opacity 0. The home hero takes none of this: the landing page
 has motion of its own.
+
+**The eight family index banners also cycle** (`.page-hero--cycle`, `components/BannerCycle.tsx`).
+The layers are the same `.page-hero__media` — same bleed, same drift, each paused until its turn —
+stacked and cross-faded, and the line under the lede names the picture on screen: the topic's number
+and title, linking to its page. The frames come from `bannerFrames()` in `lib/topics.ts` and are the
+family's own topics in the grid's order, so the banner cannot name a picture the register disagrees
+with. Frame 0 prerenders `is-on`, all the captions live in one grid cell so nothing reflows, and a
+layer takes its `.bg-*` class only when it is current or next. Pointer or focus on the **caption
+row** holds the cycle — not the whole band, or a banner this tall would sit frozen for anyone
+reading with the pointer on it. It holds off-screen and in a background tab too, and never starts
+under `prefers-reduced-motion`, where the arrows still work.
 
 `.rise` reveals on
 scroll, and the division tiles hang their own motion off it: `.tile::before` is a 3-D plane that
@@ -337,7 +415,8 @@ observer. The rail's `is-centre` spotlight is not motion and stays on either way
 ## Content and design provenance
 
 Page copy comes from the numbered RTF files in the repo root (`1 about.rtf` → `/about`, etc. — table
-in `README.md`). **Copy is transcribed, never invented.** The conversion to Next.js was verified by
+in `README.md`), and the product range from the unnumbered `new products.rtf`, which superseded the
+generic grades `3 product.rtf` carried. **Copy is transcribed, never invented.** The conversion to Next.js was verified by
 diffing the rendered text of every route against the old HTML; keep that bar. Four `TODO` markers on
 `/contact` mark gaps the source left blank.
 
@@ -370,8 +449,9 @@ the traced contour cannot catch a mistake in the mask itself; check the glyph's 
 against the source as well. "The logo" in `README.md` has the table, the
 three defects that pass found, and how each number was measured. Two of its colours come from the page rather than from the logo: `--logo-ink` (the
 orbit ring) and `--logo-void` (the gap holding that ring off the planet) are tokens in `globals.css`,
-set to the light-background cut on `:root` and flipped on `.brand`. Flip both on any other dark
-panel that carries the mark — a black ring on `--night` is an invisible ring. `BrandMark` takes an
+set to the light-background cut on `:root`, which the header capsule keeps, and flipped on the
+footer's `.brand`. Flip both on any other dark panel that carries the mark — a black ring on
+`--night` is an invisible ring. `BrandMark` takes an
 `id` prefix because it renders twice per page and its gradient ids would otherwise collide. It is
 672 × 519, not square, so `.brand__mark` sets height and leaves width `auto`; the brand capsule grew
 203 → 215px and no header breakpoint moved. See "The logo" in `README.md`.

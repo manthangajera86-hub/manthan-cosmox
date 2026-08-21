@@ -20,12 +20,16 @@ const hi: Dict = {
   "Contact": "संपर्क",
   "Product Finder": "उत्पाद खोज",
   "Skip to content": "सामग्री पर जाएँ",
+  "{n} grades": "{n} ग्रेड",
+  "Search the whole range": "पूरी श्रृंखला खोजें",
   "Visit page": "पेज देखें",
   "Sections": "अनुभाग",
   "On the home page": "होम पेज पर",
   "Explore": "देखें",
   "Previous": "पिछला",
   "Next": "अगला",
+  "Previous picture": "पिछली तस्वीर",
+  "Next picture": "अगली तस्वीर",
   "Business units": "व्यावसायिक इकाइयाँ",
   "Business Units": "व्यावसायिक इकाइयाँ",
   "Research & Development": "अनुसंधान एवं विकास",
@@ -37,29 +41,114 @@ const hi: Dict = {
     "चुनें कि आप कहाँ से खरीद रहे हैं। हम सूरत में निर्माण करते हैं और दुनिया भर में निर्यात करते हैं — देश के साथ साइट की भाषा भी बदल जाती है।",
   "Navigation and product titles are translated. Detailed page copy remains in English.":
     "नेविगेशन और उत्पाद नाम अनूदित हैं। पृष्ठों की विस्तृत सामग्री अंग्रेज़ी में ही रहती है।",
+  "Detected": "स्वतः",
+  "Search countries": "देश खोजें",
+  "Search {n} countries": "{n} देश खोजें",
+  "Set from your device's time zone. Change it here at any time.":
+    "आपके डिवाइस के समय क्षेत्र से चुना गया। इसे यहाँ कभी भी बदल सकते हैं।",
+  "Set from your browser's language. Change it here at any time.":
+    "आपके ब्राउज़र की भाषा से चुना गया। इसे यहाँ कभी भी बदल सकते हैं।",
+  "No country matches “{q}”. We export worldwide — write to us and we will route your enquiry.":
+    "“{q}” से कोई देश मेल नहीं खाता। हम दुनिया भर में निर्यात करते हैं — हमें लिखें, हम आपकी पूछताछ सही टीम तक पहुँचा देंगे।",
+
+  // the six regions the panel groups the countries into
   "Asia Pacific": "एशिया प्रशांत",
   "Europe": "यूरोप",
+  "Americas": "अमेरिका महाद्वीप",
+  "Middle East": "मध्य पूर्व",
+  "Africa": "अफ़्रीका",
+  "Central Asia & Caucasus": "मध्य एशिया एवं काकेशस",
+
+  /* All seventy countries in `lib/i18n/locales.ts`, in the order the panel
+     lists them. A country whose name is the same in this language is still
+     written out, so a name added to the register shows up here as a gap
+     rather than silently reading as translated. */
+  // Asia Pacific
   "India": "भारत",
   "China": "चीन",
   "Japan": "जापान",
   "South Korea": "दक्षिण कोरिया",
+  "Taiwan": "ताइवान",
   "Vietnam": "वियतनाम",
   "Indonesia": "इंडोनेशिया",
+  "Malaysia": "मलेशिया",
+  "Singapore": "सिंगापुर",
+  "Thailand": "थाईलैंड",
+  "Philippines": "फ़िलीपींस",
+  "Pakistan": "पाकिस्तान",
+  "Bangladesh": "बांग्लादेश",
+  "Nepal": "नेपाल",
+  "Sri Lanka": "श्रीलंका",
+  "Myanmar": "म्यांमार",
+  "Cambodia": "कंबोडिया",
+  "Australia": "ऑस्ट्रेलिया",
+  "New Zealand": "न्यूज़ीलैंड",
+  // Europe
+  "United Kingdom": "यूनाइटेड किंगडम",
+  "Ireland": "आयरलैंड",
   "Germany": "जर्मनी",
   "France": "फ़्रांस",
-  "Spain": "स्पेन",
   "Italy": "इटली",
+  "Spain": "स्पेन",
+  "Portugal": "पुर्तगाल",
   "Netherlands": "नीदरलैंड",
+  "Belgium": "बेल्जियम",
+  "Switzerland": "स्विट्ज़रलैंड",
+  "Austria": "ऑस्ट्रिया",
+  "Sweden": "स्वीडन",
+  "Norway": "नॉर्वे",
+  "Denmark": "डेनमार्क",
+  "Finland": "फ़िनलैंड",
+  "Poland": "पोलैंड",
+  "Czech Republic": "चेक गणराज्य",
+  "Hungary": "हंगरी",
+  "Romania": "रोमानिया",
+  "Greece": "यूनान",
+  "Russia": "रूस",
+  "Ukraine": "यूक्रेन",
+  "Turkey": "तुर्की",
+  // Americas
+  "United States": "संयुक्त राज्य अमेरिका",
+  "Canada": "कनाडा",
+  "Mexico": "मेक्सिको",
+  "Brazil": "ब्राज़ील",
+  "Argentina": "अर्जेंटीना",
+  "Chile": "चिली",
+  "Colombia": "कोलंबिया",
+  "Peru": "पेरू",
+  // Middle East
+  "United Arab Emirates": "संयुक्त अरब अमीरात",
+  "Saudi Arabia": "सऊदी अरब",
+  "Qatar": "क़तर",
+  "Kuwait": "कुवैत",
+  "Oman": "ओमान",
+  "Bahrain": "बहरीन",
+  "Israel": "इज़राइल",
+  // Africa
+  "Egypt": "मिस्र",
+  "Morocco": "मोरक्को",
+  "Algeria": "अल्जीरिया",
+  "Nigeria": "नाइजीरिया",
+  "Ghana": "घाना",
+  "Kenya": "केन्या",
+  "Tanzania": "तंज़ानिया",
+  "Ethiopia": "इथियोपिया",
+  "South Africa": "दक्षिण अफ़्रीका",
+  // Central Asia & Caucasus
+  "Kazakhstan": "कज़ाख़िस्तान",
+  "Uzbekistan": "उज़्बेकिस्तान",
+  "Azerbaijan": "अज़रबैजान",
+  "Georgia": "जॉर्जिया",
 
   // --- nav dropdown introductions -------------------------------------------
-  "Speciality chemistry manufactured and exported from Surat — ten divisions, forty grades, one integrated plant.":
-    "सूरत से निर्मित और निर्यातित विशेष रसायन — दस प्रभाग, चालीस ग्रेड, एक एकीकृत संयंत्र।",
+  "Speciality chemistry manufactured and exported from Surat — ten divisions, 112 grades, one integrated plant.":
+    "सूरत से निर्मित और निर्यातित विशेष रसायन — दस प्रभाग, 112 ग्रेड, एक एकीकृत संयंत्र।",
   "Who we are: the mandate to manufacture and export chemistry that makes industry safer, cleaner and more efficient.":
     "हम कौन हैं: ऐसे रसायन बनाने और निर्यात करने का दायित्व जो उद्योग को अधिक सुरक्षित, स्वच्छ और कुशल बनाएँ।",
   "Ten specialised divisions under one roof, structured so scale never costs you technical attention.":
     "एक ही छत के नीचे दस विशेषीकृत प्रभाग, इस तरह गठित कि आकार कभी तकनीकी ध्यान की क़ीमत पर न आए।",
-  "The full range — forty grades built for high performance, consistency and regulatory confidence.":
-    "पूरी श्रृंखला — उच्च प्रदर्शन, एकरूपता और नियामक भरोसे के लिए बनाए गए चालीस ग्रेड।",
+  "The full range — 112 grades built for high performance, consistency and regulatory confidence.":
+    "पूरी श्रृंखला — उच्च प्रदर्शन, एकरूपता और नियामक भरोसे के लिए बनाए गए 112 ग्रेड।",
   "The sectors we formulate for, and what each one asks of a speciality chemical supplier.":
     "वे क्षेत्र जिनके लिए हम फ़ॉर्मूलेशन करते हैं, और हर क्षेत्र विशेष रसायन आपूर्तिकर्ता से क्या अपेक्षा रखता है।",
   "What our chemistry actually does in service — the end uses each grade was developed for.":

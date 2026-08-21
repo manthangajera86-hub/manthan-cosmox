@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, EB_Garamond } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import { productMenu } from "@/lib/products";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -60,7 +61,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </a>
           <SmoothScroll />
           <Reveal />
-          <Header />
+          {/* The products dropdown is the range, not a second copy of the
+              divisions list — the ten groups with their grade counts, built
+              here on the server so `lib/products.ts` never reaches the
+              browser. See `productMenu()`. */}
+          <Header groups={productMenu()} />
           <main id="main">{children}</main>
           <Footer />
         </LocaleProvider>

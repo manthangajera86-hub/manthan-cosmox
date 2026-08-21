@@ -18,12 +18,16 @@ const vi: Dict = {
   "Contact": "Liên hệ",
   "Product Finder": "Tra cứu sản phẩm",
   "Skip to content": "Bỏ qua tới nội dung",
+  "{n} grades": "{n} mác sản phẩm",
+  "Search the whole range": "Tìm trong toàn bộ danh mục",
   "Visit page": "Xem trang",
   "Sections": "Chuyên mục",
   "On the home page": "Trên trang chủ",
   "Explore": "Tìm hiểu",
   "Previous": "Trước",
   "Next": "Tiếp",
+  "Previous picture": "Ảnh trước",
+  "Next picture": "Ảnh tiếp theo",
   "Business units": "Đơn vị kinh doanh",
   "Business Units": "Đơn vị kinh doanh",
   "Research & Development": "Nghiên cứu & phát triển",
@@ -35,29 +39,114 @@ const vi: Dict = {
     "Hãy chọn quốc gia bạn mua hàng. Chúng tôi sản xuất tại Surat và xuất khẩu toàn cầu — ngôn ngữ trang web thay đổi theo quốc gia.",
   "Navigation and product titles are translated. Detailed page copy remains in English.":
     "Phần điều hướng và tên sản phẩm đã được dịch. Nội dung chi tiết của trang vẫn giữ nguyên tiếng Anh.",
+  "Detected": "Tự động",
+  "Search countries": "Tìm quốc gia",
+  "Search {n} countries": "Tìm trong {n} quốc gia",
+  "Set from your device's time zone. Change it here at any time.":
+    "Được chọn theo múi giờ trên thiết bị của bạn. Bạn có thể thay đổi tại đây bất cứ lúc nào.",
+  "Set from your browser's language. Change it here at any time.":
+    "Được chọn theo ngôn ngữ trình duyệt của bạn. Bạn có thể thay đổi tại đây bất cứ lúc nào.",
+  "No country matches “{q}”. We export worldwide — write to us and we will route your enquiry.":
+    "Không có quốc gia nào khớp với “{q}”. Chúng tôi xuất khẩu toàn cầu — hãy liên hệ và chúng tôi sẽ chuyển yêu cầu của bạn đến đúng bộ phận.",
+
+  // the six regions the panel groups the countries into
   "Asia Pacific": "Châu Á – Thái Bình Dương",
   "Europe": "Châu Âu",
+  "Americas": "Châu Mỹ",
+  "Middle East": "Trung Đông",
+  "Africa": "Châu Phi",
+  "Central Asia & Caucasus": "Trung Á & Kavkaz",
+
+  /* All seventy countries in `lib/i18n/locales.ts`, in the order the panel
+     lists them. A country whose name is the same in this language is still
+     written out, so a name added to the register shows up here as a gap
+     rather than silently reading as translated. */
+  // Asia Pacific
   "India": "Ấn Độ",
   "China": "Trung Quốc",
   "Japan": "Nhật Bản",
   "South Korea": "Hàn Quốc",
+  "Taiwan": "Đài Loan",
   "Vietnam": "Việt Nam",
   "Indonesia": "Indonesia",
+  "Malaysia": "Malaysia",
+  "Singapore": "Singapore",
+  "Thailand": "Thái Lan",
+  "Philippines": "Philippines",
+  "Pakistan": "Pakistan",
+  "Bangladesh": "Bangladesh",
+  "Nepal": "Nepal",
+  "Sri Lanka": "Sri Lanka",
+  "Myanmar": "Myanmar",
+  "Cambodia": "Campuchia",
+  "Australia": "Úc",
+  "New Zealand": "New Zealand",
+  // Europe
+  "United Kingdom": "Vương quốc Anh",
+  "Ireland": "Ireland",
   "Germany": "Đức",
   "France": "Pháp",
-  "Spain": "Tây Ban Nha",
   "Italy": "Ý",
+  "Spain": "Tây Ban Nha",
+  "Portugal": "Bồ Đào Nha",
   "Netherlands": "Hà Lan",
+  "Belgium": "Bỉ",
+  "Switzerland": "Thụy Sĩ",
+  "Austria": "Áo",
+  "Sweden": "Thụy Điển",
+  "Norway": "Na Uy",
+  "Denmark": "Đan Mạch",
+  "Finland": "Phần Lan",
+  "Poland": "Ba Lan",
+  "Czech Republic": "Cộng hòa Séc",
+  "Hungary": "Hungary",
+  "Romania": "Romania",
+  "Greece": "Hy Lạp",
+  "Russia": "Nga",
+  "Ukraine": "Ukraina",
+  "Turkey": "Thổ Nhĩ Kỳ",
+  // Americas
+  "United States": "Hoa Kỳ",
+  "Canada": "Canada",
+  "Mexico": "Mexico",
+  "Brazil": "Brazil",
+  "Argentina": "Argentina",
+  "Chile": "Chile",
+  "Colombia": "Colombia",
+  "Peru": "Peru",
+  // Middle East
+  "United Arab Emirates": "Các Tiểu vương quốc Ả Rập Thống nhất",
+  "Saudi Arabia": "Ả Rập Xê Út",
+  "Qatar": "Qatar",
+  "Kuwait": "Kuwait",
+  "Oman": "Oman",
+  "Bahrain": "Bahrain",
+  "Israel": "Israel",
+  // Africa
+  "Egypt": "Ai Cập",
+  "Morocco": "Maroc",
+  "Algeria": "Algeria",
+  "Nigeria": "Nigeria",
+  "Ghana": "Ghana",
+  "Kenya": "Kenya",
+  "Tanzania": "Tanzania",
+  "Ethiopia": "Ethiopia",
+  "South Africa": "Nam Phi",
+  // Central Asia & Caucasus
+  "Kazakhstan": "Kazakhstan",
+  "Uzbekistan": "Uzbekistan",
+  "Azerbaijan": "Azerbaijan",
+  "Georgia": "Gruzia",
 
   // --- nav dropdown introductions -------------------------------------------
-  "Speciality chemistry manufactured and exported from Surat — ten divisions, forty grades, one integrated plant.":
-    "Hóa chất đặc chủng được sản xuất và xuất khẩu từ Surat — mười bộ phận, bốn mươi mác sản phẩm, một nhà máy tích hợp.",
+  "Speciality chemistry manufactured and exported from Surat — ten divisions, 112 grades, one integrated plant.":
+    "Hóa chất đặc chủng được sản xuất và xuất khẩu từ Surat — mười bộ phận, 112 mác sản phẩm, một nhà máy tích hợp.",
   "Who we are: the mandate to manufacture and export chemistry that makes industry safer, cleaner and more efficient.":
     "Chúng tôi là ai: sứ mệnh sản xuất và xuất khẩu hóa chất giúp ngành công nghiệp an toàn hơn, sạch hơn và hiệu quả hơn.",
   "Ten specialised divisions under one roof, structured so scale never costs you technical attention.":
     "Mười bộ phận chuyên môn dưới một mái nhà, được tổ chức sao cho quy mô không bao giờ làm giảm sự hỗ trợ kỹ thuật.",
-  "The full range — forty grades built for high performance, consistency and regulatory confidence.":
-    "Toàn bộ danh mục — bốn mươi mác sản phẩm cho hiệu năng cao, độ ổn định và sự yên tâm về pháp lý.",
+  "The full range — 112 grades built for high performance, consistency and regulatory confidence.":
+    "Toàn bộ danh mục — 112 mác sản phẩm cho hiệu năng cao, độ ổn định và sự yên tâm về pháp lý.",
   "The sectors we formulate for, and what each one asks of a speciality chemical supplier.":
     "Những ngành mà chúng tôi phát triển công thức, và điều mỗi ngành đòi hỏi ở một nhà cung cấp hóa chất đặc chủng.",
   "What our chemistry actually does in service — the end uses each grade was developed for.":
