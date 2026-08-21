@@ -20,7 +20,6 @@ const hi: Dict = {
   "Contact": "संपर्क",
   "Product Finder": "उत्पाद खोज",
   "Skip to content": "सामग्री पर जाएँ",
-  "{n} grades": "{n} ग्रेड",
   "Search the whole range": "पूरी श्रृंखला खोजें",
   "Visit page": "पेज देखें",
   "Sections": "अनुभाग",

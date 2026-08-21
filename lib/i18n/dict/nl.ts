@@ -18,7 +18,6 @@ const nl: Dict = {
   "Contact": "Contact",
   "Product Finder": "Productzoeker",
   "Skip to content": "Naar de inhoud",
-  "{n} grades": "{n} kwaliteiten",
   "Search the whole range": "Doorzoek het hele assortiment",
   "Visit page": "Bekijk pagina",
   "Sections": "Secties",

@@ -20,7 +20,6 @@ const de: Dict = {
   "Contact": "Kontakt",
   "Product Finder": "Produktfinder",
   "Skip to content": "Zum Inhalt springen",
-  "{n} grades": "{n} Qualitäten",
   "Search the whole range": "Das ganze Programm durchsuchen",
   "Visit page": "Seite ansehen",
   "Sections": "Bereiche",

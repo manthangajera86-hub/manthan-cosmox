@@ -308,17 +308,24 @@ edge without it. None of this touches the capsule's box, so `--header-h` is unch
 is kept as the hook to re-hang a scrolled treatment on; if the bar is never coming back, that state
 and the observer can come out of `components/Header.tsx` together.
 
-**The products dropdown is not a list of names, and that is deliberate.** Divisions and Products
-name the same ten things, so two columns of links made the second panel a copy of the first. The
-products panel (`.navmenu--products`, `.prodmenu`) is an index of the range: each group with its
-division number and its grade count, and the finder on a gold pill under them. Three things hold it
-up. `NAV_MENU['/products']` carries no `links` — `productMenu()` in `lib/products.ts` builds the rows
-from `lib/topics.ts` and the range, so the panel cannot disagree with the register. It is called in
-`app/layout.tsx` and passed to `Header` as props, because `Header` is a client component and
-importing the 112 records into it would ship the whole range to the browser on every route —
-`Header` imports the *type* only, which compiles away. And the count is the dictionary entry
-`"{n} grades"` with the number in a slot, never a number concatenated onto a translated noun:
-Korean counts "6개 등급".
+**The products dropdown is the range itself, and that is deliberate.** Divisions and Products name
+the same ten things, so two columns of those ten names made the second panel a copy of the first.
+The products panel (`.navmenu--products`, `.prodmenu`) opens **all 112 grades**, each under the
+group that makes it, with the finder on a gold pill beside them. Five things hold it up.
+`NAV_MENU['/products']` carries no `links` — `productMenu()` in `lib/products.ts` builds the groups
+from `lib/topics.ts` and their grades from the range, so the panel cannot disagree with the register.
+It is called in `app/layout.tsx` and passed to `Header` as props, because `Header` is a client
+component and importing the records into it would ship the teasers and industry tags of the whole
+range to the browser on every route — what travels is a name and an href per grade, and `Header`
+imports the *type* only. **Only the ten headings go through `t`**: a chemical name is the same in
+every market. The panel takes the brand panel's full bleed (`--edge` to `--edge`, left-anchored
+entry), because a 100-character IUPAC name in a 210px column already wraps four times. And the wall
+**scrolls inside itself** — `.prodmenu__wall` is the scroller, `.prodmenu__cols` the multi-column box
+inside it, and they have to be two elements: a multicol with a height cap fragments *sideways* into
+new columns instead of scrolling. `columns: 210px` is a column width, not a count, so four columns
+fall to two on their own; each group is `display: flow-root` with `break-inside: avoid`, the same
+trap `.regionmenu__region` documents. The fold lands mid-list, so `.prodmenu::before` fades the last
+rows above the finder.
 
 The utility capsule's third button is the country menu (`RegionMenu`, see Translation). It shares the
 one `open` slot with the nav dropdowns, so only one panel is ever down and moving the pointer onto a

@@ -18,7 +18,6 @@ const id: Dict = {
   "Contact": "Kontak",
   "Product Finder": "Pencari produk",
   "Skip to content": "Lompat ke konten",
-  "{n} grades": "{n} grade",
   "Search the whole range": "Cari seluruh rangkaian",
   "Visit page": "Buka halaman",
   "Sections": "Bagian",

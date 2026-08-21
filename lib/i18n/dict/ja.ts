@@ -18,7 +18,6 @@ const ja: Dict = {
   "Contact": "お問い合わせ",
   "Product Finder": "製品検索",
   "Skip to content": "本文へスキップ",
-  "{n} grades": "{n}グレード",
   "Search the whole range": "全製品を検索",
   "Visit page": "ページを見る",
   "Sections": "セクション",

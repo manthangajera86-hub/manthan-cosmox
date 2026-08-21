@@ -59,12 +59,13 @@ export const NAV: NavLink[] = [
    against whatever route the panel was opened from — the home menu used to hold
    six of them, so from `/about` "What we make" went to `/about#statement`,
    which is nothing. */
-/* `links` is optional, and `/products` is the one entry without it: its panel
-   is a different thing from the others — the ten groups with their division
-   number and how many grades each holds, built from `lib/topics.ts` and
-   `lib/products.ts` on the server (see `productMenu()`), so the names cannot
-   drift from the register the way a second copy typed out here could. Every
-   other family still lists its topics as hrefs. */
+/* `links` is optional, and `/products` is the one entry without it: Divisions
+   and Products name the same ten things, so as two columns of the same names
+   the second panel was the first one again. The products panel is the range
+   itself instead — every grade under the group that makes it, built from
+   `lib/topics.ts` and `lib/products.ts` on the server (see `productMenu()`), so
+   no chemical is ever typed out a second time here. Every other family lists
+   its topics as hrefs. */
 export type NavMenu = { about: string; links?: [href: string, label: string][] };
 
 export const NAV_MENU: Record<string, NavMenu> = {
@@ -106,7 +107,7 @@ export const NAV_MENU: Record<string, NavMenu> = {
     ]
   },
   '/products': {
-    /* no `links`: the products panel is built from the register — see NavMenu */
+    /* no `links`: the panel is the range, built from the register — see NavMenu */
     about: "The full range — 112 grades built for high performance, consistency and regulatory confidence.",
   },
   '/industries': {
