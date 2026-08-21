@@ -89,13 +89,29 @@
   --serif: var(--font-serif), "ITC Garamond Std", Garamond, "Iowan Old Style",
            "Times New Roman", serif;
 
-  --fs-mega: clamp(2.6rem,  7.4vw, 106.25px);
-  --fs-xxl:  clamp(2.1rem,  4.4vw, 63.75px);
-  --fs-xl:   clamp(1.9rem,  3.6vw, 51px);
-  --fs-lg:   clamp(1.55rem, 2.7vw, 38.25px);
-  --fs-md:   clamp(1.3rem,  2.2vw, 31.875px);
-  --fs-sm:   clamp(1.15rem, 1.8vw, 25.5px);
-  --fs-base: clamp(1.05rem, 1.5vw, 21.25px);
+  /* The maxima are the measured scale and are not negotiable. The *floors* are
+     this build's own, and they are what a phone actually renders: the `vw` term
+     only outruns them above 562px (mega) to 1120px (base), so below that every
+     size on the page is its floor. They were set one notch too high — at 390px
+     the display sizes came out 41.6 / 33.6 / 30.4px, which is desktop type on a
+     390px screen, and a section headline took five lines of it.
+
+     So the floors step down ~20% at the display end, tapering to ~5% at body
+     size: big type has the least room to spare on a phone and copy has the
+     most to lose from shrinking. Lowering a floor rather than adding a phone
+     media step is deliberate — the clamp stays continuous, so the size ramps
+     through the tablet range instead of jumping at a breakpoint. */
+  --fs-mega: clamp(2.06rem, 7.4vw, 106.25px);
+  --fs-xxl:  clamp(1.7rem,  4.4vw, 63.75px);
+  --fs-xl:   clamp(1.5rem,  3.6vw, 51px);
+  --fs-lg:   clamp(1.3rem,  2.7vw, 38.25px);
+  --fs-md:   clamp(1.15rem, 2.2vw, 31.875px);
+  --fs-sm:   clamp(1.05rem, 1.8vw, 25.5px);
+  --fs-base: clamp(1rem,    1.5vw, 21.25px);
+  /* These two are flat by design, so they take a phone step in Responsive
+     rather than a floor. 16px is the hard floor for `--fs-body`, not a
+     preference: it is also the form fields' size, and iOS Safari zooms the
+     page when a focused input is set below 16px. */
   --fs-body: 17px;
   --fs-fine: 13px;
 
@@ -106,15 +122,18 @@
   --header-h: 139px;   /* The measured height of the whole header, and the one
                           number every banner's top padding and
                           `scroll-padding-top` is built on. Three states, all
-                          measured, the last two in Responsive: 139 while the
-                          nav is one row, 169 once it wraps (≤860px), 199 on a
-                          phone narrow enough for a third row (≤461px). The one
-                          row measures 137–138px depending on where the fluid
-                          label size lands, so this sits a pixel or two above
-                          it rather than exactly on it. Its history: 127 → 123
-                          when the capsule borders came off, → 128 when the
-                          brand became a capsule, → 139 when that capsule was
-                          enlarged. */
+                          measured, the last two in Responsive: 139 with both
+                          rows, 82 once row 2 folds into the menu button
+                          (≤940px), 75 where the brand capsule steps down
+                          (≤640px). The two-row state measures 137–138px
+                          depending on where the fluid label size lands, so this
+                          sits a pixel or two above it rather than exactly on
+                          it. Its history: 127 → 123 when the capsule borders
+                          came off, → 128 when the brand became a capsule, →
+                          139 when that capsule was enlarged. The two steps
+                          below it used to go the other way — 169 once the nav
+                          wrapped and 199 at a third row — until the links moved
+                          behind a button. */
 
   /* --- radii ------------------------------------------------------------ */
   /* The reference sites are all square-cornered; this build deliberately is
@@ -1036,6 +1055,140 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* --------------------------------------------------------------------------
+   The sections panel (components/MobileMenu.tsx) — row 2, folded up.
+
+   Below 940px the nav capsule is gone and its nine links live in here instead.
+   That width is not a new one: it is where `Header` already switches the
+   dropdowns off, so the bar's menus and this panel are never both reachable
+   and there is no band where a link has two ways to open.
+
+   It borrows the country panel's surface and its right anchor, because it
+   hangs off the same utility capsule. What it does not borrow is the two-column
+   `.navmenu` grid — a phone has one column, and the panel resets to a plain
+   block flow so the kicker, the list and the two CTAs simply stack.
+   -------------------------------------------------------------------------- */
+
+/* the button is the *only* thing here that exists above 940px, and it must not:
+   row 2 is back at that width and the two would be the same nine links twice */
+.menu-item {
+  position: static;
+  display: inline-flex;
+}
+@media (min-width: 941px) {
+  .menu-item { display: none; }
+}
+.menu-item.is-open > .cap-btn { background: rgba(255, 255, 255, .26); }
+/* a glyph on its own — the label would be the fourth word in a capsule that
+   drops its other three below 640px */
+.menu-btn { padding-inline: 10px; }
+.menu-btn svg { width: 17px; height: 17px; }
+
+.navmenu--menu {
+  left: auto;
+  right: var(--edge);
+  transform: none;
+  display: block;
+  width: min(380px, calc(100vw - 2 * var(--edge)));
+  /* the nine rows and their feet come to ~560px; anything shorter than that
+     scrolls inside the panel rather than off the bottom of the window */
+  max-height: calc(100svh - var(--header-h) - 1.5rem);
+  overflow-y: auto;
+  animation-name: navmenu-in-left;
+}
+.navmenu--menu .navmenu__kicker { margin-bottom: .7rem; }
+
+/* One row a section: the glyph in its tile, then the name. Same tile as the
+   logo's panel uses — `.brandmenu__icon` — because it is the same nine glyphs
+   doing the same job, and 34px is where two or three strokes still read. */
+.menumenu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.menumenu__list a {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: .62rem .5rem;
+  border-radius: var(--r-xs);
+  color: rgba(255, 255, 255, .84);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .2s var(--ease), color .2s var(--ease);
+}
+.menumenu__list a:hover,
+.menumenu__list a:focus-visible { background: rgba(255, 255, 255, .1); color: #fff; }
+/* the section you are on, marked the way the bar marks it — a filled row */
+.menumenu__list a[aria-current="page"] {
+  background: rgba(255, 255, 255, .14);
+  color: #fff;
+}
+.menumenu__list a:hover .brandmenu__icon,
+.menumenu__list a:focus-visible .brandmenu__icon,
+.menumenu__list a[aria-current="page"] .brandmenu__icon {
+  border-color: rgba(255, 255, 255, .4);
+  color: var(--gold-lift);
+}
+
+/* Contact and the finder are in the capsule above as bare glyphs — below 640px
+   their labels are hidden, so this is the only place on a phone that names
+   them. Two-up, because they are a pair and each is two words. */
+/* A column *width*, not a count — the same idiom as `.form-grid` and the region
+   panel's columns, and for the same reason: no breakpoint to keep in step with
+   the panel's own width. 132px is measured, the width "Product Finder" needs on
+   one line with its glyph. Two equal columns while both fit; below about 375px
+   two `1fr` tracks could no longer both hold 132px and the pair came out
+   lopsided, so they stack instead. */
+.menumenu__foot {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(132px, 100%), 1fr));
+  gap: .5rem;
+  margin-top: .9rem;
+  padding-top: .9rem;
+  border-top: 1px solid rgba(255, 255, 255, .14);
+}
+/* 11px and a hair of letter-spacing, both measured: "Product Finder" is the
+   longer of the two labels and at 12px/.04em it needed 148px against the 142px
+   half a 390px panel gives it — so it wrapped to two lines while "Contact" sat
+   on one, and the pair came out uneven. `nowrap` is the guard rather than the
+   fix: if a translation is longer still, it should push the row's height rather
+   than break mid-label. */
+.menumenu__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  padding: .68rem .35rem;
+  border: 1px solid rgba(255, 255, 255, .28);
+  border-radius: var(--r-pill);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+}
+.menumenu__cta svg { width: 15px; height: 15px; flex: none; }
+.menumenu__cta:hover,
+.menumenu__cta:focus-visible { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .5); }
+/* gold is a fill and takes ink, never white — same rule as `.btn--gold` */
+.menumenu__cta--gold {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+.menumenu__cta--gold:hover,
+.menumenu__cta--gold:focus-visible {
+  background: var(--gold-lift);
+  border-color: var(--gold-lift);
+  color: var(--ink);
+}
+
+/* --------------------------------------------------------------------------
    Section photography. These live here rather than in inline styles because a
    relative url() inside a custom property resolves against the stylesheet, not
    the document — declaring them here makes `img/…` unambiguous. Swap a file to
@@ -1588,7 +1741,10 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 .tri__item {
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  /* fluid, and on the same ramp as `.card`'s `--c-pad`: a flat 2rem was 32px of
+     padding around type that is now 16px on a phone, which read as a card mostly
+     made of margin. No breakpoint — it tracks the width the way the type does */
+  padding: clamp(1.5rem, 2.4vw, 2rem);
   background: var(--sand);
   border-radius: var(--r-md);
   transition: transform .4s var(--ease-out), box-shadow .4s var(--ease-out);
@@ -4363,8 +4519,11 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   .brandmenu__sections { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-/* the nav row already wraps on its own — never a hamburger, matching the rest
-   of the site. These just keep the capsules from crowding as it does. */
+/* The nav row only exists from 941px up now, and this is what keeps it to one
+   row all the way down to that edge: tightening the links here is what buys the
+   last ~100px. `.nav-list`'s own `flex-wrap: wrap` stays as the guard behind it
+   — if a label ever grows, the row should wrap rather than push the capsule
+   past the page — but nothing reaches it at the widths the row is shown at. */
 @media (max-width: 1080px) {
   .nav-list .cap-btn { padding-inline: .55rem; }
   /* The country panel drops its intro column here rather than at 640 with the
@@ -4374,19 +4533,22 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   .regionmenu { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* Below 860px the nine links wrap inside their capsule; a stadium radius on a
-   two-row box reads as a mistake, so soften it to a rounded rectangle. 860 is
-   measured, not chosen: with the padding this query itself applies, one row
-   survives to 861px and wraps at 860 — measure it that way round, or the band
-   just above the breakpoint is one row wearing the two-row `--header-h`.
+/* Row 2 stops existing here, and this is the single most load-bearing query in
+   the file. The nine links used to wrap inside their capsule instead — two rows
+   below 860px and three below 461px, which put `--header-h` at 199px: 23% of a
+   844px phone, opaque, floating over the top of every page for the whole of a
+   scroll. They fold into `MobileMenu` now, so the header is the one row the
+   capsules occupy and nothing else.
 
-   It went 940 → 860 when the Home tab came out of the nav. It was briefly 1008,
-   while the nine links carried glyphs on the bar itself: ~22px on every link,
-   ~200px on the row, which is most of what the glyphs moving into the logo's
-   panel gave back. Anything that changes a label or its padding moves it. */
-@media (max-width: 860px) {
-  .nav-list { border-radius: 26px; padding: 5px 7px; }
-  :root { --header-h: 169px; }
+   940 rather than 860 because `Header` already gates its dropdowns on
+   `(min-width: 941px)`: matching it means the bar's menus and the panel swap
+   over at the same width, with no band where a section has two ways to open.
+
+   82px is measured, not derived — `.hdr__top` is 15px of padding either side of
+   a 52px brand capsule. Re-measure it if a capsule's box changes. */
+@media (max-width: 940px) {
+  .hdr__nav { display: none; }
+  :root { --header-h: 82px; }
 }
 
 @media (max-width: 1180px) {
@@ -4401,7 +4563,11 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   .aslide { aspect-ratio: 4 / 3; }
   /* a tablet has no room to spare either side — keep the sliver, drop the vw */
   .apps__rail { --aslide-w: calc(74vw - var(--inset)); }
-  .hero__stats { grid-template-columns: repeat(2, 1fr); row-gap: 1.6rem; }
+  /* Two up, and the column gap has to grow with them. At four columns 1px is
+     enough because each `dd` is short against its own track; at two, "Business
+     divisions" and "Product grades" are both wide enough to fill theirs and the
+     1px put the two labels in contact. */
+  .hero__stats { grid-template-columns: repeat(2, 1fr); gap: 1.6rem 1.4rem; }
   .tri { grid-template-columns: 1fr; gap: 2.2rem; }
   /* two columns — the page-edge padding moves onto the new outer columns, and
      the three-column maths is cleared first or every other tile keeps it */
@@ -4425,15 +4591,43 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   .pband { min-height: clamp(420px, 78vw, 620px); }
   .cta { grid-template-columns: 1fr; }
   .foot__grid { grid-template-columns: 1fr 1fr; }
-  .finder { grid-template-columns: 1fr; }
+  /* `minmax(0, 1fr)`, not `1fr` — the second is `minmax(auto, 1fr)`, so the
+     track floors at the facet column's min-content and cannot be made narrower
+     than its widest option label. At 320px that floor was 311px against 264px
+     of page, which is where the finder's 37px of sideways scroll came from. */
+  .finder { grid-template-columns: minmax(0, 1fr); }
   .facets { position: static; }
 }
 
 @media (max-width: 640px) {
-  .hdr__top, .hdr__nav { padding-inline: 1rem; }
+  /* The two flat sizes take their phone step here, since a floor cannot ramp
+     something that never had a `vw` term. 16px is the floor for body copy and
+     is load-bearing: the form fields read `--fs-body`, and iOS Safari zooms the
+     page when a focused input is smaller than that. */
+  :root { --fs-body: 16px; --fs-fine: 12px; }
+
+  /* `.hdr__nav` used to share this rule; it is `display: none` from 940px down,
+     so row 1 is the only one left with padding to set */
+  .hdr__top { padding-inline: 1rem; }
   .util .cap-btn { padding-inline: 10px; }
   .util .cap-btn span { display: none; }   /* utility capsule goes icon-only */
   .util .cap-btn svg { width: 17px; height: 17px; }
+  /* Row 1 is a fixed budget and the menu button is a fourth thing spending it.
+     `.brand` is a flex item, so what it does when the row runs short is shrink
+     below its content and clip the wordmark — it does not wrap or scroll. So
+     the brand takes a step down here instead of being squeezed into one: at
+     360px this is what keeps "Cosmox" whole beside four glyphs.
+     Measured — 188px → 154px, against 164px of capsule and a 10px gap in the
+     328px a 360px window leaves inside its padding. The capsule's height is
+     unchanged, so `--header-h` does not move. */
+  .hdr__top { gap: .6rem; }
+  .hdr__top .brand { padding: 6px 14px 6px 9px; }
+  .hdr__top .brand__mark { height: 33px; }
+  .hdr__top .brand__name { font-size: 19px; }
+  .hdr__top .brand__name span { font-size: 9px; letter-spacing: .16em; margin-top: 3px; }
+  /* the smaller capsule is a shorter row: 52px of brand becomes 45, so the row
+     is 75px rather than 82. Measured, like the step above it. */
+  :root { --header-h: 75px; }
   /* The nav dropdowns are already off below 940px, but the country menu stays:
      picking your market is not a desktop-only thing to want. It follows the
      header's own padding here rather than `--edge`, which is wider than the
@@ -4445,6 +4639,36 @@ section.band--full > .bleed { padding-inline: var(--edge); }
     grid-template-columns: minmax(0, 1fr);
     padding: 1.25rem 1.25rem 1.4rem;
   }
+  /* A showcase card on a phone was 520px of a 844px screen — 62% — and every
+     one of the ten was exactly 520 whether its blurb ran six lines or seven.
+     Two separate causes, so two fixes.
+
+     `grid-auto-rows: 1fr` is what made them identical: in one column every card
+     is its own row, so `1fr` levelled all ten to the tallest and padded the
+     short ones with dead space above their Explore. That is worth having across
+     three columns, where cards sit side by side and a ragged bottom edge shows;
+     stacked, there is nothing to line up with and it only adds emptiness.
+
+     The blurbs themselves are the other half: six or seven lines is a paragraph,
+     not a card. Three lines is the card's share of it, and the rest is one tap
+     away on the topic's own page — which is what Explore has always been for.
+     Nothing is lost, because the card was never where the description was
+     meant to be read in full. */
+  .topic-grid { grid-auto-rows: auto; }
+  .tcard p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  /* the action cards' internal rhythm, on the same argument as their padding:
+     a 24px rule-to-heading gap and a 29px copy-to-button gap were set against
+     desktop type and are most of the card's height at phone size */
+  .tri { gap: 1.1rem; }
+  .tri__item::before { margin-bottom: 1rem; }
+  .tri__item p { margin-bottom: 1.25rem; }
+
   /* one column — every tile is both the first and the last in its row */
   .tiles { grid-template-columns: 1fr; }
   .tiles .tile { padding-inline: var(--edge); }
@@ -4457,7 +4681,14 @@ section.band--full > .bleed { padding-inline: var(--edge); }
      390px is four words a line. Each row becomes a block — the division, then
      its line — and the header row goes, because the pill above it already
      names the column the second cell is. */
+  /* the table element goes with them. Every row and cell below is a block, so
+     there are no cells left for table layout to measure — but `display: table`
+     still floors the element at the widest of them, which at 320px was 297px
+     against 268px of page and put 2px of sideways scroll on the landing page.
+     As a block it takes the width it is given, and the cells wrap inside it. */
+  .btab { display: block; }
   .btab thead { display: none; }
+  .btab tbody { display: block; }
   .btab tbody tr { display: block; padding: .9rem 0; border-bottom: 1px solid var(--line); }
   .btab tbody th,
   .btab td { display: block; width: auto; padding: 0; border: none; }
@@ -4479,13 +4710,20 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   .aslide { min-height: 430px; }   /* the copy needs the height the width lost */
 }
 
-/* The narrowest step: below 461px the nine links need a third row. This one
-   predates the icons — the token simply never carried a three-row value, so
-   every banner on a phone started 29px too high — and it sits last because
-   these `:root` steps are all the same specificity, so source order is what
-   decides which one a 390px window ends up with. */
-@media (max-width: 461px) {
-  :root { --header-h: 199px; }
+/* `--header-h` has no narrower step any more. It used to take a third one at
+   461px, where the nine links needed a third row; the links are behind a button
+   below 940 now, so the header is one row at every width under that and the
+   token stops moving at the 640px step.
+
+   What is left down here is the last of row 1's budget. 360px is the floor for
+   the four glyphs and the brand together — measured: below it `.brand` starts
+   shrinking below its content again and clips the wordmark, which is what a
+   flex item does when a row runs short. The contact glyph is the one to give
+   up, because it is the only one of the four that is *also* named in the panel
+   the menu button opens; the finder, the country list and the menu itself are
+   not reachable any other way from up here. */
+@media (max-width: 359px) {
+  .util .cap-btn[href="/contact"] { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -82,7 +82,15 @@ ground the thing sits on, not by eye, and re-measure if you change a value — t
 
 The type scale (17 / 21.25 / 25.5 / 31.875 / 38.25 / 51 / 63.75 / 106.25px) is the literal set of
 sizes measured on the three reference sites, made fluid with `clamp()` — don't introduce off-scale
-sizes. The two faces are real and self-hosted: `next/font/google` loads **Inter** and **EB Garamond**
+sizes. **Those numbers are the clamp *maxima* and are fixed; the floors are this build's own and are
+what a phone actually renders** — the `vw` term only outruns the floor above 562px (`--fs-mega`)
+through 1120px (`--fs-base`), so below that every size on the page is sitting on its floor. They were
+set a notch too high and stepped down ~20% at the display end tapering to ~5% at body size, which is
+what took a 390px screen from 41.6 / 33.6 / 30.4px display type to 33 / 27.2 / 24. Nothing at or
+above 1120px moved — verify that before and after any change here. `--fs-body` and `--fs-fine` are
+flat px and take a phone step in Responsive instead; **16px is a hard floor for `--fs-body`**, not a
+preference, because the form fields read it and iOS Safari zooms the page when a focused input is
+smaller than that. The two faces are real and self-hosted: `next/font/google` loads **Inter** and **EB Garamond**
 italic in `app/layout.tsx` and feeds `--font-sans`/`--font-serif` into `--sans`/`--serif`. Inter runs
 ~17% wider than the old machine fallback, so any hand-broken display line is measured against it —
 re-measure in the browser before changing one. The radius scale (`--r-xs` … `--r-xl`) is this build's own addition: bigger surface, bigger
@@ -113,7 +121,7 @@ copy the Responsive rules collapse `.pband` to a 118px strip on a phone.
 ### Server by default
 
 Every `app/*/page.tsx` is a server component and ships as HTML — that matters, because the page copy
-*is* the product. Twelve client components exist, each for one reason (`grep -rl "use client"
+*is* the product. Thirteen client components exist, each for one reason (`grep -rl "use client"
 components` is the check — the count in this sentence has gone stale before):
 
 | Component | Why it's a client component |
@@ -130,6 +138,7 @@ components` is the check — the count in this sentence has gone stale before):
 | `HeroCycle` | the landing hero's cycling last word and the photograph behind it — a clock, and the layer that is primed next |
 | `BannerCycle` | the same idea on the eight family index banners: the family's topic photographs, and the caption that names the one on screen |
 | `RegionMenu` | the country panel: click-to-open, click-away, Escape, and the search filter over seventy countries |
+| `MobileMenu` | row 2 folded up below 940px: the same click-to-open, click-away, Escape and focus return, over the nine sections |
 
 The landing page's business-operations tabs are still the precedent for *not* adding one: three radio
 buttons and `:has()` switch the table in CSS, so all three views ship in the static HTML and the
@@ -268,6 +277,15 @@ cards span two columns, so ten cards fill twelve cells and four rows close exact
 `.topic-body:has(> :nth-child(4))` breaks a four-part body into two rows of two. **An eleventh topic
 in a family would defeat the first of those**, and the grid would go back to stranding a card.
 
+**`grid-auto-rows: 1fr` is for the multi-column case only.** Across three columns it levels the cards
+so the bottom edge is not ragged; in one column every card is its own row, so it levelled all ten to
+the tallest and padded the short ones with dead space above their Explore — 520px a card on a 844px
+phone, 62% of the screen, whether the blurb ran six lines or seven. Below 640px it is `auto`, and
+`.tcard p` is clamped to three lines (`-webkit-line-clamp`), which brings a card to 408–428px and
+puts Explore straight under the copy. The remaining variance is titles wrapping to a second line —
+real content, not slack. Nothing is lost to the clamp: the full blurb is on the topic's own page, and
+Explore is the way there.
+
 `lib/topics.ts` is the register: slug, number, title, blurb and picture for all 64, grouped by
 family. The showcase grid, the nav dropdowns, the previous/next walk and the index banners'
 `bannerFrames()` all read it, so they cannot disagree. **Adding a topic means a folder under `app/<family>/` and an entry in `lib/topics.ts`** —
@@ -339,14 +357,25 @@ choice. Its panel borrows `.navmenu` wholesale and drops from the right, the mir
 `.navmenu--brand` under the logo.
 
 **Every route still has a `.hero` or `.page-hero`** — `/finder` got a `.page-hero` too — so there is
-no per-page special case; a new page without one would start underneath the bar. **There is no
-hamburger anywhere, by design** — below 940px the nav links wrap inside their capsule and the
-dropdowns switch off. The country menu is the exception and stays available at every width: picking
-your market is not a desktop-only thing to want, so below 640px it stacks to one column, follows the
-header's own 1rem padding instead of `--edge`, and scrolls inside itself. `--header-h` in `globals.css` is the measured height of the whole header and
-feeds every banner's top padding plus `scroll-padding-top`; re-measure it if you add a row or change
-anything that alters a capsule's box — padding, border, or glyph size. It has three steps, all
-measured: 139px one row, 169 once the nav wraps (≤860px), 199 at ≤461px where it takes a third row.
+no per-page special case; a new page without one would start underneath the bar. **Below 940px row 2
+does not exist**: the nine links fold into `components/MobileMenu.tsx`, a button in the utility
+capsule that opens the section list, and the dropdowns switch off at the same width — one breakpoint,
+so a section never has two ways to open. The links used to wrap inside their capsule instead, which
+is what this replaced: two rows below 860px and three below 461px put `--header-h` at 199px, 23% of a
+844px phone, opaque and floating over the top of every page for the whole of a scroll. The panel is
+the country menu's surface and manners — click to open, Escape and click-away to close, focus back to
+its button, and it shares `Header`'s one `open` slot so the two are never down together. It
+deliberately does **not** reproduce the dropdowns: a topic list inside a section list is most of the
+screen twice over. The country menu stays available at every width too: picking your market is not a
+desktop-only thing to want, so below 640px it stacks to one column, follows the header's own 1rem
+padding instead of `--edge`, and scrolls inside itself. `--header-h` in `globals.css` is the measured
+height of the whole header and feeds every banner's top padding plus `scroll-padding-top`; re-measure
+it if you add a row or change anything that alters a capsule's box — padding, border, or glyph size.
+It has three steps, all measured: 139px with row 2, 82px once row 2 folds (≤940px), 75px at ≤640px
+where the brand capsule takes its own step down. **Row 1 is a fixed budget** — `.brand` is a flex
+item, so when the row runs short it shrinks below its content and clips the wordmark rather than
+wrapping. That is why the brand steps down at 640 and why the contact glyph leaves the capsule below
+360px: it is the only one of the four also named in the menu panel.
 Row 1 is the taller row, set by the brand capsule, which is enlarged inside `.hdr__top` only —
 `.brand` is the footer's lock-up too. The logo's dropdown is the large panel: full width between the
 page edges, listing every section with its glyph from `NAV`'s `icon` (path `d` strings, not markup)

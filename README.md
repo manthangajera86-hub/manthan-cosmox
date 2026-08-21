@@ -216,7 +216,12 @@ only the content routes use.
 
 The type scale in `app/globals.css` is the literal set of sizes measured on those
 three pages (17 / 21.25 / 25.5 / 31.875 / 38.25 / 51 / 63.75 / 106.25px), made
-fluid with `clamp()`. **The palette is no longer theirs** — it comes from the
+fluid with `clamp()`. Those are the maxima; the floors are this build's own, and
+they are what a phone renders, since the `vw` term only overtakes the floor
+between 562px (`--fs-mega`) and 1120px (`--fs-base`). The floors step down about
+20% at the display end, tapering to 5% at body size — a 390px screen renders
+33 / 27.2 / 24 / 20.8 / 18.4 / 16.8 / 16 / 16 / 12px. Measured at 1440px the
+scale is unchanged: 106.3 / 63.4 / 51 / 38.3 / 31.7 / 25.5 / 21.3 / 17 / 13. **The palette is no longer theirs** — it comes from the
 logo now; see "The colour" below. What the three sites still account for is the
 layout, the type scale and the structure, which is what those attributions in
 `globals.css` are about.
@@ -851,9 +856,11 @@ would resolve against wherever you happened to be rather than the page it
 describes. The menus are built from data
 rather than markup so no two pages can drift apart, and they are pure
 enhancement: the nine links themselves are in the HTML and work without
-JavaScript. They are suppressed below 940px — the nav itself now wraps lower,
-at 860px, but a panel that wide is most of a tablet screen and would cover the
-page it describes.
+JavaScript. They are suppressed below 940px, where a panel that wide is most of
+a tablet screen and would cover the page it describes — and that is the same
+width at which row 2 itself folds into the menu button, so the bar's menus and
+the section panel swap over together rather than leaving a band where a section
+has two ways to open.
 
 **Products is the one panel that is not a list of names — it is the names.**
 Divisions and Products name the same ten things — the units, and what those
@@ -973,10 +980,10 @@ white type on the picture, with the white `aria-current` pill the only thing
 locating the bar; and page content scrolls directly under the capsules with
 nothing hiding it.
 
-The current page is the one filled item (`aria-current="page"`). Below 860px the
-nav links wrap inside their capsule, which swaps the stadium radius for a 26px
-rounded rectangle; below 640px the utility capsule drops its labels and goes
-icon-only, which is why each item carries an `aria-label`.
+The current page is the one filled item (`aria-current="page"`). Below 940px row
+2 goes away entirely and the nine links move into the menu button's panel (see
+"The sections panel" below); below 640px the utility capsule drops its labels
+and goes icon-only, which is why each item carries an `aria-label`.
 
 `--header-h` in `app/globals.css` is the measured height of the whole header and
 feeds the hero's top padding — re-measure and update it if you add a row or
@@ -985,9 +992,14 @@ glyph size inside it. It has three steps, each measured in the browser:
 
 | Width | Header | `--header-h` | Why |
 |---|---|---|---|
-| ≥861px | 137–138px | **139px** | one row; the range is the fluid label size |
-| 860–462px | 168px | **169px** | the nav has wrapped to two rows |
-| ≤461px | 198px | **199px** | a third row |
+| ≥941px | 137–138px | **139px** | two rows; the range is the fluid label size |
+| 940–641px | 82px | **82px** | row 2 has folded into the menu button |
+| ≤640px | 75px | **75px** | the brand capsule takes its own step down |
+
+The last two steps replaced a pair going the other way — 169px once the nav
+wrapped to two rows at 860px, and 199px at 461px where it took a third. That was
+23% of a 844px phone, opaque, floating over the top of every page for the whole
+of a scroll, and folding the links away is what removed it.
 
 It went 127 → 123 when the borders came off, → 128 when the brand became a
 capsule and its padding made row 1 the taller of the two, and → 139 when that
