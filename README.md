@@ -695,9 +695,17 @@ path `gradeHref` builds, so `/finder?product=<cs>/<s>` and `/products/<cs>/<s>`
 name the same grade.
 
 `GROUPS` is read off `PRODUCTS` itself — the unique `cs`/`c` pairs, in range
-order — so it cannot offer a group no grade belongs to, and `GRADES_BY_GROUP`
-is read off it the same way, so adding a grade to the array puts it in the
-sidebar with nothing else to edit. `APPLICATIONS` is a
+order — so it cannot offer a group no grade belongs to, and `GRADES` is read
+off it the same way, so adding a grade to the array puts it in the sidebar with
+nothing else to edit. That list is **flat and alphabetical, not headed by group
+the way the dropdown's wall is**: Product group and Division are already that
+filter, twice, and a reader after Zinc Borate scans the Zs rather than working
+out which of ten units makes it. It sorts on a lowercased plain comparison
+rather than `localeCompare`, because the list is prerendered in Node and
+rehydrated in the browser and the two ICU collations need not agree on where a
+digit or a hyphen sorts. Only a name the range repeats takes its division number
+in the label — Polybenzimidazole is made by both 04 and 10, and two rows reading
+the same word are a coin toss rather than a filter. `APPLICATIONS` is a
 literal list whose values are the slugs under `app/applications/` and whose
 labels are those topics' own titles, which is what makes the whole sidebar
 translate with no new dictionary entries. It is not read from `lib/topics.ts`
@@ -722,11 +730,10 @@ The product-name facet is the mirror image of that rule: it is the whole range,
 so it starts **closed at every width** — that is what prerenders — and opens
 only when a link has already picked a grade. Open, its body scrolls inside
 itself (`.facet--wall`, 21rem, `overscroll-behavior: contain`), the same
-treatment the products dropdown's wall takes and for the same reason. The ten
-group headings inside it are sticky and painted on `--sand`, the ground the
-finder sits on: a chemical name half-way down a 112-row scroller is otherwise
-unplaceable. Only those headings go through `t` — a grade name is the same in
-every market.
+treatment the products dropdown's wall takes and for the same reason. Nothing
+inside it goes through `t` — a chemical name is the same in every market, the
+rule the dropdown follows too; the facet's own heading and its "All product
+names" row are the only translated strings in it.
 
 **Routing.** `/finder` seeds itself from the query string, so anything can
 link into a pre-filtered result set:

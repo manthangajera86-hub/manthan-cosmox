@@ -237,10 +237,12 @@ jump to `id` attributes on their own headings. **`/products` is the exception an
 at all** — see Header. `lib/products.ts` holds all 112 grades **and** the five facets the finder
 renders, so a facet value and the tag it filters on are never coupled by hand across two files:
 `INDUSTRIES` and `APPLICATIONS` are literal lists matching each grade's `ind` and `app`, and
-`GROUPS` and `GRADES_BY_GROUP` — the product-name facet, every grade under the group that makes
-it — are read off the range itself. A grade's facet value is `<cs>/<s>`, the pair that identifies
-it (`s` alone names two rows: Polybenzimidazole is in 04 and 10), and picking one sets the group
-and division under it, so the three never disagree. Division and product group are the same ten things, so
+`GROUPS` and `GRADES` — the product-name facet, the whole range by name in one alphabet — are read
+off the range itself. That facet is deliberately **not** headed by group the way the nav dropdown's
+wall is: the two facets above it are already that filter, and what this one is for is finding one
+named chemical. A grade's facet value is `<cs>/<s>`, the pair that identifies it, and only a name
+the range repeats (Polybenzimidazole, made by both 04 and 10) carries its division number in the
+label. Picking one sets the group and division under it, so the three never disagree. Division and product group are the same ten things, so
 `GROUP_OF_DIVISION` / `DIVISION_OF_GROUP` live there too and the finder keeps that pair in step —
 independent, every mismatched combination of the two would be an unexplained empty result. Each
 grade carries `s` (its own slug) and `cs` (its product group's), which together are its page:

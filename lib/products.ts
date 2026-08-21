@@ -347,30 +347,48 @@ export const GROUP_OF_DIVISION: Record<string, string> =
 export const DIVISION_OF_GROUP: Record<string, string> =
   Object.fromEntries(PRODUCTS.map((p) => [p.cs, p.d]));
 
-/* The product facet: the range itself, one row per grade under the group that
-   makes it, read off PRODUCTS for the same reason GROUPS is — the facet cannot
-   offer a grade the range does not hold, and adding a grade to the list above
-   puts it in the sidebar with nothing else to edit.
+/* The product facet: the range itself, one row per grade, by name and in
+   alphabetical order — a flat list, not the dropdown's wall of groups. The
+   sidebar already carries Product group and Division, so heading these 112
+   names by group again would have been the coarse filter written a third time;
+   what this facet is for is finding one named chemical, and a reader looking
+   for Zinc Borate scans the Zs, not the ten headings it might be under.
+
+   Read off PRODUCTS for the same reason GROUPS is — the facet cannot offer a
+   grade the range does not hold, and adding one to the list above puts it in
+   the sidebar with nothing else to edit.
 
    A grade's value is its group slug and its own slug together, which is the
    pair that identifies it: `s` alone would name two rows, since one chemistry
-   can sit in two divisions (Polybenzimidazole is in both 04 and 10). It is also
-   what `gradeHref` builds a path out of, so `/finder?product=<cs>/<s>` and
-   `/products/<cs>/<s>` name the same grade. */
+   can sit in two divisions. It is also what `gradeHref` builds a path out of,
+   so `/finder?product=<cs>/<s>` and `/products/<cs>/<s>` name the same grade. */
 export const gradeKey = (p: Product) => `${p.cs}/${p.s}`;
 
 /** The group half of a grade key — what the group and division facets follow. */
 export const groupOfGrade = (key: string) => key.split("/")[0] ?? "";
 
-export const GRADES_BY_GROUP: [
-  group: string,
-  label: string,
-  grades: [value: string, name: string][],
-][] = GROUPS.slice(1).map(([cs, c]) => [
-  cs,
-  c,
-  gradesIn(cs).map((p): [string, string] => [gradeKey(p), p.n]),
-]);
+/* Sorted on a lowercased plain comparison rather than `localeCompare`: the list
+   is prerendered in Node and rehydrated in the browser, and the two ICU
+   collations are not guaranteed to agree on where a digit or a hyphen sorts.
+   A codepoint order is the same everywhere. */
+const byName = (a: Product, b: Product) => {
+  const [x, y] = [a.n.toLowerCase(), b.n.toLowerCase()];
+  /* Two rows of one name are broken on the division number, which is what the
+     label disambiguates them with — 04 before 10, as the label reads. */
+  return x < y ? -1 : x > y ? 1 : a.d < b.d ? -1 : 1;
+};
+
+/* One name in the range belongs to two grades — Polybenzimidazole is made by
+   both 04 and 10 — and two rows reading the same word is a coin toss, not a
+   filter. Only a repeated name takes its division number; every other row is
+   the chemical name alone. */
+const repeated = new Set(
+  PRODUCTS.map((p) => p.n).filter((n, i, all) => all.indexOf(n) !== i),
+);
+
+export const GRADES: [value: string, label: string][] = [...PRODUCTS]
+  .sort(byName)
+  .map((p): [string, string] => [gradeKey(p), repeated.has(p.n) ? `${p.n} · ${p.d}` : p.n]);
 
 /* ---------------------------------------------------------------------------
    The Products dropdown.
