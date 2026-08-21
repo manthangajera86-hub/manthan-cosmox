@@ -61,7 +61,7 @@ the 112 grades, the build prerenders 188.
 
 Ten components are client components, and each for one reason:
 `Header` (the dropdowns, plus a now-unread scroll state), `Finder` (filtering), `Rail`
-(the arrows), `ContactForm` (the submit notice), `Reveal` (the scroll
+(the arrows), `ContactForm` (the Web3Forms submit), `Reveal` (the scroll
 observer), `SmoothScroll` (Lenis), and the four that make the country menu work
 — `LocaleProvider` (holds the choice), `T` (swaps one string), `HeroTitle` (the
 two-tone banner headline) and `RegionMenu` (the panel itself). Everything else —
@@ -1309,8 +1309,11 @@ Two things to know when editing them:
   `--gold-lift` instead (11.9:1). Keep that if you add dark sections — including
   inside `.cta--night`, whose edge rule is `--gold-lift` for the same reason.
 - The contact form's "not connected to a backend yet" handler moved from
-  the old `main.js` into `components/ContactForm.tsx`. Wiring a real backend
-  means deleting the `onSubmit` handler there.
+  the old `main.js` into `components/ContactForm.tsx`, and is now a real send:
+  the `onSubmit` there POSTs to Web3Forms. `.form-note.is-live` is the answer
+  in `--gold-text`, and `.is-error` on top of it takes the line back to `--ink` —
+  a failed send is information, not an accent, and there is no red in the
+  palette any more.
 
 ### Photography
 
@@ -1671,9 +1674,16 @@ Search the HTML for `TODO` to find each spot.
   `new contact us.rtf`) are real and in use across the site.
 - **Social media links** — LinkedIn, Twitter, Facebook and YouTube were blank in
   the source, so no social row was added anywhere.
-- **Contact form backend** — the form is fully built but not wired up. Point it
-  at a form service (Formspree, Basin, Netlify Forms) or your own endpoint, then
-  remove the fallback handler near the bottom of `lib/products.ts`.
+- ~~**Contact form backend**~~ — done. The form POSTs to [Web3Forms](https://web3forms.com),
+  which mails `info@cosmoxchemicals.com`; the handler is in
+  `components/ContactForm.tsx`. The access key in that file is the public half of
+  the pair — it names the destination inbox and authorises nothing — so it ships
+  in client JS and no route handler, mail transport or dynamic rendering is
+  needed. Two things to know about it: the free tier caps how many sends a month
+  the key will accept, and nothing on this site stores an enquiry — so if the
+  service ever refuses one, the only record is the visitor's own screen. That is
+  why a failed send prints the inbox and all three numbers rather than a bare
+  "something went wrong".
 - **Company name** — pages use "Cosmox Chemicals"; the footer legal line and
   contact page use "Cosmox International Pvt. Ltd." per the source. Confirm
   which is the trading name.
