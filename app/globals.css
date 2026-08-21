@@ -1889,36 +1889,17 @@ section.band--full > .bleed { padding-inline: var(--edge); }
 }
 .facet label:hover { color: var(--gold-text); }
 
-/* The product-name facet is the range itself — 112 rows, where every other
-   facet has ten. Left to its own height it would be four screens of radio
-   buttons under the sidebar's other four, so it scrolls inside itself, the
-   same treatment the products dropdown's wall takes and for the same reason.
-   `overscroll-behavior` keeps the wheel from carrying through to the sticky
-   sidebar (and past it to the page) when the list hits its end. */
+/* The product-name facet is the range itself — 112 rows in one alphabet, where
+   every other facet has ten. Left to its own height it would be four screens of
+   radio buttons under the sidebar's other four, so it scrolls inside itself,
+   the same treatment the products dropdown's wall takes and for the same
+   reason. `overscroll-behavior` keeps the wheel from carrying through to the
+   sticky sidebar (and past it to the page) when the list hits its end. */
 .facet--wall .facet__body {
   max-height: 21rem;
   overflow-y: auto;
   overscroll-behavior: contain;
   padding-right: .6rem;
-}
-
-/* The group heading is what stops the list reading as an undifferentiated
-   alphabet: it names the unit that makes the grades under it. Sticky, because
-   a name half-way down a 112-row scroller is otherwise unplaceable. */
-.facet__group { margin-top: .9rem; }
-.facet__group h4 {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  padding: .3rem 0;
-  /* The finder sits on `.bg-sand`, and a sticky heading has to paint its own
-     ground or the rows scroll through it. */
-  background: var(--sand);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
 }
 
 .finder__search {

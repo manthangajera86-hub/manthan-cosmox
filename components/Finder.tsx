@@ -16,6 +16,10 @@
    division under it, and changing the group drops a name that no longer sits
    in it. That is what keeps a 112-row facet from producing an empty result.
 
+   The product facet is flat and alphabetical rather than headed by group: the
+   two facets above it are already that filter, and what this one is for is
+   finding one named chemical.
+
    Routing: /finder?q=&industry=&application=&group=&division=&product= seeds
    the form, so anything can link into a pre-filtered result set. Unknown values
    are ignored rather than throwing, because they are compared against the
@@ -28,7 +32,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import {
   APPLICATIONS,
   DIVISION_OF_GROUP,
-  GRADES_BY_GROUP,
+  GRADES,
   GROUPS,
   GROUP_OF_DIVISION,
   INDUSTRIES,
@@ -61,10 +65,6 @@ const DIVISIONS: [string, string][] = [
 
 const known = (pairs: [string, string][], value: string | null) =>
   value && pairs.some(([v]) => v === value) ? value : "";
-
-/* The product facet renders grouped, but a query-string value is checked
-   against the flat range — the headings are furniture, not options. */
-const GRADES: [string, string][] = GRADES_BY_GROUP.flatMap(([, , grades]) => grades);
 
 /* "Displaying 1 - 8 of 40 Results" puts its numbers in a different place in
    most other languages, so the whole sentence is one dictionary entry with
@@ -317,12 +317,10 @@ export default function Finder() {
           </div>
         </div>
 
-        {/* The range by name. It is the only facet whose options run past ten,
-            so it scrolls inside itself (`.facet--wall`) and keeps its group
-            headings as it goes — a bare alphabet of 112 chemical names tells a
-            buyer nothing about which unit makes one. Only the headings go
-            through `t`: a grade name is the same in every market, the same rule
-            the products dropdown follows. */}
+        {/* The range by name, A to Z. It is the only facet whose options run
+            past ten, so it scrolls inside itself (`.facet--wall`). Nothing here
+            goes through `t` — a chemical name is the same in every market, the
+            same rule the products dropdown follows. */}
         <div className="facet facet--wall" data-open={String(openFacet.product)}>
           <button
             className="facet__btn"
@@ -342,22 +340,17 @@ export default function Finder() {
               />{" "}
               {t("All product names")}
             </label>
-            {GRADES_BY_GROUP.map(([slug, label, grades]) => (
-              <div className="facet__group" key={slug}>
-                <h4>{t(label)}</h4>
-                {grades.map(([value, name]) => (
-                  <label key={value}>
-                    <input
-                      type="radio"
-                      name="product"
-                      value={value}
-                      checked={product === value}
-                      onChange={() => pickProduct(value)}
-                    />{" "}
-                    {name}
-                  </label>
-                ))}
-              </div>
+            {GRADES.map(([value, name]) => (
+              <label key={value}>
+                <input
+                  type="radio"
+                  name="product"
+                  value={value}
+                  checked={product === value}
+                  onChange={() => pickProduct(value)}
+                />{" "}
+                {name}
+              </label>
             ))}
           </div>
         </div>
