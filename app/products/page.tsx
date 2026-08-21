@@ -40,6 +40,22 @@ export default function ProductsPage() {
             <span className="eyebrow">Product philosophy</span>
             <h2>Technically superior, safe, environmentally responsible</h2>
             <p className="pintro__lede">Every product undergoes rigorous testing for purity, thermal stability, chemical performance and industrial compatibility. Whether enhancing machinery lubrication, improving fire resistance, supporting high-performance polymers or providing high-purity intermediates for research and production, our products are engineered for excellence.</p>
+            {/* Search, above browse: the ten pills below are the ten doors, the
+                finder is the way through all 112 grades at once. `.btn-row` is
+                the wrapper rather than a bare `.btn` because `.pintro__copy` is
+                a column flex box — a button dropped straight into it would
+                stretch the width of the panel. The magnifier is the same glyph
+                the header capsule and the products dropdown use, so the three
+                ways into `/finder` carry one mark. */}
+            <div className="btn-row">
+              <Link className="btn btn--gold" href="/finder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-3.5-3.5" />
+                </svg>
+                <T>Product Finder</T>
+              </Link>
+            </div>
             <div className="pintro__meta">
               <div className="pintro__fact pintro__fact--wide">
                 <span className="pintro__k">Browse by category</span>

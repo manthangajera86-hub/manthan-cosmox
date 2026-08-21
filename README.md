@@ -663,10 +663,43 @@ shorter than the band (`clamp(400px, 40vw, 560px)` against
 
 It runs entirely client-side off a `PRODUCTS` array at the top of
 `lib/products.ts` — 112 grades taken from `new products.rtf`, each tagged with a
-division number and one or more industry keys. The industry keys have to match
-the radio `value`s in `/finder`. Filters, free-text search and the
-"Show more results" pagination all work; result titles currently link to
-`/products` rather than to per-product pages.
+division number, one or more industry keys and one or more application keys.
+Both sets of keys have to match the radio `value`s in `/finder`, which is why
+`INDUSTRIES` and `APPLICATIONS` sit in that same file: the facet and the tag it
+filters on are one list. Filters, free-text search and the "Show more results"
+pagination all work, and a result title links to that grade's own page.
+
+**Four facets, one per axis of the site.** Industries and Applications are what
+a grade is for; Product group and Division are two names for where it comes
+from. That last pair is the same ten things — the business unit, and what that
+unit makes — so `d` and `cs` are one-to-one across the whole range, and the two
+facets **move together**: picking either sets the other from `GROUP_OF_DIVISION`
+/ `DIVISION_OF_GROUP`. Left independent they would be a trap, since every
+mismatched pair of the two is an empty result with nothing on screen to explain
+it. They are rendered adjacent so that the pairing reads as one control in two
+skins rather than as a glitch.
+
+`GROUPS` is read off `PRODUCTS` itself — the unique `cs`/`c` pairs, in range
+order — so it cannot offer a group no grade belongs to. `APPLICATIONS` is a
+literal list whose values are the slugs under `app/applications/` and whose
+labels are those topics' own titles, which is what makes the whole sidebar
+translate with no new dictionary entries. It is not read from `lib/topics.ts`
+for the reason the products dropdown is not either: `Finder` is a client
+component, and importing the register would ship all 64 topics and their blurbs
+to the browser to render ten radio labels.
+
+A grade's `app` list, like its `ind` list, is judgement applied to its
+chemistry — the source RTF tags the range by division only. Both are the same
+kind of stand-in as the written teasers, and both are worth a chemist's eye
+before launch.
+
+**Four facets of ten options is a 1,800px column.** On the sticky sidebar that
+scrolls inside itself and costs nothing. Below 900px the sidebar stacks *above*
+the results instead, so there they start closed — except any facet the query
+string has already set, which has to show what it did. That runs in the same
+mount effect as the seeding, because the prerendered HTML has all four open and
+the two have to match; it lands before the reader has scrolled past the
+banner.
 
 **Routing.** `/finder` seeds itself from the query string, so anything can
 link into a pre-filtered result set:
@@ -675,10 +708,14 @@ link into a pre-filtered result set:
 /finder?q=stearate
 /finder?industry=energy
 /finder?industry=pharma&q=indole
+/finder?application=flame-retardancy
+/finder?group=paints-coatings-pigments
 /finder?division=02
 ```
 
-An unrecognised parameter value is ignored rather than throwing. Nothing on
+An unrecognised parameter value is ignored rather than throwing. `group` and
+`division` are the two halves of one filter, so either seeds both; `group` wins
+if a link carries both and they disagree. Nothing on
 the home page uses these parameters any more — the old GET form and industry
 chips were replaced by the image panel, and their `.quick-search` / `.chips`
 styles were deleted — but the routing is still the way to link into a
