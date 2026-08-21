@@ -1449,13 +1449,18 @@ p:last-child { margin-bottom: 0; }
               border-color .25s var(--ease), transform .25s var(--ease);
 }
 .btn:hover { transform: translateY(-1px); }
+/* Only the enquiry form's submit is ever disabled — the rest of the .btn set
+   are anchors. Fainter than the rails' `:disabled` (.3), because this one is
+   still carrying a word to read ("Sending…"). */
+.btn:disabled { opacity: .55; cursor: default; }
+.btn:disabled:hover { transform: none; }
 .btn svg { width: 16px; height: 16px; }
 
 /* gold takes ink, not white — white on this fill is 2.2:1. And it *brightens*
    on hover rather than darkening: a darker gold cannot hold ink type (4.35:1),
    and metal catching the light is the right gesture for it anyway. */
 .btn--gold   { background: var(--gold); color: var(--ink); }
-.btn--gold:hover { background: var(--gold-lift); }
+.btn--gold:hover:not(:disabled) { background: var(--gold-lift); }
 .btn--ink    { background: var(--ink); color: #fff; }
 .btn--ink:hover { background: #000; }
 .btn--ghost  { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .55); }
@@ -4490,6 +4495,14 @@ section.band--full > .bleed { padding-inline: var(--edge); }
    It was an inline `style` on the element and named `--red`, which no longer
    exists — a state belongs in here anyway. */
 .form-note.is-live { color: var(--gold-text); }
+/* A failed send is still an answer, not an accent — it reads at full ink
+   weight rather than in the gold the success line uses. There is no red in
+   this palette by design. */
+.form-note.is-error { color: var(--ink); font-weight: 600; }
+
+/* Web3Forms' honeypot field. Off the page for people, still in the form for a
+   bot that fills every input it can find. */
+.form-bot { display: none; }
 
 /* ==========================================================================
    Reveal-on-scroll

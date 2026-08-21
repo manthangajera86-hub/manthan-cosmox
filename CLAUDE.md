@@ -129,7 +129,7 @@ components` is the check — the count in this sentence has gone stale before):
 | `Header` | the dropdowns (and a scroll state, `IntersectionObserver` on `.hero, .page-hero`, that no CSS reads any more — see Header below) |
 | `Finder` | filtering, pagination, query-string seeding |
 | `Rail` | the arrow buttons and their disabled state; the autoplay clock on both rails, and the `is-centre` spotlight on the applications one |
-| `ContactForm` | the "no backend yet" submit notice |
+| `ContactForm` | the Web3Forms submit — pending, sent and failed states |
 | `Reveal` | the `.rise` scroll observer — the interior pages set `.rise` too, so it runs on every route |
 | `SmoothScroll` | Lenis |
 | `LocaleProvider` | holds the chosen country, loads its dictionary, writes `<html lang>` — see Translation |
@@ -473,8 +473,10 @@ the record of why a block looks the way it does.
 
 All photography is placeholder Unsplash imagery — none of it is Cosmox's own plant, lab or product,
 and a visitor will read it as such. Each picture is one `.bg-*` line in `globals.css` pointing at
-`/img/…` in `public/`; interior banners re-use home-page pictures via `.bg-page-*`. The contact form
-has no backend. See "Photography" and "Still to fill in" in `README.md`.
+`/img/…` in `public/`; interior banners re-use home-page pictures via `.bg-page-*`. **The contact
+form is wired** — it posts to Web3Forms (`components/ContactForm.tsx`), which mails
+`info@cosmoxchemicals.com`; the access key is public by design, which is what lets the site stay
+static. See "Photography" and "Still to fill in" in `README.md`.
 
 **The logo is real** and is no longer one of these. `components/BrandMark.tsx` is the mark — the
 planet, its α and the orbit ring — traced from `updated logo.jpeg` in the repo root, which is the
