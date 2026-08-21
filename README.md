@@ -15,7 +15,7 @@ npm start
 
 ## Deploy
 
-`npm run build` prerenders all 117 routes as static content, so this
+`npm run build` prerenders all 188 routes as static content, so this
 deploys to Vercel as-is, or to any static host via `output: "export"` in
 `next.config.mjs`.
 
@@ -24,15 +24,15 @@ deploys to Vercel as-is, or to any static host via `output: "export"` in
 ```
 app/            one folder per route, each page.tsx a server component —
                 app/<family>/<slug>/ for each of the 64 topics, and
-                app/products/<group>/<grade>/ for each of the 40 grades
+                app/products/<group>/<grade>/ for each of the 112 grades
   globals.css   the whole design system
   layout.tsx    <html>, metadata, header, footer, the two client helpers
 components/     Header, Footer, BrandMark, Rail, Finder, ContactForm,
                 Reveal, SmoothScroll, TopicPage, TopicGrid, GradePage,
                 LocaleProvider, T, HeroTitle, RegionMenu
 lib/            nav.ts (links + dropdown data), topics.ts (the 64 topics),
-                products.ts (the 40 grades + the industry facet)
-  i18n/         locales.ts (the twelve countries), dict/<lang>.ts (eleven
+                products.ts (the 112 grades + the industry facet)
+  i18n/         locales.ts (the seventy countries), detect.ts, dict/<lang>.ts (eleven
                 dictionaries — there is no en.ts, English is the source)
 public/         hero.jpg and img/ — the photography
   logo/         the brand mark and lock-up, light / dark / mono (see "The logo")
@@ -44,7 +44,7 @@ public/         hero.jpg and img/ — the photography
 | `/finder` | new — product search, driven by `lib/products.ts` |
 | `/about` | 1 about |
 | `/divisions` | 2 business |
-| `/products` | 3 product |
+| `/products` | 3 product; the range itself is `new products.rtf` |
 | `/industries` | 4 industries |
 | `/applications` | 5 application |
 | `/innovation` | 6 innovations |
@@ -55,9 +55,9 @@ public/         hero.jpg and img/ — the photography
 
 Each of those content routes also has a page per topic beneath it —
 `/applications/flame-retardancy`, `/divisions/lithium-metal-additives` and 62
-more — see "Topic pages" below, and a page for each of the 40 grades beneath
+more — see "Topic pages" below, and a page for each of the 112 grades beneath
 its product group. With the ten routes above, `/`, `/finder`, the 64 topics and
-the 40 grades, the build prerenders 117.
+the 112 grades, the build prerenders 188.
 
 Ten components are client components, and each for one reason:
 `Header` (the dropdowns, plus a now-unread scroll state), `Finder` (filtering), `Rail`
@@ -662,7 +662,7 @@ shorter than the band (`clamp(400px, 40vw, 560px)` against
 `clamp(460px, 54vw, 720px)`): the band is the picture, this is the door.
 
 It runs entirely client-side off a `PRODUCTS` array at the top of
-`lib/products.ts` — 40 grades taken from `/products`, each tagged with a
+`lib/products.ts` — 112 grades taken from `new products.rtf`, each tagged with a
 division number and one or more industry keys. The industry keys have to match
 the radio `value`s in `/finder`. Filters, free-text search and the
 "Show more results" pagination all work; result titles currently link to
@@ -818,6 +818,23 @@ JavaScript. They are suppressed below 940px — the nav itself now wraps lower,
 at 860px, but a panel that wide is most of a tablet screen and would cover the
 page it describes.
 
+**Products is the one panel that is not a list of names.** Divisions and Products
+name the same ten things — the units, and what those units make — so as two
+identical columns of links the second told a reader nothing the first had not.
+Its panel (`.navmenu--products`, `.prodmenu`) is an index of the range instead:
+each group with its division number and how many grades sit under it, right-aligned
+and tabular so the ten counts read as a set of figures, and the finder on the
+gold pill beneath them, because 112 grades is well past what a menu can list.
+`NAV_MENU['/products']` therefore carries no `links` at all — the rows are built
+from `lib/topics.ts` and `lib/products.ts` by `productMenu()`, so the panel cannot
+name a group the register disagrees with, and the ten labels are no longer typed
+out a second time in `lib/nav.ts`. It is built in `app/layout.tsx`, on the
+server, and handed to `Header` as props: `Header` is a client component, so
+importing the 112 records there would have shipped the whole range to the
+browser on every route. The count is one dictionary entry with the number in a
+slot (`"{n} grades"`) rather than a number glued to a translated noun — Korean
+counts "6개 등급".
+
 The logo opens one too, and it is **the large one** — the only menu here that is
 about the whole site rather than one page, so it runs the full width between the
 page edges (`calc(100vw - 2 * var(--edge))`) and carries three columns:
@@ -840,9 +857,11 @@ drops from the left edge instead and is narrower. A logo is not normally a menu,
 so `.brand__caret` is there to say that it is; it rotates on open and, like the
 panel itself, is only rendered above 940px.
 
-All three capsules are solid `--night` with white type, no border, no blur, and
-**they do not change on scroll** — `.hdr` itself paints nothing in any state.
-The bar is the capsules; there is no surface behind them.
+All three capsules are solid, with no border and no blur, and **they do not
+change on scroll** — `.hdr` itself paints nothing in any state. The bar is the
+capsules; there is no surface behind them. The utility group and the nav are
+`--night` with white type; the brand is the exception and is paper — see "The
+brand capsule is the light one" below.
 
 That is the end point of three separate strippings, in order. They began as
 Lilly's translucent glass islands, white at 14% over a
@@ -863,8 +882,36 @@ header with no ground of its own. While the white bar existed it could be white
 over a banner and ink over the bar, but with the bar gone it floats over
 arbitrary content, and the page has near-black bands (`.bg-night`, the divisions
 band, `.force`) as well as white sections — no single text colour is legible over
-both. Giving it the same capsule as everything else settles it at white-on-black
-everywhere. `Header` still sets `.is-solid`, and no CSS reads it any more.
+both. Giving it a capsule of its own settles it in one state everywhere.
+`Header` still sets `.is-solid`, and no CSS reads it any more.
+
+### The brand capsule is the light one
+
+That capsule is `--paper`, not `--night`, and it is the only thing in the header
+that is not near-black. The reason is the mark rather than the composition. The
+planet is graphite, and graphite has nowhere to go on a near-black ground:
+
+| the mark, on… | `--night` #17130f | `--paper` #ffffff |
+|---|---|---|
+| planet body #2f2f2f | **1.38:1** | **13.4:1** |
+| orbit ring (`--logo-ink`) | 18.5:1 as white | 19.7:1 as #0b0b0b |
+| the gold crescent, against the graphite under it | 6.1:1 | 6.1:1 |
+
+On the dark capsule the planet dissolved into its own ground: what read was the
+gold crescent and a white ring around nothing, which is a fragment of the logo
+rather than the logo. On paper the planet is the solid disc the artwork draws,
+the ring keeps the `:root` light cut (so only the footer's `.brand` still flips
+`--logo-ink`/`--logo-void`), and the gold is unaffected either way — it takes
+its contrast from the graphite it sits on, never from the page, which is the
+same rule as everywhere else in "The colour".
+
+The type follows the ground: `--ink` for the wordmark (17.6:1) and `--gold-text`
+for the "CHEMICALS" rule under it (5.4:1), the one gold that can be text on
+paper. And the capsule carries `--shadow-md`, which is load-bearing rather than
+decorative — the header floats over `--paper` sections as well as sand, night
+bands and photographs, and on a white section a white capsule has no edge at
+all without it. Nothing in the treatment changes the capsule's box, so
+`--header-h` and every breakpoint below are unmoved.
 
 Two things this look costs, both by design rather than oversight: over the
 darkest part of a photograph the capsule is invisible and the nav reads as bare
@@ -954,7 +1001,7 @@ Nothing was invented to fill the gap.
 
 ### Grade pages
 
-Beneath the ten product groups sit the 40 grades from `lib/products.ts`, each
+Beneath the ten product groups sit the 112 grades from `lib/products.ts`, each
 with a page at `/products/<group>/<grade>` — `Lithium Myristate` lives at
 `/products/lithium-metal-additives/lithium-myristate`. `components/GradePage.tsx`
 is the frame; the page files are generated stubs that name the group and the
@@ -1001,6 +1048,70 @@ banner exactly as they do over the home page hero. `Header` still observes
 Below the banner there is no default section padding, so every `<section>`
 carries its own class as on the home page — `pad`, `pad-sm` or `pad-xs`,
 optionally with `bg-sand` or `bg-night`.
+
+### The eight index banners cycle
+
+The family index pages — `/applications`, `/industries`, `/divisions`,
+`/products`, `/capabilities`, `/innovation`, `/rnd`, `/sustainability` — do not
+stand on one photograph. Their banner is `components/BannerCycle.tsx`: the
+family's own topic pictures stacked and cross-faded, with a line under the lede
+naming the one on screen — `03 · Electrical & Electronics`, the number and title
+the grid further down the page prints under the same picture, linking to the
+same page, with a prev/next pair at the far end of the row.
+
+It is the landing hero's idea (see "Hero: the cycling word") in the one form a
+banner can take it. The hero cycles the heavy word of its own headline; a family
+banner cannot, because its `<h1>` is the page's name and the titles that would
+replace it run to "Industrial Machinery & Equipment" — about 1250px of 63px
+type, which wraps the headline for some words and not others. So the headline
+holds still and a caption changes instead.
+
+Nothing in the frames is invented or duplicated: `bannerFrames()` in
+`lib/topics.ts` returns the family's topics in the grid's order, so adding a
+topic adds a frame and the banner cannot name a picture the register disagrees
+with. Four things it holds to, the first three inherited from `HeroCycle`:
+
+- **Frame 0 prerenders.** Topic 01's picture and caption are `is-on` in the
+  server's HTML, so with JavaScript off, before hydration and under
+  `prefers-reduced-motion` the banner is a still of the family's first topic.
+  For `/applications`, `/industries`, `/innovation` and `/sustainability` that
+  is the picture the banner already had; for the other four it is the family's
+  first topic in place of a generic stand-in.
+- **Nothing reflows.** Every caption sits in one grid cell, so the row is as
+  wide as the longest title. The off frames are `visibility: hidden`, which is
+  also what keeps their links out of the tab order and the accessibility tree.
+- **The pictures load as they are needed.** A layer takes its `.bg-*` class only
+  once it is the current frame or the next, so first paint asks for one
+  photograph rather than ten. (The grid below the fold asks for all of them
+  anyway — this is about what competes with the LCP image.)
+- **Reaching for it stops it.** Pointer or focus on the *caption row* holds the
+  cycle, so the link never steps out from under the pointer mid-click. Hovering
+  the picture does not: a banner this tall would otherwise sit frozen for anyone
+  whose pointer rests on it while reading. It holds off-screen and in a
+  background tab as well, and never starts under `prefers-reduced-motion`, where
+  the arrows still work — a control the visitor asks for is not motion the
+  visitor did not.
+
+Each frame dwells 4.5s (the hero's 3.6 is for a word to glance at; this is a
+line to read) and the clock is measured from the last move, so pressing an arrow
+resets the cadence instead of being followed a moment later by a step nobody
+asked for — the same clock as `Rail`'s.
+
+**The scrim carries all ten pictures without help.** Measured on the rendered
+banner — each photograph cover-fitted, both scrim gradients composited over it,
+then the mean and the brightest 5% of the pixels under each line of copy:
+
+| | worst frame, mean | worst frame, brightest 5% |
+|---|---|---|
+| headline, white | 5.5:1 | 3.1:1 |
+| lede, 85% white | 6.6:1 | 4.1:1 |
+| caption, white | 11.0:1 | 8.2:1 |
+
+So no per-layer hold-back like the hero's `brightness(.55)` — the numbers did
+not ask for one, and the still banners already carry the same range (`/rnd`'s
+own picture measures 4.3:1 at the brightest 5% under the lede). The two frames
+at the low end are `media-innovation.jpg` and `app-10-nutra.jpg`; re-measure if
+real photography replaces the placeholders.
 
 The content components — `.pintro` and its parts, `.section-head`, `.feature`,
 `.figure`, `.card`, `.card__img`, `.card__num`, `.topic-grid` / `.tcard`,
@@ -1080,7 +1191,7 @@ and their layouts kept leaving holes.
   heading, its standing line and the numbers to call a column of their own, and
   `.form-grid` went from three tracks to two so the four short fields pair up
   instead of stranding the phone number on a row of its own.
-- **The finder's facets follow the results.** Forty grades is four screens of
+- **The finder's facets follow the results.** The range is a dozen screens of
   list beside a column that ran out after one. A result row is a whole hit area
   now, not a line of type with a link in it.
 - Six inline `style={{…}}` attributes on the interior pages became `.center`,
@@ -1315,7 +1426,7 @@ them, whatever the ground is.
 ### Two things that are still open
 
 - The artwork reads **COSMOX INTERNATIONAL**; the site's lock-up still reads
-  **Cosmox / Chemicals**, which is what all 117 routes of copy say. That is a
+  **Cosmox / Chemicals**, which is what all 188 routes of copy say. That is a
   naming decision, not a logo one — see "Company name" under *Still to fill in*.
   Only `BrandMark` changed here; the words beside it did not.
 - Re-tracing, if the master artwork is ever replaced: the scripts are not in the
@@ -1325,26 +1436,98 @@ them, whatever the ground is.
 ## Countries and languages
 
 The globe capsule in the header used to be a dead `<button>` that said "India".
-It now opens a panel of **twelve countries in two regions**, each carrying a
-language, and choosing one switches the site.
+It now opens a panel of **seventy countries in six regions**, each carrying a
+language, and choosing one switches the site. The site also **works out which
+one you are in** and opens there — see *Detecting the country* below.
 
-| Asia Pacific | | Europe | |
-|---|---|---|---|
-| India | English | Germany | Deutsch |
-| India | हिन्दी | France | Français |
-| China | 中文 | Spain | Español |
-| Japan | 日本語 | Italy | Italiano |
-| South Korea | 한국어 | Netherlands | Nederlands |
-| Vietnam | Tiếng Việt | | |
-| Indonesia | Bahasa Indonesia | | |
+| Region | Countries |
+|---|---|
+| Asia Pacific | India (English and हिन्दी), China, Japan, South Korea, Taiwan, Vietnam, Indonesia, Malaysia, Singapore, Thailand, Philippines, Pakistan, Bangladesh, Nepal, Sri Lanka, Myanmar, Cambodia, Australia, New Zealand |
+| Europe | United Kingdom, Ireland, Germany, France, Italy, Spain, Portugal, Netherlands, Belgium, Switzerland, Austria, Sweden, Norway, Denmark, Finland, Poland, Czech Republic, Hungary, Romania, Greece, Russia, Ukraine, Turkey |
+| Americas | United States, Canada, Mexico, Brazil, Argentina, Chile, Colombia, Peru |
+| Middle East | United Arab Emirates, Saudi Arabia, Qatar, Kuwait, Oman, Bahrain, Israel |
+| Africa | Egypt, Morocco, Algeria, Nigeria, Ghana, Kenya, Tanzania, Ethiopia, South Africa |
+| Central Asia & Caucasus | Kazakhstan, Uzbekistan, Azerbaijan, Georgia |
+
+The countries come from `new countries.rtf` in the repo root, all seventy of
+them, in that file's own grouping.
+
+**A country's language is the language this site can actually show it in, not
+the country's own first language.** There are eleven dictionaries, so the panel
+offers Español to five Latin American markets, Deutsch to Austria and
+Switzerland, Nederlands to Belgium and Français to Morocco and Algeria — and
+plain English to Brazil, Poland, Saudi Arabia and the rest. That is the honest
+listing: offering "Português" and then rendering an English page is worse than
+saying English, and English is how speciality chemicals are actually bought
+across most of these desks. Taiwan is English rather than 中文 because the one
+Chinese dictionary is Simplified. Adding Portuguese, Russian, Turkish, Polish or
+Arabic is a dictionary each, and nothing else has to change — except Arabic,
+which also wants `dir="rtl"` support the stylesheet does not have yet.
 
 `lib/i18n/locales.ts` is the register. India is listed twice, which is why the
 key is `id` (`in-en`, `in-hi`) and not the country. Country names are shown in
-the site's current language; **language names are always written in themselves**,
-because someone looking for their own language is scanning for the word they
-already know. There are no flag emoji: Windows renders them as bare letter
-pairs, and nothing else on this site is an emoji, so the ISO code gets a chip
-instead.
+the site's current language — **all seventy are in every dictionary** —
+while **language names are always written in themselves**, because someone
+looking for their own language is scanning for the word they already know. There
+are no flag emoji: Windows renders them as bare letter pairs, and nothing else
+on this site is an emoji, so the ISO code gets a chip instead.
+
+Seventy rows changed the panel in three ways. It has a **search field**, sticky
+at the top of the list and focused when the panel opens, matching the English
+name, the translated name, the language and the ISO code, accent-folded so
+"espanol" finds Español; Enter takes the first match. Rows put the country and
+its language on **one line** rather than stacked — the second line was the
+difference between a 1,577px list and one that fits three columns. And the six
+regions are laid out with `columns: 240px` rather than a column *count*, so the
+browser drops from three columns to two to one on its own and no breakpoint has
+to be kept in step with the panel's width. 240px is measured: "United Arab
+Emirates" beside "English" is the widest row in the list.
+
+One trap worth recording, because it cost an hour. The regions carry
+`break-inside: avoid` to keep a region whole in its column, and the usual trick
+for that is `display: inline-block` — which is exactly wrong here. An atomic
+inline is opaque to Chrome's column balancer, which gave up and packed six
+regions into **two** columns 1,577px tall. As `display: flow-root` it balances
+properly: three columns, 1,109px, every region whole.
+
+### Detecting the country
+
+A first-time visitor does not have to find their country in a list of seventy —
+`lib/i18n/detect.ts` works it out and the site opens there. It reads
+`Intl.DateTimeFormat().resolvedOptions().timeZone`, the IANA zone the device is
+set to, and looks it up in a table of 253 zones covering all seventy countries.
+`Europe/Warsaw` is Poland; `America/Sao_Paulo` is Brazil.
+
+The other two ways of doing this were both rejected, and for the same reason.
+`navigator.geolocation` is the precise one and puts an operating-system
+permission dialog on a marketing site's first paint. An IP lookup is a network
+round-trip to a third party on every first visit, with every visitor's IP handed
+to a host that is not ours, and it fails the day the free tier rate-limits. The
+time zone costs nothing, asks nobody, and works offline, behind a VPN that has
+not also moved the clock, and with the static build exactly as it is.
+
+Three details in the implementation:
+
+- **Zone names get renamed and both spellings stay valid** — `Europe/Kiev`
+  became `Europe/Kyiv`, `Asia/Calcutta` became `Asia/Kolkata` — and which one a
+  browser reports depends on its ICU vintage, not on the visitor. Both are in
+  the table, *and* the reported name is run through the engine's own
+  canonicaliser as a second chance. Engines disagree on which direction they
+  canonicalise in, which is why both are tried.
+- **`navigator.languages` only breaks ties**, it never decides the country. It
+  picks हिन्दी over English for a visitor in India, and it is the fallback when
+  the zone is unknown: first a region subtag (`de-AT` → Austria), then a bare
+  language (`nl` → Netherlands). A bare `en` returns nothing rather than naming
+  an arbitrary one of the forty-odd English-speaking countries.
+- **A guess is never written to `localStorage`.** That key means "this visitor
+  chose this", so a stored choice always beats detection, and a guess stays a
+  guess that re-runs next visit if they have travelled. The panel says which it
+  was — a `DETECTED` badge on the row and a line in the intro — because a
+  visitor who did not switch the site to German is owed an explanation of what
+  did, next to the control that undoes it.
+
+An unknown zone and an unhelpful browser language mean no guess at all, and the
+site stays English. That is the same outcome as before any of this existed.
 
 **The dictionaries are keyed by the English string itself.** `t("Products")`
 returns "Produkte", or hands back "Products" unchanged when that locale has no
@@ -1354,10 +1537,10 @@ half-finished dictionary degrades to English one string at a time rather than to
 blank space. Each `lib/i18n/dict/<lang>.ts` is its own lazy chunk, so an English
 visitor downloads none of them.
 
-**English is still what builds.** All 117 routes prerender exactly as before;
+**English is still what builds.** All 188 routes prerender exactly as before;
 the swap happens after hydration. Reading a locale cookie in a server component
 would make every route dynamic, and an `app/[locale]/` segment would multiply
-117 routes by twelve — and the transcribed copy *is* the product, so English is
+them by seventy — and the transcribed copy *is* the product, so English is
 what search engines and no-JS visitors get. The cost is one frame of English on
 load for a visitor who has chosen otherwise, and `LocaleProvider` reads the
 stored choice in an effect rather than during render so the prerendered markup
@@ -1384,12 +1567,16 @@ purely for typography; `HeroTitle` keys the *whole* phrase and renders it as one
 bold run when a translation exists, since those two halves do not survive
 translation in the same order.
 
-To add a language: an entry in `lib/i18n/locales.ts`, a dictionary in
-`lib/i18n/dict/`, and a line in the `LOADERS` map in `lib/i18n/index.ts` (it is
-written out rather than built from a template literal so the bundler can see
-every target). To add a translated string, add it to **all eleven** dictionaries
-— a missing key is not an error, which is the point, but it is also how a page
-ends up half-translated without anything failing.
+To add a **country**: an entry in `lib/i18n/locales.ts`, its IANA time zones in
+the table in `lib/i18n/detect.ts`, and its name in all eleven dictionaries. A
+country with no zones still works — it just cannot be detected, only chosen.
+
+To add a **language**: a dictionary in `lib/i18n/dict/`, a line in the `LOADERS`
+map in `lib/i18n/index.ts` (written out rather than built from a template
+literal so the bundler can see every target), and the locales that should use it
+pointed at its `lang` in the register. To add a translated **string**, add it to
+**all eleven** dictionaries — a missing key is not an error, which is the point,
+but it is also how a page ends up half-translated without anything failing.
 
 Inter and EB Garamond load the `latin` subset only, so the CJK and Devanagari
 rows fall through to the system face. That is expected and looks fine on macOS,
@@ -1407,11 +1594,15 @@ Search the HTML for `TODO` to find each spot.
   names are left untranslated on purpose, but before this goes in front of
   customers each language wants an hour from someone who sells in that market.
   Everything is in `lib/i18n/dict/`, one file per language, keyed by the English.
-- **Email addresses** — the source had `info@`, `export@` and a bare `s` with no
-  domain. All four department blocks on `/contact` say "to be confirmed".
+- **Department email addresses** — `new contact us.rtf` supplied
+  `info@cosmoxchemicals.com`, which is now the address on the corporate-office
+  block, on all three department cards and in the footer. The source's
+  `export@` and its bare `s` never got a domain, so the three desks share the
+  one live inbox rather than carrying an invented `sales@` or `export@`.
 - **Department phone numbers** — the source listed bare `+91-` for sales,
-  technical and export. Only the two corporate numbers
-  (+91 92659 43799, +91 87581 94050) are real and in use across the site.
+  technical and export. Only the three corporate numbers
+  (+91 92659 43799, +91 87581 94050, +91 92650 18813 — the last from
+  `new contact us.rtf`) are real and in use across the site.
 - **Social media links** — LinkedIn, Twitter, Facebook and YouTube were blank in
   the source, so no social row was added anywhere.
 - **Contact form backend** — the form is fully built but not wired up. Point it

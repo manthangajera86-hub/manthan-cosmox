@@ -75,12 +75,11 @@ export default function ContactPage() {
             </div>
             <div className="contact-line">
               <PhoneIcon />
-              <span><a href="tel:+919265943799">+91 92659 43799</a><br /><a href="tel:+918758194050">+91 87581 94050</a></span>
+              <span><a href="tel:+919265943799">+91 92659 43799</a><br /><a href="tel:+918758194050">+91 87581 94050</a><br /><a href="tel:+919265018813">+91 92650 18813</a></span>
             </div>
             <div className="contact-line">
               <MailIcon />
-              {/* TODO: replace with the live address, e.g. info@yourdomain.com */}
-              <span className="tbd">General email — to be confirmed</span>
+              <span><a href="mailto:info@cosmoxchemicals.com">info@cosmoxchemicals.com</a></span>
             </div>
           </div>
           <div className="pintro__media bg-media-industries" aria-hidden="true"></div>
@@ -94,20 +93,23 @@ export default function ContactPage() {
           <div className="contact-card contact-card--desk rise">
             <h3>Sales &amp; business enquiries</h3>
             <p className="contact-card__note">Product availability, quotations, exports and bulk orders.</p>
-            {/* TODO: add the sales email and direct line */}
-            <p className="contact-card__note tbd">Direct line and email to be confirmed — meanwhile, please use the corporate numbers above.</p>
+            <p className="contact-card__note"><a href="mailto:info@cosmoxchemicals.com">info@cosmoxchemicals.com</a></p>
+            {/* TODO: add the sales desk's own direct line */}
+            <p className="contact-card__note tbd">Direct line to be confirmed — meanwhile, please use the corporate numbers above.</p>
           </div>
           <div className="contact-card contact-card--desk rise">
             <h3>Technical &amp; R&amp;D support</h3>
             <p className="contact-card__note">Technical assistance, application guidance and research collaboration.</p>
-            {/* TODO: add the technical support email and direct line */}
-            <p className="contact-card__note tbd">Direct line and email to be confirmed.</p>
+            <p className="contact-card__note"><a href="mailto:info@cosmoxchemicals.com">info@cosmoxchemicals.com</a></p>
+            {/* TODO: add the technical desk's own direct line */}
+            <p className="contact-card__note tbd">Direct line to be confirmed.</p>
           </div>
           <div className="contact-card contact-card--desk rise">
             <h3>Export &amp; international</h3>
             <p className="contact-card__note">For global clients and international distributors.</p>
-            {/* TODO: add the export email and direct line */}
-            <p className="contact-card__note tbd">Direct line and email to be confirmed.</p>
+            <p className="contact-card__note"><a href="mailto:info@cosmoxchemicals.com">info@cosmoxchemicals.com</a></p>
+            {/* TODO: add the export desk's own direct line */}
+            <p className="contact-card__note tbd">Direct line to be confirmed.</p>
           </div>
         </div>
       </div>
@@ -126,7 +128,11 @@ export default function ContactPage() {
             <p className="lede">Questions, feedback or partnership requests — tell us what you need and the right team will get back to you.</p>
             <div className="contact-line">
               <PhoneIcon />
-              <span><a href="tel:+919265943799">+91 92659 43799</a><br /><a href="tel:+918758194050">+91 87581 94050</a></span>
+              <span><a href="tel:+919265943799">+91 92659 43799</a><br /><a href="tel:+918758194050">+91 87581 94050</a><br /><a href="tel:+919265018813">+91 92650 18813</a></span>
+            </div>
+            <div className="contact-line">
+              <MailIcon />
+              <span><a href="mailto:info@cosmoxchemicals.com">info@cosmoxchemicals.com</a></span>
             </div>
           </div>
           <ContactForm />

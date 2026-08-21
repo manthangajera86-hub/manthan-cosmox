@@ -68,9 +68,10 @@
      (`components/BrandMark.tsx`) is gold-and-graphite everywhere, but its orbit
      ring has to be legible against whatever it floats over, and the gap that
      holds that ring off the planet has to *be* whatever it floats over. These
-     are the light-background cut; `.brand` flips them, and any dark panel that
-     ever carries the mark should flip them too. Same pair as the `--ink`/
-     `--void` in the standalone files under `public/logo/`. */
+     are the light-background cut, which is what the header capsule uses; the
+     footer's `.brand` flips them, and any dark panel that ever carries the
+     mark should flip them too. Same pair as the `--ink`/`--void` in the
+     standalone files under `public/logo/`. */
   --logo-ink:   #0b0b0b;
   --logo-void:  var(--paper);
 
@@ -282,8 +283,14 @@ p:last-child { margin-bottom: 0; }
    over a banner and switch to ink once the white bar appeared — but there is no
    white bar any more, and the page has near-black sections (`.bg-night`, the
    divisions band, `.force`) as well as white ones. No single text colour is
-   legible over both, so it gets a ground instead and stays white on `--night`
-   everywhere, like every other control in the bar. */
+   legible over both, so it gets a ground of its own instead of borrowing the
+   page's.
+
+   What is set here is the *dark* cut — near-black ground, white type, the
+   white ring — and the only place it renders now is the footer, where the
+   capsule sits on `--night` too and so reads as a plain lock-up rather than a
+   capsule. The header's copy is paper; see `.hdr__top .brand` below for why
+   the mark needs a light ground and the footer's does not. */
 .brand {
   display: flex;
   align-items: center;
@@ -333,9 +340,33 @@ p:last-child { margin-bottom: 0; }
   gap: .7rem;
   padding: 6px 19px 6px 11px;
 }
+
+/* ...and it is the light one. The mark is a graphite planet wearing a gold
+   crescent, and graphite on `--night` is 1.38:1 — on a near-black capsule the
+   planet dissolved into its own ground and all that read was the crescent and
+   the ring, which is not the logo. Paper puts the planet at 13.4:1, the ring
+   at 19.7 and the gold at 6.1 *against the graphite behind it* rather than
+   against the page, which is what the artwork was drawn for. So the ground the
+   mark sits on is the one thing in the header that is not `--night`, and the
+   ring goes back to the light cut it has everywhere else on paper
+   (`--logo-ink` black, `--logo-void` the capsule itself).
+
+   The shadow is not decoration, it is what a white capsule needs to hold its
+   shape: the header floats over `--paper` sections as well as sand, night
+   bands and photographs, and on white it would otherwise have no edge at all.
+   Type follows the ground — `--ink` for the name (17.6:1) and `--gold-text`
+   for the rule under it, the one gold that can be text on paper (5.4:1).
+   Nothing here touches the capsule's box, so `--header-h` is unmoved. */
+.hdr__top .brand {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: var(--shadow-md);
+  --logo-ink: #0b0b0b;
+  --logo-void: var(--paper);
+}
 .hdr__top .brand__mark { height: 40px; width: auto; }
 .hdr__top .brand__name { font-size: 24px; }
-.hdr__top .brand__name span { font-size: 11px; letter-spacing: .2em; margin-top: 4px; }
+.hdr__top .brand__name span { font-size: 11px; letter-spacing: .2em; margin-top: 4px; color: var(--gold-text); }
 .hdr__top .brand__caret { width: 15px; height: 15px; }
 /* the logo carries a dropdown like the nav links do, and a logo is not
    normally a menu — this is the affordance that says it is */
@@ -553,6 +584,89 @@ p:last-child { margin-bottom: 0; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* --------------------------------------------------------------------------
+   The products panel — the one nav dropdown that is not a column of names.
+   Divisions and Products name the same ten things, so side by side the two
+   panels were the same menu twice. This one is an index of the range: the
+   division number, the group, and how many grades are under it, with the
+   finder closing it because 112 grades is past what a menu can list.
+   Same surface as `.navmenu` — this only re-lays the right-hand cell.
+   -------------------------------------------------------------------------- */
+.prodmenu {
+  display: grid;
+  align-content: start;
+  gap: .9rem;
+  min-width: 0;
+}
+.prodmenu__groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px 1.2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* number, name, count — the count is pushed to the right edge of its own
+   column so the ten of them read as a set of figures rather than as trailing
+   words. `baseline` rather than `center`: a name that wraps to two lines
+   should hang its number and count off the first line, not the middle. */
+.prodmenu__groups a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: .7rem;
+  padding: .45rem .6rem;
+  border-radius: var(--r-xs);
+  text-decoration: none;
+  transition: background .2s var(--ease), color .2s var(--ease);
+}
+.prodmenu__num {
+  color: var(--gold-lift);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  font-variant-numeric: tabular-nums;
+}
+.prodmenu__name {
+  color: rgba(255, 255, 255, .86);
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.prodmenu__count {
+  color: rgba(255, 255, 255, .5);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.prodmenu__groups a:hover,
+.prodmenu__groups a:focus-visible { background: rgba(255, 255, 255, .1); }
+.prodmenu__groups a:hover .prodmenu__name,
+.prodmenu__groups a:focus-visible .prodmenu__name { color: #fff; }
+.prodmenu__groups a:hover .prodmenu__count,
+.prodmenu__groups a:focus-visible .prodmenu__count { color: rgba(255, 255, 255, .75); }
+
+/* the way out of a menu that cannot hold the range: the finder, on the gold
+   the CTAs use so it reads as the action and not as an eleventh group */
+.prodmenu__finder {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  justify-self: start;
+  padding: .6rem .95rem;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background .2s var(--ease);
+}
+.prodmenu__finder svg { width: 15px; height: 15px; }
+.prodmenu__finder:hover { background: var(--gold-lift); }
+
 .navmenu__kicker {
   margin: 0 0 .55rem;
   color: var(--gold-lift);
@@ -640,20 +754,128 @@ p:last-child { margin-bottom: 0; }
   transform: none;
   /* wider than a nav panel would need, and the intro column narrower than the
      inherited one: "Bahasa Indonesia" is the longest language name here and it
-     has to sit on one line, or that row stands a line taller than every other */
-  grid-template-columns: minmax(190px, 225px) minmax(0, 1fr);
-  width: min(740px, calc(100vw - 2 * var(--edge)));
+     has to sit on one line, or that row stands a line taller than every other.
+     The panel grew with the list — seventy countries in three columns need the
+     width, and "United Arab Emirates" beside its language is the row that sets
+     the floor for a column: at 1080px it wrapped under its own code chip, at
+     1180 it does not. Measured, like every other number in this header. */
+  grid-template-columns: minmax(190px, 235px) minmax(0, 1fr);
+  width: min(1180px, calc(100vw - 2 * var(--edge)));
   /* a short laptop window must not lose the bottom of the list */
   max-height: calc(100svh - var(--header-h) - 2rem);
   overflow-y: auto;
   animation-name: navmenu-in-left;
 }
 
-.regionmenu__regions {
+/* the search field and the list are one column of the panel's grid, so the
+   field can sit above the regions rather than beside the intro */
+.regionmenu__body {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.5rem 1.6rem;
+  gap: .9rem;
   align-content: start;
+  min-width: 0;
+}
+
+/* Columns, not a grid. The six regions are wildly uneven — twenty-three
+   European countries against four in the Caucasus — and a grid would set each
+   row to its tallest section and leave holes beside the short ones. Multi-column
+   balances them instead, and `break-inside` keeps a region whole.
+
+   A column *width* rather than a count, so the browser works out how many fit
+   and no breakpoint has to be kept in step with the panel's own width. 240px is
+   measured: "United Arab Emirates" beside "English" is the widest row in the
+   list and needs 233px including its code chip and the row's padding. Below
+   that the count drops to two and then to one on its own. */
+.regionmenu__regions {
+  columns: 240px;
+  column-gap: 1.6rem;
+}
+/* `flow-root`, emphatically not `inline-block`. The usual trick for holding a
+   block together in a column is to make it inline-block, and here that was the
+   bug: an atomic inline is opaque to the balancer, which gave up and packed six
+   regions into two columns 1,568px tall. As a block it balances properly —
+   three columns, 1,109px, every region whole. */
+.regionmenu__region {
+  break-inside: avoid;
+  display: flow-root;
+  margin-bottom: 1.35rem;
+}
+
+/* Sticky, because the list is taller than the panel on most laptops and the
+   field is the fast way through seventy countries — scrolling it away would
+   leave the slow way only. `top: 0` is the top of the scrollport, which is
+   inside the panel's padding, so the field needs its own ground. */
+.regionmenu__search {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .5rem .7rem;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: var(--r-xs);
+  background: #1d1813;
+  transition: border-color .2s var(--ease);
+}
+.regionmenu__search:focus-within { border-color: var(--gold-deep); }
+.regionmenu__search svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: rgba(255, 255, 255, .45);
+}
+.regionmenu__search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font: inherit;
+  font-size: 13.5px;
+  outline: none;
+}
+.regionmenu__search input::placeholder { color: rgba(255, 255, 255, .4); }
+/* the browser's own clear button is a light X on a dark field in some skins,
+   and the field already clears itself when the panel closes */
+.regionmenu__search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+/* the badge on the row the site chose for itself */
+.regionmenu__auto {
+  flex: none;
+  margin-left: auto;
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  background: rgba(233, 205, 133, .16);
+  color: var(--gold-lift);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+/* the same fact in a sentence, in the intro column */
+.regionmenu__detected {
+  display: flex;
+  gap: .5rem;
+  margin: .9rem 0 0;
+  padding-top: .9rem;
+  border-top: 1px solid rgba(255, 255, 255, .14);
+  color: var(--gold-lift);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.regionmenu__detected svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin-top: 2px;
+}
+
+.regionmenu__empty {
+  margin: 0;
+  color: rgba(255, 255, 255, .6);
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .regionmenu__head {
@@ -678,7 +900,7 @@ p:last-child { margin-bottom: 0; }
   align-items: center;
   gap: .7rem;
   width: 100%;
-  padding: .42rem .55rem;
+  padding: .3rem .5rem;
   border: 0;
   border-radius: var(--r-xs);
   background: transparent;
@@ -707,23 +929,31 @@ p:last-child { margin-bottom: 0; }
   color: var(--gold-lift);
 }
 
+/* Country and language sit on one line, not stacked. At twelve countries the
+   stack was two tidy lines a row; at seventy it is a 3,400px list in a panel
+   729px tall, and the second line is what doubles it. Side by side the whole
+   list is a third of that and three columns of it fit a laptop window without
+   scrolling. `wrap` is the safety valve for the few names that are long in
+   translation — "Các Tiểu vương quốc Ả Rập Thống nhất" — which fall back to the
+   old two-line shape rather than pushing the column out. */
 .regionmenu__names {
   display: flex;
-  flex-direction: column;
-  gap: 1px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 .45rem;
   min-width: 0;
 }
 .regionmenu__country {
   font-size: 13.5px;
-  line-height: 1.25;
+  line-height: 1.3;
 }
 /* the language is set in its own script, so it may be CJK or Devanagari — Inter
    carries neither and the system face takes over, which sits a shade small next
    to the Latin rows. The extra size evens them out. */
 .regionmenu__lang {
   font-size: 11.5px;
-  line-height: 1.25;
-  color: rgba(255, 255, 255, .55);
+  line-height: 1.3;
+  color: rgba(255, 255, 255, .5);
 }
 .regionmenu__opt.is-current .regionmenu__lang { color: var(--gold-lift); }
 
@@ -2900,6 +3130,115 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   line-height: 1.45;
 }
 
+/* ---- the banner that cycles: a family's own topics, and the line naming
+        the one on screen (`components/BannerCycle.tsx`) ------------------- */
+/* Only the eight family index pages take this. The layers are the same
+   `.page-hero__media` as the still banners — same 2% bleed, same 30s drift —
+   stacked and cross-faded, and each takes its photograph from a `.bg-*` class
+   like everything else on the site rather than from the section's `--ph-bg`.
+   Each layer's drift is paused until its turn, so only the picture on screen
+   is animating and every photograph starts its drift when it appears. Layer 0
+   prerenders `is-on`: with JavaScript off, before hydration and under
+   prefers-reduced-motion the banner is a still of the family's first topic. */
+.page-hero--cycle .page-hero__media {
+  /* `--im-bg` is a whole background shorthand, so it composes straight in; the
+     `none` fallback keeps the declaration valid on a layer that has not been
+     primed with its class yet */
+  background: var(--night) var(--im-bg, none);
+  opacity: 0;
+  transition: opacity 1.1s var(--ease);
+  animation-play-state: paused;
+  /* the base rule hints every banner's one layer; ten of them, nine paused,
+     would be ten full-bleed composited layers for one moving picture */
+  will-change: auto;
+}
+.page-hero--cycle .page-hero__media.is-on {
+  opacity: 1;
+  animation-play-state: running;
+  will-change: transform;
+}
+
+/* The caption is the banner's fifth line and walks in after the lede, on the
+   same 60ms cadence as the four above it. */
+.page-hero__now {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: clamp(1.6rem, 3vw, 2.6rem);
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, .22);
+  animation: ph-in .9s .28s var(--ease-out) both;
+}
+/* Every caption in one grid cell — the same trick as the hero's cycling words,
+   and for the same reason: the row is as wide as the longest title, so the
+   arrows at the far end do not shift as the line changes. `visibility` is what
+   does the work: it keeps the off captions' links out of the tab order and out
+   of the accessibility tree, and it holds `visible` for the whole fade-out
+   before flipping, so a caption is never cut off mid-cross-fade. */
+.page-hero__now-stack {
+  display: inline-grid;
+  /* not `stretch`: on a phone the longest title wraps to two lines and every
+     caption's cell is two lines tall, so a one-line caption stretched to fill
+     it would hang off the top of the row */
+  align-items: center;
+  margin: 0;
+  min-width: 0;
+}
+.page-hero__now-item {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(.35em);
+  transition: opacity .5s var(--ease), transform .5s var(--ease-out),
+              visibility .5s var(--ease);
+}
+.page-hero__now-item.is-on { opacity: 1; visibility: visible; transform: none; }
+.page-hero__now-num {
+  flex: none;
+  color: var(--gold-lift);
+  font-size: var(--fs-fine);
+  font-weight: 700;
+  letter-spacing: .2em;
+}
+.page-hero__now-item a {
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.25;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color .25s var(--ease);
+}
+.page-hero__now-item a:hover,
+.page-hero__now-item a:focus-visible { border-bottom-color: var(--gold); }
+
+/* the same control as `.scroller-nav`, in the banner's colours: white on a
+   photograph rather than ink on paper, and a step smaller because it sits on
+   one line of type rather than beside a section heading */
+.page-hero__now-nav { display: flex; flex: none; gap: .6rem; }
+.page-hero__now-nav button {
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
+  border: 1px solid rgba(255, 255, 255, .5);
+  border-radius: 50%;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+  transition: background .25s var(--ease), color .25s var(--ease),
+              border-color .25s var(--ease);
+}
+.page-hero__now-nav button:hover {
+  background: #fff;
+  color: var(--ink);
+  border-color: #fff;
+}
+.page-hero__now-nav svg { width: 17px; height: 17px; }
+
 /* ---------- page opener: the panel every interior page starts on --------- */
 /* Every route below the landing page used to open the same way — a paragraph
    in one half of a `.feature` row and a 16/9 photograph in the other. Two or
@@ -3969,6 +4308,11 @@ section.band--full > .bleed { padding-inline: var(--edge); }
    of the site. These just keep the capsules from crowding as it does. */
 @media (max-width: 1080px) {
   .nav-list .cap-btn { padding-inline: .55rem; }
+  /* The country panel drops its intro column here rather than at 640 with the
+     rest of the phone layout. Below this the panel is at the window's width,
+     and a 235px column of lede beside it is what pushes seventy countries into
+     a single column and a 2,200px scroll; stacked, the list keeps three. */
+  .regionmenu { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* Below 860px the nine links wrap inside their capsule; a stadium radius on a
@@ -4034,15 +4378,14 @@ section.band--full > .bleed { padding-inline: var(--edge); }
   /* The nav dropdowns are already off below 940px, but the country menu stays:
      picking your market is not a desktop-only thing to want. It follows the
      header's own padding here rather than `--edge`, which is wider than the
-     capsule it hangs from at this width, and it stacks — the two-column region
-     grid inside a phone-width panel is four words a line. */
+     capsule it hangs from at this width, and it stacks. The list of countries
+     needs no rule of its own: `columns: 240px` has already dropped to one. */
   .regionmenu {
     right: 1rem;
     width: calc(100vw - 2rem);
     grid-template-columns: minmax(0, 1fr);
     padding: 1.25rem 1.25rem 1.4rem;
   }
-  .regionmenu__regions { grid-template-columns: minmax(0, 1fr); }
   /* one column — every tile is both the first and the last in its row */
   .tiles { grid-template-columns: 1fr; }
   .tiles .tile { padding-inline: var(--edge); }

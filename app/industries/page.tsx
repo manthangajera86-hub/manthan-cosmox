@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import T from "@/components/T";
+import BannerCycle from "@/components/BannerCycle";
+import { bannerFrames } from "@/lib/topics";
 import HeroTitle from "@/components/HeroTitle";
 import TopicGrid from "@/components/TopicGrid";
 
@@ -14,19 +16,18 @@ export default function IndustriesPage() {
     <>
 
 
-    <section className="page-hero bg-page-industries">
-      <div className="page-hero__media" aria-hidden="true"></div>
-      <div className="page-hero__scrim" aria-hidden="true"></div>
-      <div className="page-hero__inner">
-        <nav className="crumbs" aria-label="Breadcrumb">
-          <Link href="/"><T>Home</T></Link>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page"><T>Industries</T></span>
-        </nav>
-        <h1 className="page-hero__title"><HeroTitle light="Industries" bold="We Serve" /></h1>
-        <p className="page-hero__lede">High-performance, innovative and environmentally responsible solutions engineered to meet the complex and evolving demands of modern industry.</p>
-      </div>
-    </section>
+    {/* The banner cycles this family’s own topics — the picture and the
+        line naming it — rather than standing on one still. See
+        components/BannerCycle.tsx; the frames are lib/topics.ts’ order. */}
+    <BannerCycle frames={bannerFrames("industries")}>
+      <nav className="crumbs" aria-label="Breadcrumb">
+        <Link href="/"><T>Home</T></Link>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page"><T>Industries</T></span>
+      </nav>
+      <h1 className="page-hero__title"><HeroTitle light="Industries" bold="We Serve" /></h1>
+      <p className="page-hero__lede">High-performance, innovative and environmentally responsible solutions engineered to meet the complex and evolving demands of modern industry.</p>
+    </BannerCycle>
 
     <section className="pad-xs">
       <div className="wrap">

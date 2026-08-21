@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import T from "@/components/T";
+import BannerCycle from "@/components/BannerCycle";
+import { bannerFrames } from "@/lib/topics";
 import HeroTitle from "@/components/HeroTitle";
 import TopicGrid from "@/components/TopicGrid";
 
@@ -14,19 +16,18 @@ export default function RndPage() {
     <>
 
 
-    <section className="page-hero bg-page-rnd">
-      <div className="page-hero__media" aria-hidden="true"></div>
-      <div className="page-hero__scrim" aria-hidden="true"></div>
-      <div className="page-hero__inner">
-        <nav className="crumbs" aria-label="Breadcrumb">
-          <Link href="/"><T>Home</T></Link>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page"><T>Research &amp; development</T></span>
-        </nav>
-        <h1 className="page-hero__title"><HeroTitle light="Research &amp;" bold="Development" /></h1>
-        <p className="page-hero__lede">The cornerstone of our innovation, quality and industrial leadership — developing new chemical solutions, optimising existing formulations and delivering application-specific innovation.</p>
-      </div>
-    </section>
+    {/* The banner cycles this family’s own topics — the picture and the
+        line naming it — rather than standing on one still. See
+        components/BannerCycle.tsx; the frames are lib/topics.ts’ order. */}
+    <BannerCycle frames={bannerFrames("rnd")}>
+      <nav className="crumbs" aria-label="Breadcrumb">
+        <Link href="/"><T>Home</T></Link>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page"><T>Research &amp; development</T></span>
+      </nav>
+      <h1 className="page-hero__title"><HeroTitle light="Research &amp;" bold="Development" /></h1>
+      <p className="page-hero__lede">The cornerstone of our innovation, quality and industrial leadership — developing new chemical solutions, optimising existing formulations and delivering application-specific innovation.</p>
+    </BannerCycle>
 
     <section className="pad-xs">
       <div className="wrap">

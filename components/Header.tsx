@@ -17,6 +17,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NAV, NAV_MENU } from "@/lib/nav";
+import type { ProductGroupLink } from "@/lib/products";
 import BrandMark from "./BrandMark";
 import RegionMenu from "./RegionMenu";
 import { useT } from "./LocaleProvider";
@@ -33,7 +34,51 @@ const BRAND_KEY = "brand";
    the country list away, which is what you would expect it to do. */
 const REGION_KEY = "region";
 
-export default function Header() {
+/* The one panel that is not a list of names. Divisions and Products name the
+   same ten things — the units and what they make — so as two identical columns
+   of links the second one told you nothing the first had not. This one is the
+   range: each group with its division number and how many grades sit under it,
+   and the finder under them, because 112 grades is past the point where a menu
+   can list them. The data is built on the server (`productMenu()`), so the
+   whole of `lib/products.ts` stays out of this client bundle. */
+function ProductsPanel({
+  groups,
+  t,
+}: {
+  groups: ProductGroupLink[];
+  t: (s: string) => string;
+}) {
+  return (
+    <div className="prodmenu">
+      <ul className="prodmenu__groups">
+        {groups.map((group) => (
+          <li key={group.href}>
+            <Link href={group.href}>
+              <span className="prodmenu__num" aria-hidden="true">{group.num}</span>
+              <span className="prodmenu__name">{t(group.label)}</span>
+              {/* the count is one dictionary entry with the number in a slot —
+                  Korean counts "6개 등급", which "6" + a translated "grades"
+                  would never produce */}
+              <span className="prodmenu__count">
+                {t("{n} grades").replace("{n}", String(group.count))}
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <Link className="prodmenu__finder" href="/finder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </svg>
+        {t("Search the whole range")}
+        <span aria-hidden="true">&#8594;</span>
+      </Link>
+    </div>
+  );
+}
+
+export default function Header({ groups }: { groups: ProductGroupLink[] }) {
   const pathname = usePathname();
   const t = useT();
 
@@ -192,7 +237,9 @@ export default function Header() {
               <div className="brandmenu__col">
                 <p className="navmenu__kicker">{t("On the home page")}</p>
                 <ul className="navmenu__links navmenu__links--single">
-                  {brandMenu.links.map(([href, label]) => (
+                  {/* `links` is optional on the type because the products
+                      panel has none; the home entry has always had its own */}
+                  {brandMenu.links?.map(([href, label]) => (
                     <li key={href}>
                       <Link href={href}>{t(label)}</Link>
                     </li>
@@ -270,7 +317,11 @@ export default function Header() {
                 </Link>
 
                 {menu && wide && (
-                  <div className="navmenu" id={id} hidden={!isOpen}>
+                  <div
+                    className={menu.links ? "navmenu" : "navmenu navmenu--products"}
+                    id={id}
+                    hidden={!isOpen}
+                  >
                     <div className="navmenu__about">
                       <p className="navmenu__kicker">{t(item.label)}</p>
                       <p className="navmenu__lede">{t(menu.about)}</p>
@@ -278,13 +329,17 @@ export default function Header() {
                         {t("Visit page")}<span aria-hidden="true">&#8594;</span>
                       </Link>
                     </div>
-                    <ul className="navmenu__links">
-                      {menu.links.map(([href, label]) => (
-                        <li key={href}>
-                          <Link href={href}>{t(label)}</Link>
-                        </li>
-                      ))}
-                    </ul>
+                    {menu.links ? (
+                      <ul className="navmenu__links">
+                        {menu.links.map(([href, label]) => (
+                          <li key={href}>
+                            <Link href={href}>{t(label)}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <ProductsPanel groups={groups} t={t} />
+                    )}
                   </div>
                 )}
               </li>

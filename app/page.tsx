@@ -4,6 +4,26 @@ import HeroCycle from "@/components/HeroCycle";
 import { BUSINESS_ASPECTS, BUSINESS_LINES } from "@/lib/business";
 import { FAMILY } from "@/lib/topics";
 
+/* A row of the business-operations table as one line. The products lists are
+   the real range now — 23 chemicals for the intermediates division, some of
+   them 100-character IUPAC names — and a cell that long stops being a glance
+   and starts being a page. So the line takes names until it has filled its
+   measure and counts the rest; the row's own link goes to the division page,
+   which lists them all. Applications and capabilities run to four short
+   phrases and are never cut. */
+const MEASURE = 96;
+const line = (items: string[]) => {
+  const shown: string[] = [];
+  let width = 0;
+  for (const item of items) {
+    if (shown.length && width + item.length > MEASURE) break;
+    shown.push(item);
+    width += item.length + 3;
+  }
+  const rest = items.length - shown.length;
+  return rest ? `${shown.join(" · ")} · +${rest} more` : shown.join(" · ");
+};
+
 export default function HomePage() {
   return (
     <>
@@ -187,7 +207,7 @@ export default function HomePage() {
                         <span className="btab__num">{topic.num}</span>
                         <Link href={`/divisions/${topic.slug}`}>{topic.title}</Link>
                       </th>
-                      <td>{BUSINESS_LINES[topic.slug][aspect.key].join(" · ")}</td>
+                      <td>{line(BUSINESS_LINES[topic.slug][aspect.key])}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -252,7 +272,7 @@ export default function HomePage() {
         <div className="fcta__body">
           <p className="fcta__kicker">Product finder</p>
           <h2>Search for a product</h2>
-          <p>Forty grades across ten divisions, filtered by the industry you are
+          <p>112 grades across ten divisions, filtered by the industry you are
           formulating for or searched by chemistry name — every one with
           technical and safety documentation.</p>
           <span className="btn btn--gold">Explore the finder

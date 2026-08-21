@@ -16,9 +16,12 @@
    change of ground. `--logo-ink` is the orbit ring — black on paper, white on
    `--night` — and `--logo-void` is the gap that holds the ring off the planet,
    which is whatever is behind the logo. Both are set in `globals.css`: the
-   defaults are the light-background cut, and `.brand` (the capsule, in the
-   header and the footer alike) flips them. The sphere and the glyph do not
-   change: gold reads on both, and the alpha is white inside a dark planet.
+   defaults are the light-background cut, which the header capsule keeps, and
+   the footer's `.brand` flips them. The sphere and the glyph do not change:
+   the alpha is white inside a dark planet, and the gold gets its contrast from
+   the graphite it sits on rather than from the ground — which is why the
+   planet needs a *light* ground to read as a planet at all (13.4:1 on paper,
+   1.38:1 on `--night`, where it dissolves and only the crescent survives).
 
    `id` prefixes the gradient/clip ids. The mark renders twice per page, and
    two copies of one id is invalid markup — pass a different prefix at each

@@ -3,7 +3,15 @@
    coupling constraints: `ind` values must match the industry radio values in
    components/Finder.tsx, `cs` must be the slug of a product group in
    lib/topics.ts, and `s` must be the folder name under it — a grade whose
-   folder is missing is a 404 the build will not catch. */
+   folder is missing is a 404 the build will not catch.
+
+   The names are transcribed from `new products.rtf`, which numbers its ten
+   sections in a different order to the site's own divisions; they are mapped by
+   name, not by number, so `d` is the division number this site has always used.
+   The one-line teasers are not in that source — they are written here, and are
+   the one thing on a grade page that has not come from a client document. */
+
+import { FAMILY } from "./topics";
 
 export type Product = {
   /** name */          n: string;
@@ -46,103 +54,275 @@ export const industryLabel = (value: string) =>
   INDUSTRIES.find(([v]) => v === value)?.[1] ?? value;
 
 export const PRODUCTS: Product[] = [
-    // 01 · Lithium & metal additives
+    // 01 · Lithium & Metal Additives
+    { n: 'Lithium 12-Hydroxystearate', s: 'lithium-12-hydroxystearate', cs: 'lithium-metal-additives', d: '01', c: 'Lithium & Metal Additives', ind: ['automotive', 'machinery'],
+      t: 'The standard lithium soap thickener for multipurpose greases, holding structure and drop point under sustained load and heat.' },
+    { n: 'Lithium Neodecanoate', s: 'lithium-neodecanoate', cs: 'lithium-metal-additives', d: '01', c: 'Lithium & Metal Additives', ind: ['coatings', 'machinery'],
+      t: 'Oil-soluble branched-chain lithium carboxylate for grease formulation and as a metal-carboxylate catalyst in coatings.' },
+    { n: 'Lithium Ricinoleate', s: 'lithium-ricinoleate', cs: 'lithium-metal-additives', d: '01', c: 'Lithium & Metal Additives', ind: ['machinery', 'polymers'],
+      t: 'Castor-derived lithium soap used as a lubricant and internal release additive in greases and polymer processing.' },
+    { n: 'Calcium 12-Hydroxystearate', s: 'calcium-12-hydroxystearate', cs: 'lithium-metal-additives', d: '01', c: 'Lithium & Metal Additives', ind: ['machinery', 'polymers'],
+      t: 'Calcium soap thickener for water-resistant greases, and a lubricant and acid scavenger in plastics processing.' },
+    { n: 'Zinc Ricinoleate', s: 'zinc-ricinoleate', cs: 'lithium-metal-additives', d: '01', c: 'Lithium & Metal Additives', ind: ['nutra', 'polymers'],
+      t: 'Zinc soap of ricinoleic acid, used as an odour-absorbing active in personal care and as a processing additive.' },
     { n: 'Lithium Myristate', s: 'lithium-myristate', cs: 'lithium-metal-additives', d: '01', c: 'Lithium & Metal Additives', ind: ['automotive', 'machinery'],
       t: 'High-purity lithium soap thickener for industrial and automotive lubricants, with excellent thermal stability and water resistance.' },
-    { n: '12-Hydroxy Lithium Stearate', s: '12-hydroxy-lithium-stearate', cs: 'lithium-metal-additives', d: '01', c: 'Lithium & Metal Additives', ind: ['automotive', 'machinery'],
-      t: 'Lithium soap for high-temperature, heavy-duty greases running under sustained mechanical load.' },
-    { n: 'Calcium Stearate', s: 'calcium-stearate', cs: 'lithium-metal-additives', d: '01', c: 'Lithium & Metal Additives', ind: ['polymers', 'coatings'],
-      t: 'Metal stearate acting as a lubricant, release agent and acid scavenger in plastics processing.' },
-    { n: 'Aluminum Stearate', s: 'aluminum-stearate', cs: 'lithium-metal-additives', d: '01', c: 'Lithium & Metal Additives', ind: ['coatings', 'polymers'],
-      t: 'Gelling and water-repellent additive for paints, inks and industrial coatings.' },
 
-    // 02 · Flame retardants
+    // 02 · Flame-Retardant & Inorganic Salts
     { n: 'Aluminium Hypophosphite', s: 'aluminium-hypophosphite', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'electronics', 'construction'],
       t: 'Halogen-free flame retardant for engineering plastics (PA, PBT, PET), with uniform particle size for predictable dispersion.' },
     { n: 'Calcium Hypophosphite', s: 'calcium-hypophosphite', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'electronics'],
       t: 'Halogen-free additive raising fire resistance in cables and coatings while reducing smoke and toxicity.' },
     { n: 'Magnesium Hypophosphite', s: 'magnesium-hypophosphite', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'electronics'],
       t: 'Thermally stable hypophosphite for flame-retardant polymer compounds and electrical components.' },
+    { n: 'Aluminium Diethyl Phosphinate', s: 'aluminium-diethyl-phosphinate', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'electronics'],
+      t: 'Halogen-free phosphinate flame retardant for glass-filled PA, PBT and PET, effective at low loadings.' },
+    { n: 'Melamine Polyphosphate', s: 'melamine-polyphosphate', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'electronics', 'construction'],
+      t: 'Nitrogen-phosphorus synergist for intumescent systems and engineering-plastic flame-retardant packages.' },
+    { n: 'Zinc Hydroxystannate', s: 'zinc-hydroxystannate', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'construction'],
+      t: 'Smoke suppressant and flame-retardant synergist for PVC and other halogenated polymer systems.' },
+    { n: 'Magnesium Oxysulfate Whisker', s: 'magnesium-oxysulfate-whisker', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'construction'],
+      t: 'Needle-form reinforcing filler adding stiffness and fire performance to boards and compounds.' },
+    { n: 'Expandable Graphite', s: 'expandable-graphite', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'construction'],
+      t: 'Intercalated graphite that expands into an insulating char, for intumescent seals, foams and coatings.' },
+    { n: 'Zinc Borate', s: 'zinc-borate', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'coatings', 'construction'],
+      t: 'Multi-functional flame retardant, smoke suppressant and anti-tracking additive for polymers and coatings.' },
+    { n: 'Melamine Cyanurate', s: 'melamine-cyanurate', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'electronics'],
+      t: 'Nitrogen-based flame retardant for unfilled polyamides, also serving as a solid lubricant.' },
+    { n: 'Huntite', s: 'huntite', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'construction'],
+      t: 'Natural magnesium-calcium carbonate mineral releasing carbon dioxide on heating, for halogen-free compounds and cables.' },
+    { n: 'Zinc Hypophosphite', s: 'zinc-hypophosphite', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'electronics'],
+      t: 'Hypophosphite salt combining flame retardancy with heat-stabilising action in polyamide and polyester compounds.' },
+    { n: 'Zinc Stannate', s: 'zinc-stannate', cs: 'flame-retardant-inorganic-salts', d: '02', c: 'Flame-Retardant & Inorganic Salts', ind: ['polymers', 'construction'],
+      t: 'Halogen-free smoke suppressant and char promoter for demanding cable and construction compounds.' },
 
-    // 03 · Intermediates
-    { n: '1-Phenyl Oxide', s: '1-phenyl-oxide', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
-      t: 'Intermediate for pharmaceutical, agrochemical and industrial applications, supplied at controlled purity.' },
-    { n: 'Triazolo Pyridione', s: 'triazolo-pyridione', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
-      t: 'Heterocyclic compound for R&D and industrial synthesis, reproducible batch to batch.' },
-    { n: 'Benzimidazole Derivatives', s: 'benzimidazole-derivatives', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
-      t: 'Building blocks for active pharmaceutical ingredients and crop-protection chemistry.' },
-    { n: '2-Aminopyridine', s: '2-aminopyridine', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
-      t: 'Versatile intermediate for drug synthesis and fine-chemical manufacture.' },
-    { n: 'Indole Derivatives', s: 'indole-derivatives', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
-      t: 'High-purity heterocyclics for pharmaceutical research and commercial-scale production.' },
+    // 03 · Organic & Pharmaceutical Intermediates
+    { n: 'N-Methyl-2-pyrrolidone', s: 'n-methyl-2-pyrrolidone', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma', 'electronics'],
+      t: 'High-boiling polar aprotic solvent for pharmaceutical synthesis, electronics cleaning and polymer processing.' },
+    { n: '[1,2,4]Triazolo[4,3-a]pyridin-3(2H)-one', s: 'triazolo-4-3-a-pyridin-3-2h-one', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Fused heterocyclic building block for pharmaceutical synthesis, supplied at controlled purity.' },
+    { n: 'Diphenyl ether', s: 'diphenyl-ether', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma', 'polymers'],
+      t: 'Thermally stable aromatic ether used as a heat-transfer fluid and as an intermediate in fine-chemical synthesis.' },
+    { n: 'Methyl 2-[(3S)-3-[3-[(1E)-2-(7-chloro-2-quinolinyl)ethenyl]phenyl]-3-hydroxypropyl]benzoate', s: 'methyl-3s-3-hydroxypropyl-quinolinyl-benzoate', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Chiral quinoline benzoate ester intermediate for API synthesis, supplied with defined stereochemistry.' },
+    { n: 'N-[5-(Diphenylphosphinoylmethyl)-4-(4-fluorophenyl)-6-isopropylpyrimidin-2-yl]-N-methylmethanesulfonamide', s: 'diphenylphosphinoylmethyl-fluorophenyl-pyrimidinyl-methanesulfonamide', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Fluorophenyl-pyrimidine phosphine oxide intermediate for API manufacture, controlled for purity and isomer content.' },
+    { n: '2,3-Dichlorobenzoyl chloride', s: '2-3-dichlorobenzoyl-chloride', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Reactive acyl chloride for amide and ester formation in pharmaceutical and agrochemical routes.' },
+    { n: '2-Azaspiro[4.5]decan-3-one', s: '2-azaspiro-4-5-decan-3-one', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Spirocyclic lactam building block for pharmaceutical synthesis, supplied at controlled purity.' },
+    { n: '(R)-(-)-3-Carbamoymethyl-5-methylhexanoic acid', s: 'r-3-carbamoymethyl-5-methylhexanoic-acid', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Single-enantiomer carbamoyl acid intermediate supplied to a defined optical purity for chiral API routes.' },
+    { n: '3-Carbamoymethyl-5-methylhexanoic acid', s: '3-carbamoymethyl-5-methylhexanoic-acid', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Racemic carbamoyl acid intermediate for chiral resolution in pharmaceutical synthesis.' },
+    { n: '3-(Aminomethyl)-5-methylhexanoic acid', s: '3-aminomethyl-5-methylhexanoic-acid', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Branched-chain amino acid intermediate for pharmaceutical manufacture.' },
+    { n: '3-Isobutylglutaric acid', s: '3-isobutylglutaric-acid', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Branched diacid starting material for amino-acid API routes.' },
+    { n: '4-Chloro-2,6-Diaminopyrimidine', s: '4-chloro-2-6-diaminopyrimidine', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Chlorinated diaminopyrimidine for nucleoside and heterocyclic drug synthesis.' },
+    { n: '2-Chloro-3,5-difluoropyridine', s: '2-chloro-3-5-difluoropyridine', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Halogenated pyridine for cross-coupling and nucleophilic substitution in pharma and agrochemical routes.' },
+    { n: '4-Chloro-2-fluoro-5-nitroaniline', s: '4-chloro-2-fluoro-5-nitroaniline', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Substituted nitroaniline intermediate for heterocyclic, dye and crop-protection chemistry.' },
+    { n: '2-Chloro-4-(trifluoromethyl)pyrimidine', s: '2-chloro-4-trifluoromethyl-pyrimidine', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Trifluoromethylated pyrimidine for crop-protection and pharmaceutical synthesis.' },
+    { n: '4-Bromo-2,6-difluoroaniline', s: '4-bromo-2-6-difluoroaniline', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Halogenated aniline for coupling chemistry in agrochemical and pharmaceutical manufacture.' },
+    { n: '2,4-Dichlorophenoxyacetic acid', s: '2-4-dichlorophenoxyacetic-acid', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Phenoxy acid herbicide active and intermediate, supplied to agrochemical specification.' },
+    { n: '2-Aminophenol-4-sulfonic acid', s: '2-aminophenol-4-sulfonic-acid', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma', 'coatings'],
+      t: 'Amino-phenol sulfonic acid for dye, pigment and speciality intermediate synthesis.' },
+    { n: 'N,N-Dimethylformamide dimethyl acetal', s: 'n-n-dimethylformamide-dimethyl-acetal', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Formylating and cyclisation reagent for heterocyclic synthesis.' },
+    { n: 'Ethyl 2-bromopropionate', s: 'ethyl-2-bromopropionate', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Alkylating ester used to introduce the propionate unit in pharmaceutical and agrochemical routes.' },
+    { n: '1-(2-Bromoethoxy)-2-ethoxybenzene', s: '1-2-bromoethoxy-2-ethoxybenzene', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Bromoalkyl aryl ether intermediate for alkylation steps in API synthesis.' },
+    { n: 'Toluene-2,5-diamine sulfate', s: 'toluene-2-5-diamine-sulfate', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma', 'coatings'],
+      t: 'Aromatic diamine sulfate for oxidative hair-colour and dye intermediate manufacture.' },
+    { n: 'Cyclopropanecarboxamide', s: 'cyclopropanecarboxamide', cs: 'organic-pharmaceutical-intermediates', d: '03', c: 'Organic & Pharmaceutical Intermediates', ind: ['pharma'],
+      t: 'Strained-ring amide building block for pharmaceutical and agrochemical synthesis.' },
 
-    // 04 · Polymers & resins
-    { n: 'Epoxy & Phenolic Resins', s: 'epoxy-phenolic-resins', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['coatings', 'construction'],
-      t: 'Structural resins for adhesives, composites and protective coatings.' },
-    { n: 'Polyurethane & Polyamide Intermediates', s: 'polyurethane-polyamide-intermediates', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['coatings', 'automotive'],
-      t: 'Intermediates for flexible and rigid systems across coatings, adhesives and mouldings.' },
-    { n: 'PTFE & Fluoropolymer Intermediates', s: 'ptfe-fluoropolymer-intermediates', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['machinery', 'electronics'],
-      t: 'Low-friction, chemically inert materials for demanding industrial environments.' },
-    { n: 'Heat-Resistant Functional Polymers', s: 'heat-resistant-functional-polymers', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['automotive', 'machinery'],
-      t: 'Grades engineered to hold mechanical properties at elevated service temperatures.' },
+    // 04 · Polymers, Resins & High-Performance Materials
+    { n: 'Polyimide', s: 'polyimide', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['electronics', 'machinery'],
+      t: 'High-temperature polymer for flexible circuits, films and parts in continuous thermal service.' },
+    { n: '4,4′-(Hexafluoroisopropylidene)diphthalic anhydride', s: '4-4-hexafluoroisopropylidene-diphthalic-anhydride', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['electronics', 'polymers'],
+      t: '6FDA: fluorinated dianhydride for soluble, low-dielectric polyimides and gas-separation membranes.' },
+    { n: '4,4′-Oxydianiline', s: '4-4-oxydianiline', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['electronics', 'polymers'],
+      t: 'ODA: aromatic diamine paired with dianhydrides in classical polyimide synthesis.' },
+    { n: 'Polybenzimidazole', s: 'polybenzimidazole', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['machinery', 'electronics'],
+      t: 'PBI resin for compression-moulded parts and high-temperature membranes and fibres.' },
+    { n: 'Polyether Ketone Ketone', s: 'polyether-ketone-ketone', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['machinery', 'automotive'],
+      t: 'PEKK: high-temperature PAEK with a tunable melt window for composites and additive manufacture.' },
+    { n: 'Polyetherimide', s: 'polyetherimide', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['electronics', 'automotive'],
+      t: 'PEI: amorphous high-heat thermoplastic with inherent flame retardance and dimensional stability.' },
+    { n: 'Hexafluoroisopropylidene Bisphenol', s: 'hexafluoroisopropylidene-bisphenol', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['polymers', 'electronics'],
+      t: 'Bisphenol AF: fluorinated monomer for fluoroelastomer cure systems and high-performance polymers.' },
+    { n: '3,3′,4,4′-Biphenyltetracarboxylic dianhydride', s: '3-3-4-4-biphenyltetracarboxylic-dianhydride', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['electronics', 'polymers'],
+      t: 'BPDA: rigid dianhydride for low-expansion polyimide films and coatings.' },
+    { n: 'Pyromellitic Dianhydride', s: 'pyromellitic-dianhydride', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['electronics', 'polymers'],
+      t: 'PMDA: the classical dianhydride for thermally stable polyimides, epoxies and curing agents.' },
+    { n: '4,4′-Diaminodiphenyl Sulfone', s: '4-4-diaminodiphenyl-sulfone', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['coatings', 'polymers'],
+      t: 'DDS: high-temperature epoxy curing agent for aerospace prepregs and structural composites.' },
+    { n: '3,3′-Diaminodiphenyl sulfone', s: '3-3-diaminodiphenyl-sulfone', cs: 'polymers-resins-high-performance-materials', d: '04', c: 'Polymers, Resins & High-Performance Materials', ind: ['coatings', 'polymers'],
+      t: 'Meta-isomer curing agent giving epoxy systems a longer pot life and greater toughness.' },
 
-    // 05 · Surfactants
-    { n: 'Sodium Lauryl Sulfate (SLS)', s: 'sodium-lauryl-sulfate-sls', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['nutra', 'machinery'],
-      t: 'Anionic surfactant for industrial cleaning and formulation work.' },
-    { n: 'Tween 80 / Span 60', s: 'tween-80-span-60', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['nutra', 'pharma'],
-      t: 'Non-ionic emulsifiers for stable oil-in-water and water-in-oil systems.' },
-    { n: 'Plant-Derived Surfactants', s: 'plant-derived-surfactants', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['nutra', 'coatings'],
-      t: 'Bio-based wetting agents for greener cleaning and coating formulations.' },
-    { n: 'Bio-Based Solvents', s: 'bio-based-solvents', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['coatings', 'pharma'],
-      t: 'Renewable-feedstock solvents replacing petrochemical equivalents in process chemistry.' },
+    // 05 · Surfactants, Detergents & Bio-Based Chemicals
+    { n: 'Monorhamnolipid R95', s: 'monorhamnolipid-r95', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['nutra', 'water'],
+      t: 'Fermentation-derived biosurfactant at 95% monorhamnolipid, readily biodegradable and mild in use.' },
+    { n: 'Mannosylerythritol Lipid-B (MEL-B)', s: 'mannosylerythritol-lipid-b-mel-b', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['nutra'],
+      t: 'Glycolipid biosurfactant with strong moisturising and emulsifying performance in personal care.' },
+    { n: 'Lactonic Sophorolipid', s: 'lactonic-sophorolipid', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['nutra', 'water'],
+      t: 'Yeast-fermented biosurfactant used for cleaning, emulsification and antimicrobial support.' },
+    { n: 'Mannosylerythritol Lipid-A', s: 'mannosylerythritol-lipid-a', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['nutra'],
+      t: 'Glycolipid biosurfactant forming stable vesicles for cosmetic and formulation work.' },
+    { n: 'Sodium Methyl Cocoyl Taurate', s: 'sodium-methyl-cocoyl-taurate', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['nutra'],
+      t: 'Mild anionic surfactant giving a dense, creamy lather in facial and body cleansers.' },
+    { n: 'Sodium Cocoyl Isethionate', s: 'sodium-cocoyl-isethionate', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['nutra'],
+      t: 'Sulfate-free surfactant for syndet bars and gentle cleansers, stable in hard water.' },
+    { n: 'Disodium Laureth Sulfosuccinate', s: 'disodium-laureth-sulfosuccinate', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['nutra'],
+      t: 'Low-irritation secondary surfactant that softens the profile of anionic cleansing systems.' },
+    { n: 'Cocamidopropyl Hydroxysultaine', s: 'cocamidopropyl-hydroxysultaine', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['nutra'],
+      t: 'Amphoteric surfactant boosting foam and viscosity, and tolerant of high electrolyte loads.' },
+    { n: 'Cetearyl Glucoside', s: 'cetearyl-glucoside', cs: 'surfactants-detergents-bio-based-chemicals', d: '05', c: 'Surfactants, Detergents & Bio-Based Chemicals', ind: ['nutra'],
+      t: 'Sugar-based non-ionic emulsifier for stable oil-in-water creams and lotions.' },
 
-    // 06 · Battery & electronic
-    { n: 'Lithium Carbonate', s: 'lithium-carbonate', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy'],
-      t: 'Battery-grade lithium salt for cathode and electrolyte manufacture.' },
-    { n: 'Lithium Hydroxide', s: 'lithium-hydroxide', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy'],
-      t: 'High-purity precursor for nickel-rich cathode chemistries.' },
-    { n: 'Electrolyte Salts (LiPF₆, LiBF₄)', s: 'electrolyte-salts-lipf-libf', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy', 'electronics'],
-      t: 'Conductive salts for lithium-ion cell electrolytes, moisture-controlled throughout packing.' },
-    { n: 'TMAH (Tetramethylammonium Hydroxide)', s: 'tmah-tetramethylammonium-hydroxide', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['electronics'],
-      t: 'Semiconductor-grade developer and etchant for photolithography.' },
-    { n: 'Electronic-Grade Solvents', s: 'electronic-grade-solvents', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['electronics', 'energy'],
-      t: 'Ultra-high-purity solvents with trace-metal specifications for device manufacture.' },
+    // 06 · Electrochemical, Battery & Electronic Chemicals
+    { n: 'Lithium Bis(fluorosulfonyl)imide', s: 'lithium-bis-fluorosulfonyl-imide', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy'],
+      t: 'LiFSI: conductive lithium salt raising cycle life and low-temperature performance in lithium-ion electrolytes.' },
+    { n: 'Lithium Difluoro(oxalato)borate (LIODFB)', s: 'lithium-difluoro-oxalato-borate-liodfb', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy'],
+      t: 'Film-forming electrolyte salt improving interface stability and high-temperature cycling.' },
+    { n: 'Tris(trimethylsilyl) Phosphate', s: 'tris-trimethylsilyl-phosphate', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy', 'electronics'],
+      t: 'Electrolyte additive scavenging acidic species and stabilising the cathode interface in high-voltage cells.' },
+    { n: 'Lithium Bis(trifluoromethanesulfonyl)imide', s: 'lithium-bis-trifluoromethanesulfonyl-imide', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy', 'electronics'],
+      t: 'LiTFSI: thermally stable imide salt for electrolytes, ionic liquids and antistatic formulations.' },
+    { n: '1,3,2-Dioxathiolane-2,2-dioxide', s: '1-3-2-dioxathiolane-2-2-dioxide', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy'],
+      t: 'Cyclic sulfate additive forming a stable interface film and lowering cell impedance.' },
+    { n: 'Tris(trimethylsilyl) Borate', s: 'tris-trimethylsilyl-borate', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy'],
+      t: 'Electrolyte additive trapping fluoride species and protecting high-nickel cathodes.' },
+    { n: 'Fluoroethylene Carbonate (FEC)', s: 'fluoroethylene-carbonate-fec', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy'],
+      t: 'Film-forming solvent additive central to silicon-anode cycling stability.' },
+    { n: 'Silicon-Carbon Composite', s: 'silicon-carbon-composite', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy'],
+      t: 'High-capacity anode material pairing silicon\'s capacity with a carbon matrix that buffers expansion.' },
+    { n: 'Tetramethylammonium Hydroxide', s: 'tetramethylammonium-hydroxide', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['electronics'],
+      t: 'Semiconductor-grade developer and etchant for photolithography, supplied to trace-metal specification.' },
+    { n: 'Lithium Hexafluorophosphate', s: 'lithium-hexafluorophosphate', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy'],
+      t: 'LiPF6: the standard lithium-ion conducting salt, moisture-controlled throughout packing.' },
+    { n: 'Carbon Nanotube', s: 'carbon-nanotube', cs: 'electrochemical-battery-electronic-chemicals', d: '06', c: 'Electrochemical, Battery & Electronic Chemicals', ind: ['energy', 'electronics'],
+      t: 'Conductive additive raising electrode conductivity at a fraction of carbon-black loading.' },
 
-    // 07 · Pigments
-    { n: 'Quinacridone Pigments', s: 'quinacridone-pigments', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'automotive'],
-      t: 'Organic pigment with high lightfastness for automotive and industrial finishes.' },
-    { n: 'Phthalocyanine Blue', s: 'phthalocyanine-blue', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings'],
-      t: 'Strong, stable organic blue for coatings, inks and plastics.' },
-    { n: 'Iron Oxide Pigments', s: 'iron-oxide-pigments', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'construction'],
-      t: 'Inorganic pigments for durable colour in construction and protective coatings.' },
-    { n: 'Titanium Dioxide', s: 'titanium-dioxide', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'polymers'],
-      t: 'Opacifying white pigment with controlled dispersion behaviour.' },
-    { n: 'UV Stabilisers & Dispersants', s: 'uv-stabilisers-dispersants', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'polymers'],
-      t: 'Coating additives extending service life and keeping pigment loads stable.' },
+    // 07 · Paints, Coatings & Pigments
+    { n: 'Pyrrole Orange', s: 'pyrrole-orange', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'automotive'],
+      t: 'Diketopyrrolopyrrole orange with high opacity and weatherfastness for automotive and industrial finishes.' },
+    { n: 'Pigment Red 202', s: 'pigment-red-202', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'automotive'],
+      t: 'Quinacridone magenta-red with high lightfastness for automotive topcoats, inks and plastics.' },
+    { n: 'Quinacridone Violet 19', s: 'quinacridone-violet-19', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'polymers'],
+      t: 'Quinacridone violet offering clean transparent shades and outstanding weather resistance.' },
+    { n: 'Quinacridone Magenta', s: 'quinacridone-magenta', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'polymers'],
+      t: 'Blue-shade quinacridone for high-chroma magentas in coatings, inks and masterbatch.' },
+    { n: 'Benzimidazolone Yellow 180', s: 'benzimidazolone-yellow-180', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'polymers'],
+      t: 'High-performance organic yellow with the heat stability plastics and industrial coatings demand.' },
+    { n: 'Bismuth Vanadate Yellow', s: 'bismuth-vanadate-yellow', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'automotive'],
+      t: 'Bright, opaque inorganic yellow replacing lead and cadmium pigments in durable coatings.' },
+    { n: '2-(2H-Benzotriazol-2-yl)-4,6-bis(1-methyl-1-phenylethyl)phenol', s: 'benzotriazol-2-yl-bis-methyl-phenylethyl-phenol', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'polymers'],
+      t: 'Benzotriazole UV absorber protecting coatings and polymers from photo-degradation and colour shift.' },
+    { n: 'HALS-944', s: 'hals-944', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['polymers', 'coatings'],
+      t: 'High-molecular-weight hindered amine light stabiliser for polyolefins in long-term outdoor service.' },
+    { n: 'Pigment Violet 23', s: 'pigment-violet-23', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'polymers'],
+      t: 'Dioxazine violet with very high tinting strength for inks, coatings and plastics colouration.' },
+    { n: 'Pigment Red 264', s: 'pigment-red-264', cs: 'paints-coatings-pigments', d: '07', c: 'Paints, Coatings & Pigments', ind: ['coatings', 'automotive'],
+      t: 'Diketopyrrolopyrrole red delivering deep blue-shade reds with high weather and heat stability.' },
 
-    // 08 · Nutraceutical & cosmetic
-    { n: 'Ascorbic Acid & Derivatives', s: 'ascorbic-acid-derivatives', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra', 'pharma'],
-      t: 'Vitamin C actives for functional foods, supplements and topical formulations.' },
-    { n: 'Niacinamide', s: 'niacinamide', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra'],
-      t: 'Vitamin B3 intermediate widely used in cosmetic and nutraceutical products.' },
-    { n: 'Hyaluronic Acid Derivatives', s: 'hyaluronic-acid-derivatives', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra', 'pharma'],
-      t: 'Humectant actives supplied across molecular-weight grades.' },
-    { n: 'PABA', s: 'paba', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra', 'pharma'],
-      t: 'Para-aminobenzoic acid for pharmaceutical and personal-care formulation.' },
+    // 08 · Nutraceutical, Cosmetic & Food Chemicals
+    { n: 'Vitamin K2 (Menaquinone-7 / MK-7)', s: 'vitamin-k2-menaquinone-7-mk-7', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra', 'pharma'],
+      t: 'Fermentation-derived MK-7 for bone and cardiovascular supplement formulation.' },
+    { n: 'Tetrahexyldecyl Ascorbate', s: 'tetrahexyldecyl-ascorbate', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra'],
+      t: 'Oil-soluble, stable vitamin C ester for brightening and antioxidant skincare.' },
+    { n: 'Astaxanthin', s: 'astaxanthin', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra'],
+      t: 'Carotenoid antioxidant for supplements, functional foods and cosmetic formulation.' },
+    { n: 'Ceramide 3', s: 'ceramide-3', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra'],
+      t: 'Skin-identical lipid restoring barrier function in moisturisers and treatment products.' },
+    { n: 'Coenzyme Q10', s: 'coenzyme-q10', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra', 'pharma'],
+      t: 'Ubiquinone active for energy-support supplements and anti-ageing cosmetics.' },
+    { n: 'Alpha-Lipoic Acid', s: 'alpha-lipoic-acid', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra', 'pharma'],
+      t: 'Amphiphilic antioxidant used in metabolic-support supplements and topical formulations.' },
+    { n: 'Glutathione', s: 'glutathione', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra', 'pharma'],
+      t: 'Tripeptide antioxidant for supplements, functional foods and skin-brightening formulations.' },
+    { n: 'Green Tea Extract - EGCG standardized', s: 'green-tea-extract-egcg-standardized', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra'],
+      t: 'Camellia sinensis extract standardised to EGCG content for supplements and cosmetics.' },
+    { n: 'Berberine HCl', s: 'berberine-hcl', cs: 'nutraceutical-cosmetic-food-chemicals', d: '08', c: 'Nutraceutical, Cosmetic & Food Chemicals', ind: ['nutra', 'pharma'],
+      t: 'Plant alkaloid supplied as the hydrochloride for metabolic-health supplement formulation.' },
 
-    // 09 · Water treatment
-    { n: 'Phosphonates & Polyphosphates', s: 'phosphonates-polyphosphates', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water', 'energy'],
-      t: 'Scale control for cooling towers, boilers and process water systems.' },
-    { n: 'Anti-Scalants', s: 'anti-scalants', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water'],
-      t: 'Threshold inhibitors keeping heat-transfer surfaces clean under hard-water duty.' },
-    { n: 'Corrosion Inhibitors', s: 'corrosion-inhibitors', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water', 'machinery'],
-      t: 'Filming and passivating chemistries protecting carbon steel and mixed-metallurgy loops.' },
+    // 09 · Water Treatment & Industrial Additives
+    { n: '2-Phosphonobutane-1,2,4-tricarboxylic acid', s: '2-phosphonobutane-1-2-4-tricarboxylic-acid', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water', 'energy'],
+      t: 'PBTC: scale and corrosion inhibitor holding up under chlorine and high-temperature duty.' },
+    { n: 'Diethylenetriamine Pentamethylene Phosphonic Acid', s: 'diethylenetriamine-pentamethylene-phosphonic-acid', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water'],
+      t: 'DTPMP: high-efficiency chelant and threshold inhibitor for hard, high-alkalinity waters.' },
+    { n: 'Amino Trimethylene Phosphonic Acid', s: 'amino-trimethylene-phosphonic-acid', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water', 'machinery'],
+      t: 'ATMP: carbonate scale inhibitor and metal-ion chelant for cooling and boiler systems.' },
+    { n: '1-Hydroxyethylidene-1,1-Diphosphonic Acid', s: '1-hydroxyethylidene-1-1-diphosphonic-acid', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water', 'machinery'],
+      t: 'HEDP: scale and corrosion inhibitor stable against chlorine and oxidising biocides.' },
+    { n: 'Carboxymethyl Inulin', s: 'carboxymethyl-inulin', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water'],
+      t: 'Biodegradable, plant-derived antiscalant for phosphorus-restricted treatment programmes.' },
+    { n: 'Acrylic Acid-Sulfonic Acid Copolymer', s: 'acrylic-acid-sulfonic-acid-copolymer', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water', 'energy'],
+      t: 'Dispersant copolymer keeping iron, silt and phosphate scales suspended in cooling loops.' },
+    { n: 'Polymaleic Acid', s: 'polymaleic-acid', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water', 'energy'],
+      t: 'High-temperature antiscalant for boilers, evaporators and desalination service.' },
+    { n: 'Tolyltriazole', s: 'tolyltriazole', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water', 'machinery'],
+      t: 'Yellow-metal corrosion inhibitor forming a passivating film on copper and brass.' },
+    { n: 'Oleyl Imidazoline', s: 'oleyl-imidazoline', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water', 'energy'],
+      t: 'Filming amine corrosion inhibitor for carbon steel in oilfield and process water.' },
+    { n: '2,2\'-Methylenebis(4-chlorophenol)', s: '2-2-methylenebis-4-chlorophenol', cs: 'water-treatment-industrial-additives', d: '09', c: 'Water Treatment & Industrial Additives', ind: ['water'],
+      t: 'Bisphenolic biocide controlling microbial fouling in industrial water systems.' },
 
-    // 10 · Functional materials
-    { n: 'Specialty Coatings & Films', s: 'specialty-coatings-films', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['electronics', 'coatings'],
-      t: 'Thin-film chemistries for barrier, release and functional surface properties.' },
-    { n: 'Graphene & Nano Additives', s: 'graphene-nano-additives', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['electronics', 'polymers'],
-      t: 'Conductive and reinforcing additives for next-generation composites.' },
-    { n: 'Fluorosilicone Fluids', s: 'fluorosilicone-fluids', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['automotive', 'machinery'],
-      t: 'Fuel- and solvent-resistant fluids for sealing and lubrication in aggressive service.' }
+    // 10 · Functional & High-Performance Materials
+    { n: 'Perfluoropolyether', s: 'perfluoropolyether', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['machinery', 'electronics'],
+      t: 'Chemically inert PFPE fluid for vacuum, oxygen-service and extreme-temperature lubrication.' },
+    { n: 'Boron Nitride Nanotube', s: 'boron-nitride-nanotube', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['electronics', 'polymers'],
+      t: 'Thermally conductive, electrically insulating nanotube for advanced composites and thermal management.' },
+    { n: 'Single-Walled Carbon Nanotubes', s: 'single-walled-carbon-nanotubes', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['electronics', 'energy'],
+      t: 'Conductive nanomaterial for transparent electrodes, sensors and battery electrodes.' },
+    { n: 'Polybenzimidazole', s: 'polybenzimidazole', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['machinery', 'electronics'],
+      t: 'PBI: the highest-temperature engineering polymer, holding mechanical strength where other thermoplastics soften.' },
+    { n: 'Polyetheretherketone', s: 'polyetheretherketone', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['machinery', 'automotive'],
+      t: 'PEEK: semi-crystalline thermoplastic for metal-replacement parts under load, heat and chemical attack.' },
+    { n: 'Lithium Lanthanum Zirconium Oxide', s: 'lithium-lanthanum-zirconium-oxide', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['energy'],
+      t: 'LLZO garnet solid electrolyte for solid-state lithium battery development.' },
+    { n: 'Hexagonal Boron Nitride', s: 'hexagonal-boron-nitride', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['electronics', 'machinery'],
+      t: 'Lubricious, thermally conductive ceramic powder for thermal management and release coatings.' },
+    { n: 'Polyphenylene Sulfide', s: 'polyphenylene-sulfide', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['automotive', 'electronics'],
+      t: 'PPS: dimensionally stable engineering thermoplastic for under-bonnet and electrical parts.' },
+    { n: 'Polyvinylidene Fluoride', s: 'polyvinylidene-fluoride', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['energy', 'coatings'],
+      t: 'PVDF: binder and membrane resin with chemical resistance and piezoelectric behaviour.' },
+    { n: 'Hexamethyldisilazane', s: 'hexamethyldisilazane', cs: 'functional-high-performance-materials', d: '10', c: 'Functional & High-Performance Materials', ind: ['electronics', 'pharma'],
+      t: 'HMDS: silylating agent and photoresist adhesion promoter for semiconductor processing.' }
   ];
+
+/* ---------------------------------------------------------------------------
+   The Products dropdown.
+
+   `Header` is a client component, so anything it imports ships to the browser
+   on every route — and `PRODUCTS` is 112 records. This is built on the server
+   in `app/layout.tsx` and handed down as props instead, which is ten small
+   objects on the wire and none of the range. `Header` imports only the type,
+   which compiles away.
+
+   It reads `lib/topics.ts` for the number and the title, so the panel cannot
+   name a group the register disagrees with — the ten labels used to be typed
+   out a second time in `lib/nav.ts`, where they could drift.
+   --------------------------------------------------------------------------- */
+export type ProductGroupLink = {
+  href: string;
+  num: string;
+  label: string;
+  count: number;
+};
+
+export const productMenu = (): ProductGroupLink[] =>
+  FAMILY.products.topics.map((topic) => ({
+    href: `/products/${topic.slug}`,
+    num: topic.num,
+    label: topic.title,
+    count: gradesIn(topic.slug).length,
+  }));

@@ -195,8 +195,12 @@ export default function Finder() {
 
         <ul className="results">
           {page.length ? (
+            /* Keyed on the group and the slug together, never on the name
+               alone: one chemistry can sit in two divisions — Polybenzimidazole
+               is in both 04 and 10 — and two rows under one key is a duplicate
+               key warning and a dropped row. */
             page.map((p) => (
-              <li key={p.n}>
+              <li key={`${p.cs}/${p.s}`}>
                 <h4>
                   <Link href={gradeHref(p)}>
                     {p.n} | Cosmox™ {p.c}

@@ -14,8 +14,9 @@
    rows is not a column. **If you edit a list, edit both places** until the
    division pages are pointed at this file.
 
-   `LiPF₆` / `LiBF₄` are written with Unicode subscripts rather than `<sub>`,
-   because these are data and not markup. */
+   The products lists are the range in `new products.rtf`, transcribed; the
+   landing page's table shows as much of a line as fits and counts the rest,
+   because the intermediates division alone runs to 23 names */
 
 export type BusinessAspect = "products" | "applications" | "capabilities";
 
@@ -27,7 +28,7 @@ export const BUSINESS_ASPECTS: { key: BusinessAspect; label: string }[] = [
 
 export const BUSINESS_LINES: Record<string, Record<BusinessAspect, string[]>> = {
   "lithium-metal-additives": {
-    products: ["Lithium Myristate", "12-Hydroxy Lithium Stearate", "Calcium Stearate", "Aluminum Stearate"],
+    products: ["Lithium 12-Hydroxystearate", "Lithium Neodecanoate", "Lithium Ricinoleate", "Calcium 12-Hydroxystearate", "Zinc Ricinoleate", "Lithium Myristate"],
     applications: [
       "Automotive greases and industrial lubrication systems",
       "High-temperature and heavy-duty machinery greases",
@@ -42,7 +43,7 @@ export const BUSINESS_LINES: Record<string, Record<BusinessAspect, string[]>> = 
     ],
   },
   "inorganic-flame-retardant-chemicals": {
-    products: ["Aluminium Hypophosphite", "Calcium Hypophosphite", "Magnesium Hypophosphite"],
+    products: ["Aluminium Hypophosphite", "Calcium Hypophosphite", "Magnesium Hypophosphite", "Aluminium Diethyl Phosphinate", "Melamine Polyphosphate", "Zinc Hydroxystannate", "Magnesium Oxysulfate Whisker", "Expandable Graphite", "Zinc Borate", "Melamine Cyanurate", "Huntite", "Zinc Hypophosphite", "Zinc Stannate"],
     applications: [
       "Engineering plastics (PA, PBT, PET)",
       "Electrical and electronic housings",
@@ -57,7 +58,7 @@ export const BUSINESS_LINES: Record<string, Record<BusinessAspect, string[]>> = 
     ],
   },
   "organic-pharmaceutical-intermediates": {
-    products: ["1-Phenyl Oxide", "Triazolo Pyridione", "Benzimidazole derivatives", "2-Aminopyridine", "Indole derivatives"],
+    products: ["N-Methyl-2-pyrrolidone", "[1,2,4]Triazolo[4,3-a]pyridin-3(2H)-one", "Diphenyl ether", "Methyl 2-[(3S)-3-[3-[(1E)-2-(7-chloro-2-quinolinyl)ethenyl]phenyl]-3-hydroxypropyl]benzoate", "N-[5-(Diphenylphosphinoylmethyl)-4-(4-fluorophenyl)-6-isopropylpyrimidin-2-yl]-N-methylmethanesulfonamide", "2,3-Dichlorobenzoyl chloride", "2-Azaspiro[4.5]decan-3-one", "(R)-(-)-3-Carbamoymethyl-5-methylhexanoic acid", "3-Carbamoymethyl-5-methylhexanoic acid", "3-(Aminomethyl)-5-methylhexanoic acid", "3-Isobutylglutaric acid", "4-Chloro-2,6-Diaminopyrimidine", "2-Chloro-3,5-difluoropyridine", "4-Chloro-2-fluoro-5-nitroaniline", "2-Chloro-4-(trifluoromethyl)pyrimidine", "4-Bromo-2,6-difluoroaniline", "2,4-Dichlorophenoxyacetic acid", "2-Aminophenol-4-sulfonic acid", "N,N-Dimethylformamide dimethyl acetal", "Ethyl 2-bromopropionate", "1-(2-Bromoethoxy)-2-ethoxybenzene", "Toluene-2,5-diamine sulfate", "Cyclopropanecarboxamide"],
     applications: [
       "Pharmaceutical synthesis and research",
       "Agrochemical intermediate production",
@@ -71,12 +72,7 @@ export const BUSINESS_LINES: Record<string, Record<BusinessAspect, string[]>> = 
     ],
   },
   "polymers-resins-high-performance-materials": {
-    products: [
-      "Epoxy and phenolic resins",
-      "Polyurethane and polyamide intermediates",
-      "PTFE and fluoropolymer intermediates",
-      "Heat-resistant and high-performance polymers",
-    ],
+    products: ["Polyimide", "4,4′-(Hexafluoroisopropylidene)diphthalic anhydride", "4,4′-Oxydianiline", "Polybenzimidazole", "Polyether Ketone Ketone", "Polyetherimide", "Hexafluoroisopropylidene Bisphenol", "3,3′,4,4′-Biphenyltetracarboxylic dianhydride", "Pyromellitic Dianhydride", "4,4′-Diaminodiphenyl Sulfone", "3,3′-Diaminodiphenyl sulfone"],
     applications: [
       "Coatings, adhesives and composites",
       "Automotive and aerospace components",
@@ -90,7 +86,7 @@ export const BUSINESS_LINES: Record<string, Record<BusinessAspect, string[]>> = 
     ],
   },
   "surfactants-detergents-bio-based-chemicals": {
-    products: ["Sodium Lauryl Sulfate (SLS)", "Tween 80, Span 60", "Plant-derived surfactants", "Bio-based solvents and intermediates"],
+    products: ["Monorhamnolipid R95", "Mannosylerythritol Lipid-B (MEL-B)", "Lactonic Sophorolipid", "Mannosylerythritol Lipid-A", "Sodium Methyl Cocoyl Taurate", "Sodium Cocoyl Isethionate", "Disodium Laureth Sulfosuccinate", "Cocamidopropyl Hydroxysultaine", "Cetearyl Glucoside"],
     applications: [
       "Industrial and consumer cleaning formulations",
       "Wetting and emulsification for polymers and coatings",
@@ -103,12 +99,7 @@ export const BUSINESS_LINES: Record<string, Record<BusinessAspect, string[]>> = 
     ],
   },
   "electrochemical-battery-electronic-chemicals": {
-    products: [
-      "Lithium Carbonate, Lithium Hydroxide",
-      "Electrolyte salts (LiPF₆, LiBF₄)",
-      "TMAH (Tetramethylammonium Hydroxide)",
-      "Electronic-grade solvents",
-    ],
+    products: ["Lithium Bis(fluorosulfonyl)imide", "Lithium Difluoro(oxalato)borate (LIODFB)", "Tris(trimethylsilyl) Phosphate", "Lithium Bis(trifluoromethanesulfonyl)imide", "1,3,2-Dioxathiolane-2,2-dioxide", "Tris(trimethylsilyl) Borate", "Fluoroethylene Carbonate (FEC)", "Silicon-Carbon Composite", "Tetramethylammonium Hydroxide", "Lithium Hexafluorophosphate", "Carbon Nanotube"],
     applications: [
       "Energy storage systems and batteries",
       "Semiconductor manufacturing",
@@ -121,11 +112,7 @@ export const BUSINESS_LINES: Record<string, Record<BusinessAspect, string[]>> = 
     ],
   },
   "paints-coatings-pigments": {
-    products: [
-      "Organic pigments (Quinacridone, Phthalocyanine Blue)",
-      "Inorganic pigments (Iron Oxides, Titanium Dioxide)",
-      "Coating additives (UV stabilisers, dispersants)",
-    ],
+    products: ["Pyrrole Orange", "Pigment Red 202", "Quinacridone Violet 19", "Quinacridone Magenta", "Benzimidazolone Yellow 180", "Bismuth Vanadate Yellow", "2-(2H-Benzotriazol-2-yl)-4,6-bis(1-methyl-1-phenylethyl)phenol", "HALS-944", "Pigment Violet 23", "Pigment Red 264"],
     applications: [
       "Industrial and decorative coatings",
       "Automotive and protective coatings",
@@ -134,12 +121,7 @@ export const BUSINESS_LINES: Record<string, Record<BusinessAspect, string[]>> = 
     capabilities: ["Custom colour formulations", "Optimised pigment dispersion", "Consistent quality control"],
   },
   "nutraceutical-cosmetic-food-chemicals": {
-    products: [
-      "Ascorbic Acid and derivatives",
-      "Niacinamide and other vitamin intermediates",
-      "Hyaluronic acid derivatives",
-      "PABA and cosmetic actives",
-    ],
+    products: ["Vitamin K2 (Menaquinone-7 / MK-7)", "Tetrahexyldecyl Ascorbate", "Astaxanthin", "Ceramide 3", "Coenzyme Q10", "Alpha-Lipoic Acid", "Glutathione", "Green Tea Extract - EGCG standardized", "Berberine HCl"],
     applications: ["Nutraceutical and functional food production", "Cosmetic formulations", "Pharmaceutical actives"],
     capabilities: [
       "High-purity, application-ready intermediates",
@@ -148,7 +130,7 @@ export const BUSINESS_LINES: Record<string, Record<BusinessAspect, string[]>> = 
     ],
   },
   "water-treatment-industrial-additives": {
-    products: ["Phosphonates and polyphosphates", "Anti-scalants", "Corrosion inhibitors", "Specialty industrial additives"],
+    products: ["2-Phosphonobutane-1,2,4-tricarboxylic acid", "Diethylenetriamine Pentamethylene Phosphonic Acid", "Amino Trimethylene Phosphonic Acid", "1-Hydroxyethylidene-1,1-Diphosphonic Acid", "Carboxymethyl Inulin", "Acrylic Acid-Sulfonic Acid Copolymer", "Polymaleic Acid", "Tolyltriazole", "Oleyl Imidazoline", "2,2'-Methylenebis(4-chlorophenol)"],
     applications: [
       "Industrial water systems",
       "Power plants, cooling towers and processing industries",
@@ -161,7 +143,7 @@ export const BUSINESS_LINES: Record<string, Record<BusinessAspect, string[]>> = 
     ],
   },
   "functional-high-performance-materials": {
-    products: ["Specialty coatings and films", "Graphene and nano additives", "Fluorosilicone fluids", "High-performance polymers"],
+    products: ["Perfluoropolyether", "Boron Nitride Nanotube", "Single-Walled Carbon Nanotubes", "Polybenzimidazole", "Polyetheretherketone", "Lithium Lanthanum Zirconium Oxide", "Hexagonal Boron Nitride", "Polyphenylene Sulfide", "Polyvinylidene Fluoride", "Hexamethyldisilazane"],
     applications: [
       "Advanced materials for industrial and research applications",
       "Aerospace, automotive and electronics sectors",

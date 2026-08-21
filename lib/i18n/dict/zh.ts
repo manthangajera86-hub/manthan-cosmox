@@ -19,12 +19,16 @@ const zh: Dict = {
   "Contact": "联系我们",
   "Product Finder": "产品查询",
   "Skip to content": "跳至正文",
+  "{n} grades": "{n}个牌号",
+  "Search the whole range": "搜索全部产品",
   "Visit page": "访问页面",
   "Sections": "版块",
   "On the home page": "首页内容",
   "Explore": "了解详情",
   "Previous": "上一个",
   "Next": "下一个",
+  "Previous picture": "上一张图片",
+  "Next picture": "下一张图片",
   "Business units": "业务单元",
   "Business Units": "业务单元",
   "Research & Development": "研究与开发",
@@ -36,29 +40,112 @@ const zh: Dict = {
     "请选择您的采购所在地。我们在苏拉特生产并出口至全球——网站语言随国家切换。",
   "Navigation and product titles are translated. Detailed page copy remains in English.":
     "导航与产品名称已翻译，页面详细内容仍为英文。",
+  "Detected": "自动识别",
+  "Search countries": "搜索国家/地区",
+  "Search {n} countries": "搜索 {n} 个国家/地区",
+  "Set from your device's time zone. Change it here at any time.": "已根据您设备的时区选择，可随时在此更改。",
+  "Set from your browser's language. Change it here at any time.": "已根据您浏览器的语言选择，可随时在此更改。",
+  "No country matches “{q}”. We export worldwide — write to us and we will route your enquiry.":
+    "没有与“{q}”匹配的国家/地区。我们出口至全球——请与我们联系，我们会将您的询价转交相应团队。",
+
+  // the six regions the panel groups the countries into
   "Asia Pacific": "亚太地区",
   "Europe": "欧洲",
+  "Americas": "美洲",
+  "Middle East": "中东",
+  "Africa": "非洲",
+  "Central Asia & Caucasus": "中亚与高加索",
+
+  /* All seventy countries in `lib/i18n/locales.ts`, in the order the panel
+     lists them. A country whose name is the same in this language is still
+     written out, so a name added to the register shows up here as a gap
+     rather than silently reading as translated. */
+  // Asia Pacific
   "India": "印度",
   "China": "中国",
   "Japan": "日本",
   "South Korea": "韩国",
+  "Taiwan": "台湾",
   "Vietnam": "越南",
   "Indonesia": "印度尼西亚",
+  "Malaysia": "马来西亚",
+  "Singapore": "新加坡",
+  "Thailand": "泰国",
+  "Philippines": "菲律宾",
+  "Pakistan": "巴基斯坦",
+  "Bangladesh": "孟加拉国",
+  "Nepal": "尼泊尔",
+  "Sri Lanka": "斯里兰卡",
+  "Myanmar": "缅甸",
+  "Cambodia": "柬埔寨",
+  "Australia": "澳大利亚",
+  "New Zealand": "新西兰",
+  // Europe
+  "United Kingdom": "英国",
+  "Ireland": "爱尔兰",
   "Germany": "德国",
   "France": "法国",
-  "Spain": "西班牙",
   "Italy": "意大利",
+  "Spain": "西班牙",
+  "Portugal": "葡萄牙",
   "Netherlands": "荷兰",
+  "Belgium": "比利时",
+  "Switzerland": "瑞士",
+  "Austria": "奥地利",
+  "Sweden": "瑞典",
+  "Norway": "挪威",
+  "Denmark": "丹麦",
+  "Finland": "芬兰",
+  "Poland": "波兰",
+  "Czech Republic": "捷克",
+  "Hungary": "匈牙利",
+  "Romania": "罗马尼亚",
+  "Greece": "希腊",
+  "Russia": "俄罗斯",
+  "Ukraine": "乌克兰",
+  "Turkey": "土耳其",
+  // Americas
+  "United States": "美国",
+  "Canada": "加拿大",
+  "Mexico": "墨西哥",
+  "Brazil": "巴西",
+  "Argentina": "阿根廷",
+  "Chile": "智利",
+  "Colombia": "哥伦比亚",
+  "Peru": "秘鲁",
+  // Middle East
+  "United Arab Emirates": "阿联酋",
+  "Saudi Arabia": "沙特阿拉伯",
+  "Qatar": "卡塔尔",
+  "Kuwait": "科威特",
+  "Oman": "阿曼",
+  "Bahrain": "巴林",
+  "Israel": "以色列",
+  // Africa
+  "Egypt": "埃及",
+  "Morocco": "摩洛哥",
+  "Algeria": "阿尔及利亚",
+  "Nigeria": "尼日利亚",
+  "Ghana": "加纳",
+  "Kenya": "肯尼亚",
+  "Tanzania": "坦桑尼亚",
+  "Ethiopia": "埃塞俄比亚",
+  "South Africa": "南非",
+  // Central Asia & Caucasus
+  "Kazakhstan": "哈萨克斯坦",
+  "Uzbekistan": "乌兹别克斯坦",
+  "Azerbaijan": "阿塞拜疆",
+  "Georgia": "格鲁吉亚",
 
   // --- nav dropdown introductions -------------------------------------------
-  "Speciality chemistry manufactured and exported from Surat — ten divisions, forty grades, one integrated plant.":
-    "在苏拉特生产并出口的特种化学品——十个事业部、四十个牌号、一座一体化工厂。",
+  "Speciality chemistry manufactured and exported from Surat — ten divisions, 112 grades, one integrated plant.":
+    "在苏拉特生产并出口的特种化学品——十个事业部、112个牌号、一座一体化工厂。",
   "Who we are: the mandate to manufacture and export chemistry that makes industry safer, cleaner and more efficient.":
     "我们是谁：以生产和出口化学品为使命，让工业更安全、更清洁、更高效。",
   "Ten specialised divisions under one roof, structured so scale never costs you technical attention.":
     "十个专业事业部同处一体，其架构确保规模从不以牺牲技术支持为代价。",
-  "The full range — forty grades built for high performance, consistency and regulatory confidence.":
-    "完整产品线——四十个牌号，为高性能、一致性与合规信心而生。",
+  "The full range — 112 grades built for high performance, consistency and regulatory confidence.":
+    "完整产品线——112个牌号，为高性能、一致性与合规信心而生。",
   "The sectors we formulate for, and what each one asks of a speciality chemical supplier.":
     "我们所服务的行业，以及各行业对特种化学品供应商的要求。",
   "What our chemistry actually does in service — the end uses each grade was developed for.":

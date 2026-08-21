@@ -7,8 +7,9 @@
 import { useState } from "react";
 
 const NOT_WIRED =
-  "This form is not connected to a backend yet. Please call +91 92659 43799 " +
-  "or +91 87581 94050 in the meantime.";
+  "This form is not connected to a backend yet. Please email " +
+  "info@cosmoxchemicals.com, or call +91 92659 43799, +91 87581 94050 " +
+  "or +91 92650 18813 in the meantime.";
 
 export default function ContactForm() {
   const [status, setStatus] = useState<string | null>(null);

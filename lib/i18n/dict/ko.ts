@@ -18,12 +18,16 @@ const ko: Dict = {
   "Contact": "문의",
   "Product Finder": "제품 찾기",
   "Skip to content": "본문으로 건너뛰기",
+  "{n} grades": "{n}개 등급",
+  "Search the whole range": "전체 제품군 검색",
   "Visit page": "페이지 보기",
   "Sections": "섹션",
   "On the home page": "홈 화면에서",
   "Explore": "자세히 보기",
   "Previous": "이전",
   "Next": "다음",
+  "Previous picture": "이전 이미지",
+  "Next picture": "다음 이미지",
   "Business units": "사업 부문",
   "Business Units": "사업 부문",
   "Research & Development": "연구개발",
@@ -35,29 +39,114 @@ const ko: Dict = {
     "구매하시는 국가를 선택하세요. 당사는 수라트에서 생산하여 전 세계로 수출하며, 국가에 따라 사이트 언어가 전환됩니다.",
   "Navigation and product titles are translated. Detailed page copy remains in English.":
     "내비게이션과 제품명은 번역되어 있습니다. 페이지의 상세 내용은 영문으로 유지됩니다.",
+  "Detected": "자동 감지",
+  "Search countries": "국가 검색",
+  "Search {n} countries": "{n}개국 검색",
+  "Set from your device's time zone. Change it here at any time.":
+    "기기의 시간대를 기준으로 설정되었습니다. 언제든 여기서 변경할 수 있습니다.",
+  "Set from your browser's language. Change it here at any time.":
+    "브라우저 언어를 기준으로 설정되었습니다. 언제든 여기서 변경할 수 있습니다.",
+  "No country matches “{q}”. We export worldwide — write to us and we will route your enquiry.":
+    "“{q}”와 일치하는 국가가 없습니다. 당사는 전 세계로 수출합니다 — 문의해 주시면 담당 부서로 연결해 드립니다.",
+
+  // the six regions the panel groups the countries into
   "Asia Pacific": "아시아 태평양",
   "Europe": "유럽",
+  "Americas": "미주",
+  "Middle East": "중동",
+  "Africa": "아프리카",
+  "Central Asia & Caucasus": "중앙아시아 및 캅카스",
+
+  /* All seventy countries in `lib/i18n/locales.ts`, in the order the panel
+     lists them. A country whose name is the same in this language is still
+     written out, so a name added to the register shows up here as a gap
+     rather than silently reading as translated. */
+  // Asia Pacific
   "India": "인도",
   "China": "중국",
   "Japan": "일본",
   "South Korea": "대한민국",
+  "Taiwan": "대만",
   "Vietnam": "베트남",
   "Indonesia": "인도네시아",
+  "Malaysia": "말레이시아",
+  "Singapore": "싱가포르",
+  "Thailand": "태국",
+  "Philippines": "필리핀",
+  "Pakistan": "파키스탄",
+  "Bangladesh": "방글라데시",
+  "Nepal": "네팔",
+  "Sri Lanka": "스리랑카",
+  "Myanmar": "미얀마",
+  "Cambodia": "캄보디아",
+  "Australia": "호주",
+  "New Zealand": "뉴질랜드",
+  // Europe
+  "United Kingdom": "영국",
+  "Ireland": "아일랜드",
   "Germany": "독일",
   "France": "프랑스",
-  "Spain": "스페인",
   "Italy": "이탈리아",
+  "Spain": "스페인",
+  "Portugal": "포르투갈",
   "Netherlands": "네덜란드",
+  "Belgium": "벨기에",
+  "Switzerland": "스위스",
+  "Austria": "오스트리아",
+  "Sweden": "스웨덴",
+  "Norway": "노르웨이",
+  "Denmark": "덴마크",
+  "Finland": "핀란드",
+  "Poland": "폴란드",
+  "Czech Republic": "체코",
+  "Hungary": "헝가리",
+  "Romania": "루마니아",
+  "Greece": "그리스",
+  "Russia": "러시아",
+  "Ukraine": "우크라이나",
+  "Turkey": "튀르키예",
+  // Americas
+  "United States": "미국",
+  "Canada": "캐나다",
+  "Mexico": "멕시코",
+  "Brazil": "브라질",
+  "Argentina": "아르헨티나",
+  "Chile": "칠레",
+  "Colombia": "콜롬비아",
+  "Peru": "페루",
+  // Middle East
+  "United Arab Emirates": "아랍에미리트",
+  "Saudi Arabia": "사우디아라비아",
+  "Qatar": "카타르",
+  "Kuwait": "쿠웨이트",
+  "Oman": "오만",
+  "Bahrain": "바레인",
+  "Israel": "이스라엘",
+  // Africa
+  "Egypt": "이집트",
+  "Morocco": "모로코",
+  "Algeria": "알제리",
+  "Nigeria": "나이지리아",
+  "Ghana": "가나",
+  "Kenya": "케냐",
+  "Tanzania": "탄자니아",
+  "Ethiopia": "에티오피아",
+  "South Africa": "남아프리카공화국",
+  // Central Asia & Caucasus
+  "Kazakhstan": "카자흐스탄",
+  "Uzbekistan": "우즈베키스탄",
+  "Azerbaijan": "아제르바이잔",
+  "Georgia": "조지아",
 
   // --- nav dropdown introductions -------------------------------------------
-  "Speciality chemistry manufactured and exported from Surat — ten divisions, forty grades, one integrated plant.":
-    "수라트에서 생산하여 수출하는 특수화학 — 10개 사업부, 40개 등급, 하나의 통합 공장.",
+  "Speciality chemistry manufactured and exported from Surat — ten divisions, 112 grades, one integrated plant.":
+    "수라트에서 생산하여 수출하는 특수화학 — 10개 사업부, 112개 등급, 하나의 통합 공장.",
   "Who we are: the mandate to manufacture and export chemistry that makes industry safer, cleaner and more efficient.":
     "우리는 누구인가 — 산업을 더 안전하고, 더 깨끗하고, 더 효율적으로 만드는 화학을 생산하고 수출한다는 사명.",
   "Ten specialised divisions under one roof, structured so scale never costs you technical attention.":
     "한 지붕 아래 10개 전문 사업부. 규모가 결코 기술 지원의 질을 떨어뜨리지 않도록 구성했습니다.",
-  "The full range — forty grades built for high performance, consistency and regulatory confidence.":
-    "전체 제품군 — 고성능, 품질 일관성, 규제 대응 신뢰를 위해 개발된 40개 등급.",
+  "The full range — 112 grades built for high performance, consistency and regulatory confidence.":
+    "전체 제품군 — 고성능, 품질 일관성, 규제 대응 신뢰를 위해 개발된 112개 등급.",
   "The sectors we formulate for, and what each one asks of a speciality chemical supplier.":
     "당사가 배합을 담당하는 산업 분야와, 각 분야가 특수화학 공급업체에 요구하는 것.",
   "What our chemistry actually does in service — the end uses each grade was developed for.":
