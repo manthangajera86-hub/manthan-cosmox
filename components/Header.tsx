@@ -8,10 +8,12 @@
    other, so the bar is always floating; if a page is ever added without one, it
    needs the bar in normal flow instead or the content will start underneath it.
 
-   There is no hamburger, by design — the dropdowns switch off below 940px and
-   the links wrap inside their capsule below 860px (they used to wrap at 940
-   too, until the Home tab came out). The brand stays a plain link to `/` under
-   940, so home is still one tap away with no panel involved. */
+   Below 940px row 2 goes away and the nine links fold into `MobileMenu`, a
+   button in the utility capsule — the dropdowns switch off at the same width,
+   so the panel and the bar's own menus are never both available. The links
+   used to wrap inside their capsule instead, which cost three rows and a 199px
+   opaque header on a phone. The brand stays a plain link to `/` under 940, so
+   home is still one tap away with no panel involved. */
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,6 +21,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { NAV, NAV_MENU } from "@/lib/nav";
 import type { ProductGroupLink } from "@/lib/products";
 import BrandMark from "./BrandMark";
+import MobileMenu from "./MobileMenu";
 import RegionMenu from "./RegionMenu";
 import { useT } from "./LocaleProvider";
 
@@ -33,6 +36,10 @@ const BRAND_KEY = "brand";
    thing is ever down at a time — and moving the pointer onto a nav link puts
    the country list away, which is what you would expect it to do. */
 const REGION_KEY = "region";
+
+/* and so does the sections panel, which only exists below 940px — the width at
+   which the nav row it replaces is gone */
+const MENU_KEY = "menu";
 
 /* The one panel that is not a list of names — it is the names. Divisions and
    Products name the same ten things, so as two columns of those ten the second
@@ -112,11 +119,17 @@ export default function Header({ groups }: { groups: ProductGroupLink[] }) {
     return () => io.disconnect();
   }, [pathname]);
 
-  /* the dropdowns are desktop-only — below 940px a panel is most of the screen
-     and would cover the page it describes */
+  /* The dropdowns are desktop-only — below 940px a panel is most of the screen
+     and would cover the page it describes. The same flag is the other side of
+     `MobileMenu`: widening past 940 takes the button away with CSS, so the
+     panel it opened has to be put away here or it would be left on screen with
+     nothing to shut it. */
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 941px)");
-    const sync = () => setWide(mq.matches);
+    const sync = () => {
+      setWide(mq.matches);
+      if (mq.matches) setOpen((o) => (o === MENU_KEY ? null : o));
+    };
     sync();
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
@@ -149,6 +162,16 @@ export default function Header({ groups }: { groups: ProductGroupLink[] }) {
   }, []);
   const closeRegion = useCallback(() => {
     setOpen((o) => (o === REGION_KEY ? null : o));
+  }, []);
+
+  /* the sections panel is click-driven for the same reason, and shares the one
+     slot — opening it puts the country list away and the other way round */
+  const toggleMenu = useCallback(() => {
+    if (shutTimer.current) clearTimeout(shutTimer.current);
+    setOpen((o) => (o === MENU_KEY ? null : MENU_KEY));
+  }, []);
+  const closeMenu = useCallback(() => {
+    setOpen((o) => (o === MENU_KEY ? null : o));
   }, []);
 
   /* Clicking the tab you are already on is not a navigation, so the router
@@ -289,6 +312,8 @@ export default function Header({ groups }: { groups: ProductGroupLink[] }) {
             <span>{t("Product Finder")}</span>
           </Link>
           <RegionMenu open={open === REGION_KEY} onToggle={toggleRegion} onClose={closeRegion} />
+          {/* last in the capsule and hidden above 940px, where row 2 is back */}
+          <MobileMenu open={open === MENU_KEY} onToggle={toggleMenu} onClose={closeMenu} />
         </div>
       </div>
 
