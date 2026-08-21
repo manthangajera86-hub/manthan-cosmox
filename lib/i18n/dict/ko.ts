@@ -18,7 +18,6 @@ const ko: Dict = {
   "Contact": "문의",
   "Product Finder": "제품 찾기",
   "Skip to content": "본문으로 건너뛰기",
-  "{n} grades": "{n}개 등급",
   "Search the whole range": "전체 제품군 검색",
   "Visit page": "페이지 보기",
   "Sections": "섹션",

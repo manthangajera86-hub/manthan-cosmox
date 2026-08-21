@@ -18,7 +18,6 @@ const vi: Dict = {
   "Contact": "Liên hệ",
   "Product Finder": "Tra cứu sản phẩm",
   "Skip to content": "Bỏ qua tới nội dung",
-  "{n} grades": "{n} mác sản phẩm",
   "Search the whole range": "Tìm trong toàn bộ danh mục",
   "Visit page": "Xem trang",
   "Sections": "Chuyên mục",

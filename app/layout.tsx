@@ -61,9 +61,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </a>
           <SmoothScroll />
           <Reveal />
-          {/* The products dropdown is the range, not a second copy of the
-              divisions list — the ten groups with their grade counts, built
-              here on the server so `lib/products.ts` never reaches the
+          {/* The products dropdown is the range itself, not a second copy of
+              the divisions list — every grade under its group, built here on
+              the server so the whole of `lib/products.ts` never reaches the
               browser. See `productMenu()`. */}
           <Header groups={productMenu()} />
           <main id="main">{children}</main>

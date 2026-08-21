@@ -587,67 +587,126 @@ p:last-child { margin-bottom: 0; }
 /* --------------------------------------------------------------------------
    The products panel — the one nav dropdown that is not a column of names.
    Divisions and Products name the same ten things, so side by side the two
-   panels were the same menu twice. This one is an index of the range: the
-   division number, the group, and how many grades are under it, with the
-   finder closing it because 112 grades is past what a menu can list.
-   Same surface as `.navmenu` — this only re-lays the right-hand cell.
+   panels were the same menu twice. This one opens the range itself: all 112
+   grades, each under the group that makes it, from `new products.rtf` by way
+   of `lib/products.ts`. Chemical names are never translated, so what is in
+   here is the same in every locale bar the ten headings.
+
+   Wider than a nav panel, because the names are wide — a hundred-character
+   IUPAC name in a 240px column wraps five times. It takes the brand panel's
+   full-bleed treatment and its left-anchored entry rather than the centred
+   one, since a 1300px panel has nothing left to centre.
    -------------------------------------------------------------------------- */
+.navmenu--products {
+  left: var(--edge);
+  transform: none;
+  width: calc(100vw - 2 * var(--edge));
+  animation-name: navmenu-in-left;
+}
+
+/* the scroller and the finder are the two rows: the way to search the range
+   must not be under the fold of a panel that scrolls */
 .prodmenu {
+  position: relative;
   display: grid;
   align-content: start;
   gap: .9rem;
   min-width: 0;
 }
-.prodmenu__groups {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1px 1.2rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+/* the fold falls in the middle of a group's list, so the wall says so: a fade
+   over its last rows, sitting between the scroller and the finder rather than
+   inside the scroller, where it would move with the content */
+.prodmenu::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 3.2rem;
+  height: 3rem;
+  background: linear-gradient(rgba(23, 19, 15, 0), rgba(23, 19, 15, .97));
+  pointer-events: none;
 }
-/* number, name, count — the count is pushed to the right edge of its own
-   column so the ten of them read as a set of figures rather than as trailing
-   words. `baseline` rather than `center`: a name that wraps to two lines
-   should hang its number and count off the first line, not the middle. */
-.prodmenu__groups a {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+
+/* 112 names are taller than a dropdown may be, so the wall scrolls inside
+   itself. `overscroll-behavior: contain` keeps the page still when it hits the
+   end, and Lenis leaves an inner scroller its own wheel (`allowNestedScroll`).
+   The cap is svh, not vh, so a phone's collapsing toolbar cannot push the last
+   row out of reach — though the dropdowns are off below 940px anyway. */
+.prodmenu__wall {
+  max-height: min(58svh, 500px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: .5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, .22) transparent;
+}
+
+/* A column *width*, like the country panel's: the count falls from five to
+   four to two on its own, and no breakpoint has to be kept in step with the
+   panel. 210px is what keeps the wall to four columns on a 1440 screen, which
+   is the difference between two and a half screens of scrolling and one and a
+   half; below it the two-word names start wrapping as well as the long ones. The multicol box must NOT be the scroller — a fragmented
+   multicol with a height cap spills sideways into new columns instead of
+   scrolling, which is why the wall and the columns are two elements. */
+.prodmenu__cols {
+  columns: 210px;
+  column-gap: 1.4rem;
+}
+/* `flow-root`, never `inline-block`: the usual trick for honouring
+   `break-inside: avoid` makes the block an atomic inline, which Chrome's
+   column balancer cannot see into — the same trap as `.regionmenu__region`. */
+.prodmenu__group {
+  display: flow-root;
+  break-inside: avoid;
+  margin-bottom: 1.15rem;
+}
+
+.prodmenu__head {
+  display: flex;
   align-items: baseline;
-  gap: .7rem;
-  padding: .45rem .6rem;
+  gap: .5rem;
+  padding: .2rem .5rem .3rem;
   border-radius: var(--r-xs);
-  text-decoration: none;
-  transition: background .2s var(--ease), color .2s var(--ease);
-}
-.prodmenu__num {
   color: var(--gold-lift);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: .1em;
-  font-variant-numeric: tabular-nums;
-}
-.prodmenu__name {
-  color: rgba(255, 255, 255, .86);
-  font-size: 13.5px;
-  font-weight: 600;
   line-height: 1.35;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background .2s var(--ease), color .2s var(--ease);
 }
-.prodmenu__count {
-  color: rgba(255, 255, 255, .5);
-  font-size: 11.5px;
+.prodmenu__head:hover,
+.prodmenu__head:focus-visible { background: rgba(255, 255, 255, .1); color: #fff; }
+.prodmenu__num {
+  color: rgba(255, 255, 255, .45);
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
 }
-.prodmenu__groups a:hover,
-.prodmenu__groups a:focus-visible { background: rgba(255, 255, 255, .1); }
-.prodmenu__groups a:hover .prodmenu__name,
-.prodmenu__groups a:focus-visible .prodmenu__name { color: #fff; }
-.prodmenu__groups a:hover .prodmenu__count,
-.prodmenu__groups a:focus-visible .prodmenu__count { color: rgba(255, 255, 255, .75); }
 
-/* the way out of a menu that cannot hold the range: the finder, on the gold
-   the CTAs use so it reads as the action and not as an eleventh group */
+.prodmenu__grades {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.prodmenu__grades a {
+  display: block;
+  padding: .2rem .5rem;
+  border-radius: var(--r-xs);
+  color: rgba(255, 255, 255, .8);
+  font-size: 12.5px;
+  line-height: 1.4;
+  text-decoration: none;
+  /* the long intermediates run past 100 characters with no space in them, and
+     a name that cannot break would set the column's width on its own.
+     `break-word`, not `anywhere`: the latter also breaks names that would have
+     fitted whole on the next line — "…sulfonyl)imid / e" */
+  overflow-wrap: break-word;
+  transition: background .2s var(--ease), color .2s var(--ease);
+}
+.prodmenu__grades a:hover,
+.prodmenu__grades a:focus-visible { background: rgba(255, 255, 255, .1); color: #fff; }
+
+/* the way through a menu that holds the whole range: the finder, on the gold
+   the CTAs use so it reads as the action and not as a hundred and thirteenth
+   name */
 .prodmenu__finder {
   display: flex;
   align-items: center;

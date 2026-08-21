@@ -19,7 +19,6 @@ const zh: Dict = {
   "Contact": "联系我们",
   "Product Finder": "产品查询",
   "Skip to content": "跳至正文",
-  "{n} grades": "{n}个牌号",
   "Search the whole range": "搜索全部产品",
   "Visit page": "访问页面",
   "Sections": "版块",

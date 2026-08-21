@@ -34,13 +34,18 @@ const BRAND_KEY = "brand";
    the country list away, which is what you would expect it to do. */
 const REGION_KEY = "region";
 
-/* The one panel that is not a list of names. Divisions and Products name the
-   same ten things — the units and what they make — so as two identical columns
-   of links the second one told you nothing the first had not. This one is the
-   range: each group with its division number and how many grades sit under it,
-   and the finder under them, because 112 grades is past the point where a menu
-   can list them. The data is built on the server (`productMenu()`), so the
-   whole of `lib/products.ts` stays out of this client bundle. */
+/* The one panel that is not a list of names — it is the names. Divisions and
+   Products name the same ten things, so as two columns of those ten the second
+   panel was the first one again; this one opens the range instead, every grade
+   under the group that makes it. Chemical names are not translated, so only the
+   group headings go through `t` — a buyer looks for "Zinc Ricinoleate" under
+   that name in every market.
+
+   The wall scrolls inside itself (112 names is taller than a dropdown may be)
+   and the finder sits outside the scroller, so the way to search the range is
+   never below the fold of a panel. The data is built on the server
+   (`productMenu()`), so the whole of `lib/products.ts` stays out of this client
+   bundle. */
 function ProductsPanel({
   groups,
   t,
@@ -50,22 +55,25 @@ function ProductsPanel({
 }) {
   return (
     <div className="prodmenu">
-      <ul className="prodmenu__groups">
-        {groups.map((group) => (
-          <li key={group.href}>
-            <Link href={group.href}>
-              <span className="prodmenu__num" aria-hidden="true">{group.num}</span>
-              <span className="prodmenu__name">{t(group.label)}</span>
-              {/* the count is one dictionary entry with the number in a slot —
-                  Korean counts "6개 등급", which "6" + a translated "grades"
-                  would never produce */}
-              <span className="prodmenu__count">
-                {t("{n} grades").replace("{n}", String(group.count))}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className="prodmenu__wall">
+        <div className="prodmenu__cols">
+          {groups.map((group) => (
+            <section className="prodmenu__group" key={group.href}>
+              <Link className="prodmenu__head" href={group.href}>
+                <span className="prodmenu__num" aria-hidden="true">{group.num}</span>
+                {t(group.label)}
+              </Link>
+              <ul className="prodmenu__grades">
+                {group.grades.map(([href, name]) => (
+                  <li key={href}>
+                    <Link href={href}>{name}</Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </div>
       <Link className="prodmenu__finder" href="/finder">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
           <circle cx="11" cy="11" r="7" />

@@ -302,21 +302,27 @@ export const PRODUCTS: Product[] = [
 /* ---------------------------------------------------------------------------
    The Products dropdown.
 
-   `Header` is a client component, so anything it imports ships to the browser
-   on every route — and `PRODUCTS` is 112 records. This is built on the server
-   in `app/layout.tsx` and handed down as props instead, which is ten small
-   objects on the wire and none of the range. `Header` imports only the type,
-   which compiles away.
+   Divisions and Products name the same ten things — the units, and what those
+   units make — so a second column of those ten names told a reader nothing the
+   first had not. This panel is the range itself: every grade, under the group
+   that makes it, straight from the list above. Names are never translated (a
+   buyer searches for "Aluminium Hypophosphite" in every market), so only the
+   group headings go through the dictionary.
 
-   It reads `lib/topics.ts` for the number and the title, so the panel cannot
-   name a group the register disagrees with — the ten labels used to be typed
-   out a second time in `lib/nav.ts`, where they could drift.
+   `Header` is a client component, so anything it imports ships to the browser
+   on every route. This is built on the server in `app/layout.tsx` and handed
+   down as props instead, which puts a name and an href on the wire per grade
+   and leaves the teasers, industry tags and division numbers of all 112 records
+   behind. `Header` imports only the type, which compiles away.
+
+   The groups, their numbers and their titles come from `lib/topics.ts`, so the
+   panel cannot name a group the register disagrees with.
    --------------------------------------------------------------------------- */
 export type ProductGroupLink = {
   href: string;
   num: string;
   label: string;
-  count: number;
+  grades: [href: string, name: string][];
 };
 
 export const productMenu = (): ProductGroupLink[] =>
@@ -324,5 +330,5 @@ export const productMenu = (): ProductGroupLink[] =>
     href: `/products/${topic.slug}`,
     num: topic.num,
     label: topic.title,
-    count: gradesIn(topic.slug).length,
+    grades: gradesIn(topic.slug).map((p): [string, string] => [gradeHref(p), p.n]),
   }));

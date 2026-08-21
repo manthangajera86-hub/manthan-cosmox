@@ -18,7 +18,6 @@ const it: Dict = {
   "Contact": "Contatti",
   "Product Finder": "Ricerca prodotti",
   "Skip to content": "Vai al contenuto",
-  "{n} grades": "{n} qualità",
   "Search the whole range": "Cerca in tutta la gamma",
   "Visit page": "Vai alla pagina",
   "Sections": "Sezioni",

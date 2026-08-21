@@ -818,22 +818,39 @@ JavaScript. They are suppressed below 940px — the nav itself now wraps lower,
 at 860px, but a panel that wide is most of a tablet screen and would cover the
 page it describes.
 
-**Products is the one panel that is not a list of names.** Divisions and Products
-name the same ten things — the units, and what those units make — so as two
-identical columns of links the second told a reader nothing the first had not.
-Its panel (`.navmenu--products`, `.prodmenu`) is an index of the range instead:
-each group with its division number and how many grades sit under it, right-aligned
-and tabular so the ten counts read as a set of figures, and the finder on the
-gold pill beneath them, because 112 grades is well past what a menu can list.
-`NAV_MENU['/products']` therefore carries no `links` at all — the rows are built
-from `lib/topics.ts` and `lib/products.ts` by `productMenu()`, so the panel cannot
-name a group the register disagrees with, and the ten labels are no longer typed
-out a second time in `lib/nav.ts`. It is built in `app/layout.tsx`, on the
-server, and handed to `Header` as props: `Header` is a client component, so
-importing the 112 records there would have shipped the whole range to the
-browser on every route. The count is one dictionary entry with the number in a
-slot (`"{n} grades"`) rather than a number glued to a translated noun — Korean
-counts "6개 등급".
+**Products is the one panel that is not a list of names — it is the names.**
+Divisions and Products name the same ten things — the units, and what those
+units make — so as two identical columns of links the second told a reader
+nothing the first had not. Its panel (`.navmenu--products`, `.prodmenu`) opens
+the range instead: all 112 grades, each under the group that makes it, in the
+order `new products.rtf` gives them, with the finder on a gold pill beside them
+because a wall that long wants a search as well as a scroll.
+
+`NAV_MENU['/products']` therefore carries no `links` at all — the groups come
+from `lib/topics.ts` and their grades from `lib/products.ts`, both by way of
+`productMenu()`, so the panel cannot name a group or a grade the register
+disagrees with, and no chemical is typed out a second time in `lib/nav.ts`. It
+is built in `app/layout.tsx`, on the server, and handed to `Header` as props:
+`Header` is a client component, so importing the records there would have
+shipped every teaser and industry tag to the browser on every route. What
+travels is a name and an href per grade. Only the ten headings are translated —
+a buyer looks for "Zinc Ricinoleate" under that name in every market.
+
+Three things about the shape of it. The panel is **full bleed**, `--edge` to
+`--edge` with the brand panel's left-anchored entry, because the long
+intermediates run past a hundred characters and a narrow column wraps them four
+times. The wall **scrolls inside itself** (`max-height: min(58svh, 500px)`,
+`overscroll-behavior: contain`), and the scroller and the multi-column box have
+to be **two elements**: a multicol with a height cap fragments sideways into new
+columns rather than scrolling, so `.prodmenu__wall` scrolls and
+`.prodmenu__cols` lays out at its natural height inside it. And `columns: 210px`
+is a column *width* like the country panel's — four columns on a 1440 screen
+fall to two at 1000px with no breakpoint to keep in step. Each group is
+`display: flow-root` with `break-inside: avoid`, so a heading is never stranded
+from its list; that is the same trap `.regionmenu__region` documents, where
+`inline-block` defeats Chrome's column balancer. The fold falls in the middle of
+a list, so `.prodmenu::before` fades the last rows between the scroller and the
+finder.
 
 The logo opens one too, and it is **the large one** — the only menu here that is
 about the whole site rather than one page, so it runs the full width between the
